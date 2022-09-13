@@ -6,7 +6,7 @@ import {UserContext} from '../../Context/AuthContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Login = () => {
-  const {signIn} = useContext(UserContext);
+  const {signIn} = useContext<any>(UserContext);
   //console.log(signIn);
   interface cred {
     email: string;

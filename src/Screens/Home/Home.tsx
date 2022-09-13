@@ -5,7 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {ActivityIndicator} from 'react-native-paper';
 
 function Home() {
-  const {user} = useContext(UserContext);
+  const {user} = useContext<any>(UserContext);
   const [animate, setAnimate] = useState<boolean>(true);
   const onPress = async () => {
     try {
