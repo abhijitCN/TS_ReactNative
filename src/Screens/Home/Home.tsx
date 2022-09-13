@@ -1,21 +1,41 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {View, TouchableOpacity, Text, StyleSheet} from 'react-native';
 import {UserContext} from '../../Context/AuthContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {ActivityIndicator} from 'react-native-paper';
+
 function Home() {
   const {user} = useContext(UserContext);
+  const [animate, setAnimate] = useState(true);
   const onPress = () => {
     console.log('Logout');
+    AsyncStorage.setItem('Auth', '');
   };
+  useEffect(() => {
+    setTimeout(() => {
+      setAnimate(false);
+    }, 2000);
+  });
   return (
     <View style={style.main}>
-      <Text style={{fontSize: 20, fontWeight: 'bold'}}>
-        Hello, {user.email}
-      </Text>
-      <View style={style.buttonContainer}>
-        <TouchableOpacity style={style.button} onPress={onPress}>
-          <Text style={style.buttonText}>Log Out</Text>
-        </TouchableOpacity>
-      </View>
+      {animate === true ? (
+        <>
+          <View>
+            <ActivityIndicator animating={animate} color="red" size="large" />
+          </View>
+        </>
+      ) : (
+        <>
+          <Text style={{fontSize: 20, fontWeight: 'bold'}}>
+            Hello, {user.email}
+          </Text>
+          <View style={style.buttonContainer}>
+            <TouchableOpacity style={style.button} onPress={onPress}>
+              <Text style={style.buttonText}>Log Out</Text>
+            </TouchableOpacity>
+          </View>
+        </>
+      )}
     </View>
   );
 }
