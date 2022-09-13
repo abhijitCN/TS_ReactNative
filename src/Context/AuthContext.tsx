@@ -8,7 +8,8 @@ export const UserContext = React.createContext({});
 export default function AuthContext({children}: any) {
   const [user, setUser] = React.useState<any>({});
   const signIn = (data: ISignIn) => {
-    AsyncStorage.setItem('Auth', JSON.stringify(data));
+    AsyncStorage.setItem('userToken', JSON.stringify(data));
+    // console.log(data);
     setUser(data);
   };
 
