@@ -7,9 +7,13 @@ import {ActivityIndicator} from 'react-native-paper';
 function Home() {
   const {user} = useContext(UserContext);
   const [animate, setAnimate] = useState(true);
-  const onPress = () => {
-    console.log('Logout');
-    AsyncStorage.setItem('Auth', '');
+  const onPress = async () => {
+    try {
+      await AsyncStorage.setItem('userToken', '');
+      console.log('Logout');
+    } catch (error) {
+      console.log('Logout error');
+    }
   };
   useEffect(() => {
     setTimeout(() => {
