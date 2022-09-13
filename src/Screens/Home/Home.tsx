@@ -6,7 +6,7 @@ import {ActivityIndicator} from 'react-native-paper';
 
 function Home() {
   const {user} = useContext(UserContext);
-  const [animate, setAnimate] = useState(true);
+  const [animate, setAnimate] = useState<boolean>(true);
   const onPress = async () => {
     try {
       await AsyncStorage.setItem('userToken', '');
