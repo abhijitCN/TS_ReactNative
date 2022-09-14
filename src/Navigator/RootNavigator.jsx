@@ -13,7 +13,7 @@ function RootNavigator() {
         setUser(JSON.parse(value));
         console.log('?????', value);
       }
-      console.log('=========', value);
+      console.log('=====', value);
     } catch (error) {
       console.log(error);
     }

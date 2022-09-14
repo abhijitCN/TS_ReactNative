@@ -13,16 +13,18 @@ const Login = () => {
     password: string;
   }
   const credential = {email: '123', password: '123'};
-  const [data, setData] = useState({email: '', password: ''});
+  const [data, setData] = useState<any>({email: '', password: ''});
   const onPress = () => {
     if (
       credential.email === data.email &&
       credential.password === data.password
     ) {
+      Toast.show({
+        type: 'success',
+        text1: 'Logout Successfully',
+        position: 'top',
+      });
       signIn(data);
-      /*      setTimeout(() => {
-        <ActivityIndicator animating={true} color={MD2Colors.red800} />;
-      }, 3000); */
     } else {
       if (!data.email || !data.password) {
         console.log('Required All Felds');
@@ -33,14 +35,9 @@ const Login = () => {
       }
     }
   };
-  // const loginContext = () => {
-  //   signin;
-  //   //navigation.navigate('Home', {data: data});
-  // };
   return (
     <>
       <View style={style.main}>
-        {/* <View style={{}}> */}
         <Text style={style.loginText}>Log In</Text>
         <Text style={style.sentence}>Enter your email and password</Text>
         <TextInput
@@ -51,7 +48,7 @@ const Login = () => {
           mode="outlined"
           outlineColor="#95d6f0"
           activeOutlineColor="#1b94c4"
-          //keyboardType="numeric"
+          placeholderTextColor="#1b94c4"
         />
         <TextInput
           style={style.input}
@@ -61,12 +58,13 @@ const Login = () => {
           mode="outlined"
           outlineColor="#95d6f0"
           activeOutlineColor="#1b94c4"
-          //keyboardType="numeric"
         />
         <TouchableOpacity style={style.button} onPress={onPress}>
           <Text style={style.buttonText}>Submit</Text>
         </TouchableOpacity>
-        {/* </View> */}
+        <View>
+          <Toast />
+        </View>
       </View>
     </>
   );
@@ -94,7 +92,7 @@ const style = StyleSheet.create({
   },
   buttonText: {
     fontSize: 17,
-    fontWeight: '500',
+    fontWeight: 'bold',
     color: '#0a3749',
   },
   loginText: {

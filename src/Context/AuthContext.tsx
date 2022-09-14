@@ -12,9 +12,14 @@ export default function AuthContext({children}: any) {
     // console.log(data);
     setUser(data);
   };
+  const signOut = () => {
+    AsyncStorage.removeItem('userToken');
+    // console.log(data);
+    setUser(null);
+  };
 
   return (
-    <UserContext.Provider value={{user, setUser, signIn}}>
+    <UserContext.Provider value={{user, setUser, signIn, signOut}}>
       {children}
     </UserContext.Provider>
   );
