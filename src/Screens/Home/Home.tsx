@@ -11,6 +11,7 @@ function Home() {
   const onPress = async () => {
     try {
       await AsyncStorage.removeItem('userToken');
+      signOut()
       Toast.show({
         type: 'success',
         text1: 'Logout Successfully',

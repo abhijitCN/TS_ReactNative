@@ -5,13 +5,12 @@ import Toast from 'react-native-toast-message';
 import {UserContext} from '../../Context/AuthContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+
+
 const Login = () => {
   const {signIn} = useContext<any>(UserContext);
   //console.log(signIn);
-  interface cred {
-    email: string;
-    password: string;
-  }
+  
   const credential = {email: '123', password: '123'};
   const [data, setData] = useState<any>({email: '', password: ''});
   const onPress = () => {

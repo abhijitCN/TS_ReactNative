@@ -10,4 +10,13 @@ function Registration() {
   );
 }
 
+
+/**
+ * name
+ * email
+ * password
+ * mobile
+ * 
+ */
+
 export default Registration;
