@@ -16,7 +16,7 @@ interface ISignIn {
 export const signinUser = createAsyncThunk(
     'signupuser',
     async (data: ISignIn) => {
-        //const result =  await fetch2('/signup',body)
+        //const result =  await fetch2('/signup',body)...
         try {
             const user = await firebase
                 .auth()
