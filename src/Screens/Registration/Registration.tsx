@@ -1,4 +1,6 @@
+import {firebase} from '@react-native-firebase/auth';
 import React, {useState, useContext} from 'react';
+//import firestore from '@react-native-firebase/firestore';
 import {
     View,
     StyleSheet,
@@ -16,45 +18,51 @@ function Registration({navigation}) {
         phoneNo: '',
         password: '',
     });
-    const onPress = () => {
-        if (
-            data.email != '' &&
-            data.name != '' &&
-            data.phoneNo != '' &&
-            data.password != ''
-        ) {
-            Alert.alert('All ok');
-        } else if (
-            data.email === '' &&
-            data.name === '' &&
-            data.phoneNo === ''
-        ) {
-            Alert.alert('Password Requre');
-        } else if (
-            data.email === '' &&
-            data.name === '' &&
-            data.password === ''
-        ) {
-            Alert.alert('All fields Requre');
-        } else if (
-            data.email === '' &&
-            data.phoneNo === '' &&
-            data.password === ''
-        ) {
-            Alert.alert('All fields Requre');
-        } else if (
-            data.name === '' &&
-            data.phoneNo === '' &&
-            data.password === ''
-        ) {
-            Alert.alert('All fields Requre');
-        } else if (
-            data.email === '' &&
-            data.name === '' &&
-            data.phoneNo === '' &&
-            data.password === ''
-        ) {
-            Alert.alert('All Fields');
+    const [validate, SetValiadate] = useState<boolean>(false);
+
+    const onPress = async () => {
+        // Alert.alert('All ok');
+        if (data.password && data.email && data.name && data.phoneNo) {
+            console.log(
+                '??',
+                data.email,
+                data.password,
+                data.name,
+                data.phoneNo,
+            );
+            try {
+                const {user} = await firebase
+                    .auth()
+                    .createUserWithEmailAndPassword(data.email, data.password);
+                if (user) {
+                    console.log('>>>>>', JSON.stringify(user.email));
+                    // await firebase
+                    //     .firestore()
+                    //     .collection('users')
+                    //     .doc(user.uid)
+                    //     .set(data.displayName);
+                }
+            } catch (error) {
+                console.log('error', error);
+            }
+            //Alert.alert('All ok');
+        } else {
+            SetValiadate(true);
+        }
+    };
+
+    const signIn = async () => {
+        if (data.name && data.email && data.Phone && data.password) {
+            try {
+                const user = await firebase
+                    .auth()
+                    .createUserWithEmailAndPassword(data.email, data.password);
+                if (user) {
+                    Alert.alert(JSON.stringify(user));
+                }
+            } catch (error) {
+                console.log(error);
+            }
         }
     };
     return (
@@ -65,38 +73,94 @@ function Registration({navigation}) {
                 <View style={{}}>
                     <Text style={style.textInputHeading}>Name</Text>
                     <TextInput
-                        style={style.input}
+                        style={[
+                            style.input,
+                            {
+                                borderColor:
+                                    validate && data.name === ''
+                                        ? 'red'
+                                        : '#1b94c4',
+                            },
+                        ]}
                         placeholderTextColor="#1b94c4"
                         keyboardType="email-address"
-                        //keyboardAppearance="light"
+                        onChangeText={e => setData({...data, name: e})}
                         placeholder="Name"
+                        value={data.name}
                     />
+                    {validate && data.name === '' && (
+                        <Text style={{marginLeft: 12, color: 'red'}}>
+                            Name required
+                        </Text>
+                    )}
                     <Text style={style.textInputHeading}>Email</Text>
 
                     <TextInput
-                        style={style.input}
+                        style={[
+                            style.input,
+                            {
+                                borderColor:
+                                    validate && data.email === ''
+                                        ? 'red'
+                                        : '#1b94c4',
+                            },
+                        ]}
                         placeholderTextColor="#1b94c4"
                         keyboardType="email-address"
                         placeholder="Email"
-                        //keyboardAppearance="light"
+                        onChangeText={e => setData({...data, email: e})}
                     />
+                    {validate && data.email === '' && (
+                        <Text style={{marginLeft: 12, color: 'red'}}>
+                            Email required
+                        </Text>
+                    )}
+
                     <Text style={style.textInputHeading}>Phone No</Text>
 
                     <TextInput
-                        style={style.input}
+                        style={[
+                            style.input,
+                            {
+                                borderColor:
+                                    validate && data.phoneNo === ''
+                                        ? 'red'
+                                        : '#1b94c4',
+                            },
+                        ]}
                         placeholderTextColor="#1b94c4"
-                        keyboardType="email-address"
+                        keyboardType="phone-pad"
                         placeholder="Phone No"
-                        //keyboardAppearance="light"
+                        onChangeText={e => setData({...data, phoneNo: e})}
                     />
+                    {validate && data.phoneNo === '' && (
+                        <Text style={{marginLeft: 12, color: 'red'}}>
+                            Phone No required
+                        </Text>
+                    )}
+
                     <Text style={style.textInputHeading}>Password</Text>
                     <TextInput
-                        style={style.input}
+                        style={[
+                            style.input,
+                            {
+                                borderColor:
+                                    validate && data.password === ''
+                                        ? 'red'
+                                        : '#1b94c4',
+                            },
+                        ]}
                         placeholderTextColor="#1b94c4"
                         keyboardType="email-address"
                         placeholder="password"
-                        //keyboardAppearance="light"
+                        onChangeText={e => setData({...data, password: e})}
                     />
+                    {validate && data.password === '' && (
+                        <Text style={{marginLeft: 12, color: 'red'}}>
+                            Password required
+                        </Text>
+                    )}
+
                     <TouchableOpacity style={style.button} onPress={onPress}>
                         <Text style={style.buttonText}>Submit</Text>
                     </TouchableOpacity>
@@ -115,12 +179,12 @@ function Registration({navigation}) {
         </View>
     );
 }
+
 const style = StyleSheet.create({
     main: {
         flex: 1,
         justifyContent: 'center',
         backgroundColor: '#ffffff',
-        // alignItems: 'center',
     },
     input: {
         height: 60,
@@ -128,7 +192,6 @@ const style = StyleSheet.create({
         borderWidth: 1,
         padding: 10,
         backgroundColor: '#eafafc',
-        borderColor: '#1b94c4',
         borderRadius: 10,
     },
     button: {
@@ -137,7 +200,6 @@ const style = StyleSheet.create({
         padding: 10,
         marginHorizontal: 10,
         borderRadius: 25,
-        //width: '90%',
     },
     buttonText: {
         fontSize: 17,

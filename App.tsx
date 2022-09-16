@@ -1,9 +1,21 @@
-import React, {type PropsWithChildren, useState} from 'react';
+import React, {type PropsWithChildren, useState, useEffect} from 'react';
 import {StyleSheet, Text, useColorScheme, View} from 'react-native';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import {RootNavigator} from './src/Navigator';
 import AuthContext from './src/Context/AuthContext';
+import {configureStore} from '@reduxjs/toolkit';
+//import authReducer, {addToken} from './src/Reducers/Authreducer';
+import profileReducer from './src/Reducers/UserProfileReducer';
+import {Provider, useSelector, useDispatch} from 'react-redux';
+import {AuthNavigator, MainStackNavigation} from './src/Navigator/index';
 //import './src/Constant/Firebase';
+
+// const store = configureStore({
+//     reducer: {
+//         user: authReducer,
+//         profile: profileReducer,
+//     },
+// });
 const Section: React.FC<
     PropsWithChildren<{
         title: string;
@@ -35,10 +47,19 @@ const Section: React.FC<
 };
 
 const App = () => {
+    // const token = useSelector(state => state.user.token)
+    //   const dispatch = useDispatch()
+    //   useEffect(()=>{
+    //     dispatch(addToken())
+    //   },[])
+
     return (
         <>
             <AuthContext>
+                {/* <Provider store={store}> */}
                 <RootNavigator />
+                {/* {token ? <MainStackNavigation /> :<AuthNavigator />  } */}
+                {/* </Provider> */}
             </AuthContext>
         </>
     );

@@ -9,11 +9,14 @@ import {
 } from 'react-native';
 import Toast from 'react-native-toast-message';
 import {UserContext} from '../../Context/AuthContext';
+import {firebase} from '@react-native-firebase/auth';
 
 const Login = ({navigation}) => {
     const {signIn} = useContext<any>(UserContext);
     const credential = {email: '123', password: '123'};
     const [data, setData] = useState<any>({email: '', password: ''});
+    const [validate, SetValiadate] = useState<boolean>(false);
+
     const onPress = () => {
         if (
             credential.email === data.email &&
@@ -35,6 +38,26 @@ const Login = ({navigation}) => {
             }
         }
     };
+
+    const FBLogin = async () => {
+        if (data.password && data.email) {
+            console.log('??', data.email, data.password);
+            try {
+                const user = await firebase
+                    .auth()
+                    .signInWithEmailAndPassword(data.email, data.password);
+                if (user) {
+                    console.log('>>>>>', JSON.stringify(user));
+                }
+            } catch (error) {
+                console.log('error', error);
+            }
+            //Alert.alert('All ok');
+        } else {
+            SetValiadate(true);
+        }
+    };
+
     return (
         <>
             <View style={style.main}>
@@ -45,7 +68,15 @@ const Login = ({navigation}) => {
                 <View style={{}}>
                     <Text style={style.textInputHeading}>Email</Text>
                     <TextInput
-                        style={style.input}
+                        style={[
+                            style.input,
+                            {
+                                borderColor:
+                                    validate && data.email === ''
+                                        ? 'red'
+                                        : '#1b94c4',
+                            },
+                        ]}
                         onChangeText={e => setData({...data, email: e})}
                         value={data.email}
                         placeholderTextColor="#1b94c4"
@@ -53,9 +84,22 @@ const Login = ({navigation}) => {
                         //keyboardAppearance="light"
                         placeholder="Email"
                     />
+                    {validate && data.email === '' && (
+                        <Text style={{marginLeft: 12, color: 'red'}}>
+                            Email required
+                        </Text>
+                    )}
                     <Text style={style.textInputHeading}>Password</Text>
                     <TextInput
-                        style={style.input}
+                        style={[
+                            style.input,
+                            {
+                                borderColor:
+                                    validate && data.password === ''
+                                        ? 'red'
+                                        : '#1b94c4',
+                            },
+                        ]}
                         onChangeText={e => setData({...data, password: e})}
                         value={data.password}
                         //value={'123'}
@@ -64,6 +108,11 @@ const Login = ({navigation}) => {
                         //keyboardAppearance="light"
                         placeholder="Password"
                     />
+                    {validate && data.password === '' && (
+                        <Text style={{marginLeft: 12, color: 'red'}}>
+                            Password required
+                        </Text>
+                    )}
                     <TouchableOpacity style={style.button} onPress={onPress}>
                         <Text style={style.buttonText}>Submit</Text>
                     </TouchableOpacity>
@@ -85,6 +134,7 @@ const Login = ({navigation}) => {
         </>
     );
 };
+
 const style = StyleSheet.create({
     main: {
         flex: 1,

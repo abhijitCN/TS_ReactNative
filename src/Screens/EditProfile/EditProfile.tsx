@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useState} from 'react';
 import {
     View,
     Dimensions,
@@ -16,23 +16,43 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const EditProfile = ({navigation}) => {
     const {user, signOut} = useContext<any>(UserContext);
-
-    const onPress = async () => {
-        try {
-            await AsyncStorage.removeItem('userToken');
-            signOut();
+    const [validate, SetValiadate] = useState<boolean>(false);
+    const credential = {email: '123', password: '123'};
+    const [data, setData] = useState<any>({email: '', password: ''});
+    const onPress = () => {
+        if (
+            credential.email === data.email &&
+            credential.password === data.password
+        ) {
             Toast.show({
                 type: 'success',
                 text1: 'Logout Successfully',
                 position: 'top',
             });
-            console.log('Logout');
-        } catch (error) {
-            console.log('Logout error');
+            //signIn(data);
+        } else {
+            if (!data.email || !data.password) {
+                console.log('Required All Felds');
+            } else if (credential.email !== data.email) {
+                console.log('Wrong Email');
+            } else if (credential.password !== data.password) {
+                console.log('Wrong Password');
+            }
         }
     };
+
     return (
         <View style={style.main}>
+            <View style={{alignSelf: 'center'}}>
+                <Text
+                    style={{
+                        fontWeight: 'bold',
+                        fontSize: 25,
+                        paddingTop: 20,
+                    }}>
+                    Edit Profile
+                </Text>
+            </View>
             <View style={{}}>
                 <Image
                     style={style.image}
@@ -107,7 +127,7 @@ const style = StyleSheet.create({
         borderColor: '#1b94c4',
         borderRadius: 10,
     },
-    image: {width: 200, height: 200, marginTop: 50, alignSelf: 'center'},
+    image: {width: 200, height: 200, marginTop: 40, alignSelf: 'center'},
 });
 
 export default EditProfile;

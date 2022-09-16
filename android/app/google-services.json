@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "505483753338",
+    "project_id": "ts-reactnative-fec8b",
+    "storage_bucket": "ts-reactnative-fec8b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:505483753338:android:9809aa308f855c81c508c3",
+        "android_client_info": {
+          "package_name": "com.tsreactnative"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "505483753338-lebadbd4at68grq0cqf3j4vbdcjf081u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDMNUQC3G33iLXOztHJGVekWB4w0vZG0ow"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "505483753338-lebadbd4at68grq0cqf3j4vbdcjf081u.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

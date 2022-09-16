@@ -35,33 +35,44 @@ const Profile = ({navigation}) => {
             {/* <View style={{alignItems: 'center'}}>
                
             </View> */}
-            <View style={{alignItems: 'center', marginTop: 50}}>
+
+            <View style={{alignItems: 'center'}}>
+                <View>
+                    <Text
+                        style={{
+                            fontWeight: 'bold',
+                            fontSize: 25,
+                            paddingTop: 20,
+                        }}>
+                        Profile
+                    </Text>
+                </View>
                 <Image
-                    style={{width: 200, height: 200}}
+                    style={{width: 200, height: 200, marginTop: 40}}
                     source={require('../../Assets/avatar.jpeg')}
                 />
                 <Text style={style.text}>Full Name</Text>
                 <Text style={style.text}>Full Name</Text>
                 <Text style={style.text}>Full Name</Text>
-                <View
-                    style={{
-                        flexDirection: 'row',
-                        //alignItems: 'center',
-                        //flexWrap: 'wrap',
-                        //width: '100%',
-                    }}>
-                    <TouchableOpacity
-                        style={style.button}
-                        onPress={() => navigation.navigate('EditProfile')}>
-                        <Text style={style.buttonText}>Edit Details</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={style.button} onPress={onPress}>
-                        <Text style={style.buttonText}>Log Out</Text>
-                    </TouchableOpacity>
-                </View>
                 <View>
                     <Toast />
                 </View>
+            </View>
+            <View
+                style={{
+                    flexDirection: 'row',
+                    //alignItems: 'center',
+                    //flexWrap: 'wrap',
+                    width: '100%',
+                }}>
+                <TouchableOpacity
+                    style={style.button}
+                    onPress={() => navigation.navigate('EditProfile')}>
+                    <Text style={style.buttonText}>Edit Details</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={style.button} onPress={onPress}>
+                    <Text style={style.buttonText}>Log Out</Text>
+                </TouchableOpacity>
             </View>
         </View>
     );
@@ -78,7 +89,7 @@ const style = StyleSheet.create({
         padding: 10,
         marginHorizontal: 10,
         borderRadius: 25,
-        //width: '90%',
+        width: '45%',
         marginTop: 50,
     },
     buttonText: {

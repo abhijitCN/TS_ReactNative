@@ -44,7 +44,12 @@ function Home({navigation}) {
             </View>
             {animate === true ? (
                 <>
-                    <View>
+                    <View
+                        style={{
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            flex: 1,
+                        }}>
                         <ActivityIndicator
                             animating={animate}
                             color="red"
