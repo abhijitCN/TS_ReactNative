@@ -1,6 +1,6 @@
 import {firebase} from '@react-native-firebase/auth';
 import React, {useState, useContext} from 'react';
-//import firestore from '@react-native-firebase/firestore';
+import firestore from '@react-native-firebase/firestore';
 import {
     View,
     StyleSheet,
@@ -35,17 +35,22 @@ function Registration({navigation}) {
                     .auth()
                     .createUserWithEmailAndPassword(data.email, data.password);
                 if (user) {
-                    console.log('>>>>>', JSON.stringify(user.email));
-                    // await firebase
-                    //     .firestore()
-                    //     .collection('users')
-                    //     .doc(user.uid)
-                    //     .set(data.displayName);
+                    //console.log('>>>>>', JSON.stringify(user.email));
+                    firestore()
+                        .collection('users')
+                        .add({
+                            name: data.name,
+                            email: data.email,
+                            phoneNo: data.phoneNo,
+                        })
+                        .then(() => {
+                            Alert.alert('Register Successfully');
+                            navigation.navigate('Login');
+                        });
                 }
             } catch (error) {
                 console.log('error', error);
             }
-            //Alert.alert('All ok');
         } else {
             SetValiadate(true);
         }

@@ -13,32 +13,23 @@ import {UserContext} from '../../Context/AuthContext';
 const {height, width} = Dimensions.get('screen');
 import Toast from 'react-native-toast-message';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import firestore from '@react-native-firebase/firestore';
 
 const EditProfile = ({navigation}) => {
     const {user, signOut} = useContext<any>(UserContext);
     const [validate, SetValiadate] = useState<boolean>(false);
     const credential = {email: '123', password: '123'};
     const [data, setData] = useState<any>({email: '', password: ''});
-    const onPress = () => {
-        if (
-            credential.email === data.email &&
-            credential.password === data.password
-        ) {
-            Toast.show({
-                type: 'success',
-                text1: 'Logout Successfully',
-                position: 'top',
+    const onPress = async () => {
+        await firestore()
+            .collection('users')
+            .doc('w035GhK8LaHSFeCjFeDG')
+            .update({
+                name: 'don',
+            })
+            .then(() => {
+                console.log('User updated!');
             });
-            //signIn(data);
-        } else {
-            if (!data.email || !data.password) {
-                console.log('Required All Felds');
-            } else if (credential.email !== data.email) {
-                console.log('Wrong Email');
-            } else if (credential.password !== data.password) {
-                console.log('Wrong Password');
-            }
-        }
     };
 
     return (
@@ -74,7 +65,10 @@ const EditProfile = ({navigation}) => {
                 />
                 <TouchableOpacity
                     style={style.button}
-                    onPress={() => navigation.navigate('Profile')}>
+                    onPress={
+                        onPress
+                        //() => navigation.navigate('Profile')
+                    }>
                     <Text style={style.buttonText}>Submit</Text>
                 </TouchableOpacity>
 

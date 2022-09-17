@@ -6,6 +6,7 @@ import {
     Text,
     TextInput,
     SafeAreaView,
+    Alert,
 } from 'react-native';
 import Toast from 'react-native-toast-message';
 import {UserContext} from '../../Context/AuthContext';
@@ -47,12 +48,12 @@ const Login = ({navigation}) => {
                     .auth()
                     .signInWithEmailAndPassword(data.email, data.password);
                 if (user) {
-                    console.log('>>>>>', JSON.stringify(user));
+                    console.log('>>>>>', JSON.stringify(user.user));
+                    Alert.alert('Login Successfully');
                 }
             } catch (error) {
                 console.log('error', error);
             }
-            //Alert.alert('All ok');
         } else {
             SetValiadate(true);
         }

@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {
     View,
     Dimensions,
@@ -11,12 +11,13 @@ import {UserContext} from '../../Context/AuthContext';
 const {height, width} = Dimensions.get('screen');
 import Toast from 'react-native-toast-message';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-// import { Container } from './styles';
+import firestore from '@react-native-firebase/firestore';
 
 const Profile = ({navigation}) => {
     const {user, signOut} = useContext<any>(UserContext);
+    const [posts, setPosts] = useState<any>([]);
 
-    const onPress = async () => {
+    const logOut = async () => {
         try {
             await AsyncStorage.removeItem('userToken');
             signOut();
@@ -30,12 +31,57 @@ const Profile = ({navigation}) => {
             console.log('Logout error');
         }
     };
+
+    const getProfileData = async () => {
+        const productList: any[] = [];
+        console.log('called');
+        await firestore()
+            .collection('users')
+            .get()
+            .then(querySnapshot => {
+                //console.log('Total users: ', querySnapshot);
+                querySnapshot.forEach(documentSnapshot => {
+                    const {name, phoneNo, email} = documentSnapshot.data();
+                    productList.push({
+                        name: name,
+                        phoneNo: phoneNo,
+                        email: email,
+                    });
+                    // console.log(
+                    //     'User ID: ',
+                    //     name,
+                    //     phoneNo,
+                    //     email,
+                    //     //documentSnapshot.id,
+                    //     //documentSnapshot.data(),
+                    // );
+                });
+            });
+        setPosts(productList);
+        console.log('GetValue', posts);
+    };
+    // const valueName = posts[0].name;
+    // const valueEmail = posts[0].email;
+    // const valuePhoneNo = posts[0].phoneNo;
+
+    const lapsList = () => {
+        return posts.map((data: any) => {
+            return (
+                <View>
+                    <Text style={style.text}>{data.name}</Text>
+                    <Text style={style.text}>{data.email}</Text>
+                    <Text style={style.text}>{data.phoneNo}</Text>
+                </View>
+            );
+        });
+    };
+
+    useEffect(() => {
+        getProfileData;
+    }, []);
+
     return (
         <View style={style.main}>
-            {/* <View style={{alignItems: 'center'}}>
-               
-            </View> */}
-
             <View style={{alignItems: 'center'}}>
                 <View>
                     <Text
@@ -48,29 +94,34 @@ const Profile = ({navigation}) => {
                     </Text>
                 </View>
                 <Image
-                    style={{width: 200, height: 200, marginTop: 40}}
+                    style={{
+                        width: 200,
+                        height: 200,
+                        marginTop: 40,
+                        marginBottom: 5,
+                    }}
                     source={require('../../Assets/avatar.jpeg')}
                 />
-                <Text style={style.text}>Full Name</Text>
-                <Text style={style.text}>Full Name</Text>
-                <Text style={style.text}>Full Name</Text>
+                <View>{lapsList()}</View>
                 <View>
                     <Toast />
                 </View>
             </View>
             <View
                 style={{
-                    flexDirection: 'row',
-                    //alignItems: 'center',
-                    //flexWrap: 'wrap',
-                    width: '100%',
+                    //flexDirection: 'row',
+                    //width: '100%',
+                    alignItems: 'center',
                 }}>
                 <TouchableOpacity
                     style={style.button}
-                    onPress={() => navigation.navigate('EditProfile')}>
+                    onPress={() => navigation.navigate('EditProfile', {})}>
                     <Text style={style.buttonText}>Edit Details</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={style.button} onPress={onPress}>
+                <TouchableOpacity style={style.button}>
+                    <Text style={style.buttonText}>Change Password</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={style.button} onPress={getProfileData}>
                     <Text style={style.buttonText}>Log Out</Text>
                 </TouchableOpacity>
             </View>
@@ -79,9 +130,7 @@ const Profile = ({navigation}) => {
 };
 const style = StyleSheet.create({
     main: {
-        //alignItems: 'center',
         flex: 1,
-        //justifyContent: 'center',
     },
     button: {
         alignItems: 'center',
@@ -89,19 +138,22 @@ const style = StyleSheet.create({
         padding: 10,
         marginHorizontal: 10,
         borderRadius: 25,
-        width: '45%',
-        marginTop: 50,
+        width: '90%',
+        marginTop: 10,
+        //height: 50,
     },
     buttonText: {
         fontSize: 17,
         fontWeight: '500',
         color: '#0a3749',
+        textAlignVertical: 'center',
     },
     buttonContainer: {
         marginTop: 10,
     },
     text: {
-        fontSize: 25,
+        fontSize: 20,
+        textAlign: 'center',
         fontWeight: '600',
         marginHorizontal: 10,
     },
