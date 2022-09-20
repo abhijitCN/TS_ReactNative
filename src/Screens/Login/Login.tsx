@@ -5,18 +5,22 @@ import {
     TouchableOpacity,
     Text,
     TextInput,
-    SafeAreaView,
+    ScrollView,
     Alert,
 } from 'react-native';
 import Toast from 'react-native-toast-message';
 import {UserContext} from '../../Context/AuthContext';
 import {firebase} from '@react-native-firebase/auth';
+import {verify} from '../../Reducers/verificationSlice';
+import {useDispatch, useSelector} from 'react-redux';
+import {signUpUser} from '../../Reducers/authSlice';
 
 const Login = ({navigation}) => {
     const {signIn} = useContext<any>(UserContext);
     const credential = {email: '123', password: '123'};
     const [data, setData] = useState<any>({email: '', password: ''});
     const [validate, SetValiadate] = useState<boolean>(false);
+    const dispatch = useDispatch();
 
     const onPress = () => {
         if (
@@ -47,12 +51,17 @@ const Login = ({navigation}) => {
                 const user = await firebase
                     .auth()
                     .signInWithEmailAndPassword(data.email, data.password);
-                if (user) {
-                    console.log('>>>>>', JSON.stringify(user.user));
+                if (user.user.providerData[0].email) {
+                    dispatch(
+                        signUpUser({email: user.user.providerData[0].email}),
+                    );
+                    console.log('USER EMAIL', user.user.providerData[0].email);
                     Alert.alert('Login Successfully');
+                    dispatch(verify(true));
                 }
             } catch (error) {
                 console.log('error', error);
+                dispatch(verify(false));
             }
         } else {
             SetValiadate(true);
@@ -60,79 +69,74 @@ const Login = ({navigation}) => {
     };
 
     return (
-        <>
-            <View style={style.main}>
-                <Text style={style.loginText}>Log In</Text>
-                <Text style={style.sentence}>
-                    Enter your email and password
-                </Text>
-                <View style={{}}>
-                    <Text style={style.textInputHeading}>Email</Text>
-                    <TextInput
+        <View style={style.main}>
+            <Text style={style.loginText}>Log In</Text>
+            <Text style={style.sentence}>Enter your email and password</Text>
+            <View style={{}}>
+                <Text style={style.textInputHeading}>Email</Text>
+                <TextInput
+                    style={[
+                        style.input,
+                        {
+                            borderColor:
+                                validate && data.email === ''
+                                    ? 'red'
+                                    : '#1b94c4',
+                        },
+                    ]}
+                    onChangeText={e => setData({...data, email: e})}
+                    value={data.email}
+                    placeholderTextColor="#1b94c4"
+                    keyboardType="email-address"
+                    //keyboardAppearance="light"
+                    placeholder="Email"
+                />
+                {validate && data.email === '' && (
+                    <Text style={{marginLeft: 12, color: 'red'}}>
+                        Email required
+                    </Text>
+                )}
+                <Text style={style.textInputHeading}>Password</Text>
+                <TextInput
+                    style={[
+                        style.input,
+                        {
+                            borderColor:
+                                validate && data.password === ''
+                                    ? 'red'
+                                    : '#1b94c4',
+                        },
+                    ]}
+                    onChangeText={e => setData({...data, password: e})}
+                    value={data.password}
+                    //value={'123'}
+                    placeholderTextColor="#1b94c4"
+                    //keyboardType="default"
+                    //keyboardAppearance="light"
+                    placeholder="Password"
+                />
+                {validate && data.password === '' && (
+                    <Text style={{marginLeft: 12, color: 'red'}}>
+                        Password required
+                    </Text>
+                )}
+                <TouchableOpacity style={style.button} onPress={FBLogin}>
+                    <Text style={style.buttonText}>Submit</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
+                    <Text
                         style={[
-                            style.input,
-                            {
-                                borderColor:
-                                    validate && data.email === ''
-                                        ? 'red'
-                                        : '#1b94c4',
-                            },
-                        ]}
-                        onChangeText={e => setData({...data, email: e})}
-                        value={data.email}
-                        placeholderTextColor="#1b94c4"
-                        keyboardType="email-address"
-                        //keyboardAppearance="light"
-                        placeholder="Email"
-                    />
-                    {validate && data.email === '' && (
-                        <Text style={{marginLeft: 12, color: 'red'}}>
-                            Email required
-                        </Text>
-                    )}
-                    <Text style={style.textInputHeading}>Password</Text>
-                    <TextInput
-                        style={[
-                            style.input,
-                            {
-                                borderColor:
-                                    validate && data.password === ''
-                                        ? 'red'
-                                        : '#1b94c4',
-                            },
-                        ]}
-                        onChangeText={e => setData({...data, password: e})}
-                        value={data.password}
-                        //value={'123'}
-                        placeholderTextColor="#1b94c4"
-                        //keyboardType="default"
-                        //keyboardAppearance="light"
-                        placeholder="Password"
-                    />
-                    {validate && data.password === '' && (
-                        <Text style={{marginLeft: 12, color: 'red'}}>
-                            Password required
-                        </Text>
-                    )}
-                    <TouchableOpacity style={style.button} onPress={onPress}>
-                        <Text style={style.buttonText}>Submit</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        onPress={() => navigation.navigate('SignUp')}>
-                        <Text
-                            style={[
-                                style.buttonText,
-                                {alignSelf: 'center', marginTop: 12},
-                            ]}>
-                            Don't Have Account ? Sign Up
-                        </Text>
-                    </TouchableOpacity>
-                </View>
-                <View>
-                    <Toast />
-                </View>
+                            style.buttonText,
+                            {alignSelf: 'center', marginTop: 12},
+                        ]}>
+                        Don't Have Account ? Sign Up
+                    </Text>
+                </TouchableOpacity>
             </View>
-        </>
+            <View>
+                <Toast />
+            </View>
+        </View>
     );
 };
 

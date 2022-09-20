@@ -1,14 +1,22 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {View, TouchableOpacity, Text, StyleSheet, Image} from 'react-native';
-import {UserContext} from '../../Context/AuthContext';
+import {
+    View,
+    TouchableOpacity,
+    Text,
+    StyleSheet,
+    Image,
+    ActivityIndicator,
+} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {ActivityIndicator} from 'react-native-paper';
 import Toast from 'react-native-toast-message';
+import {useDispatch, useSelector} from 'react-redux';
+import firestore from '@react-native-firebase/firestore';
 
 function Home({navigation}) {
-    const {user, signOut} = useContext<any>(UserContext);
+    // const {user, signOut} = useContext<any>(UserContext);
     const [animate, setAnimate] = useState<boolean>(true);
-
+    const [posts, setPosts] = useState<any>([]);
+    const user = useSelector(state => state.user);
     // const onPress = () => {
     //   signOut();
     // };
@@ -17,6 +25,50 @@ function Home({navigation}) {
             setAnimate(false);
         }, 2000);
     });
+    const getProfileData = async () => {
+        const productList: any[] = [];
+        console.log('called');
+        await firestore()
+            .collection('users')
+            .get()
+            .then(querySnapshot => {
+                console.log('Total users: ', querySnapshot);
+                // querySnapshot.forEach(documentSnapshot => {
+                //     const {name, phoneNo, email} = documentSnapshot.data();
+                //     productList.push({
+                //         name: name,
+                //         phoneNo: phoneNo,
+                //         email: email,
+                //     });
+                //     console.log(
+                //         'User ID: ',
+                //         name,
+                //         phoneNo,
+                //         email,
+                //         //documentSnapshot.id,
+                //         //documentSnapshot.data(),
+                //     );
+                // });
+            });
+        setPosts(productList);
+        console.log('GetValue', posts);
+    };
+    useEffect(() => {
+        console.log('user data');
+        getProfileData();
+    }, []);
+    const lapsList = () => {
+        return posts.map((data: any) => {
+            return (
+                <View>
+                    <Text style={style.text}>{data.name}</Text>
+                    <Text style={style.text}>{data.email}</Text>
+                    <Text style={style.text}>{data.phoneNo}</Text>
+                </View>
+            );
+        });
+    };
+
     return (
         <View style={style.main}>
             <View
@@ -50,11 +102,7 @@ function Home({navigation}) {
                             justifyContent: 'center',
                             flex: 1,
                         }}>
-                        <ActivityIndicator
-                            animating={animate}
-                            color="red"
-                            size="large"
-                        />
+                        <ActivityIndicator color="red" size="large" />
                     </View>
                 </>
             ) : (
@@ -65,7 +113,7 @@ function Home({navigation}) {
                         justifyContent: 'center',
                     }}>
                     <Text style={{fontSize: 20, fontWeight: 'bold'}}>
-                        Hello, {user.email}
+                        Hello,{user.email}
                     </Text>
                 </View>
             )}
@@ -93,6 +141,12 @@ const style = StyleSheet.create({
     },
     buttonContainer: {
         marginTop: 10,
+    },
+    text: {
+        fontSize: 20,
+        textAlign: 'center',
+        fontWeight: '600',
+        marginHorizontal: 10,
     },
 });
 export default Home;

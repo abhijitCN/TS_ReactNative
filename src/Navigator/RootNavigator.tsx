@@ -8,7 +8,7 @@ function RootNavigator() {
 
     const getUser = async () => {
         try {
-            const value = await AsyncStorage.getItem('userToken');
+            //const value = await AsyncStorage.getItem('userToken');
             console.log('#######', value);
             if (value != null) {
                 setUser(JSON.parse(value));

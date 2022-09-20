@@ -23,7 +23,7 @@ export default function AuthContext(props: IAuthContextProps) {
 
     const [user, setUser] = React.useState<ISignIn>(null);
     const signIn = (data: ISignIn) => {
-        AsyncStorage.setItem('userToken', JSON.stringify(data));
+        //AsyncStorage.setItem('userToken', JSON.stringify(data));
         // console.log(data);
         setUser(data);
     };

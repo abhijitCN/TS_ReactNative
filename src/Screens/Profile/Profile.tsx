@@ -12,15 +12,23 @@ const {height, width} = Dimensions.get('screen');
 import Toast from 'react-native-toast-message';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import firestore from '@react-native-firebase/firestore';
+import {useDispatch, useSelector} from 'react-redux';
+import {verify} from '../../Reducers/verificationSlice';
 
 const Profile = ({navigation}) => {
-    const {user, signOut} = useContext<any>(UserContext);
+    //const {user, signOut} = useContext<any>(UserContext);
+    const dispatch = useDispatch();
     const [posts, setPosts] = useState<any>([]);
+    const [userData, setUserData] = useState({});
+    const user = useSelector(state => state.user);
+    useEffect(() => {
+        getProfileData();
+    }, []);
 
     const logOut = async () => {
         try {
-            await AsyncStorage.removeItem('userToken');
-            signOut();
+            //await AsyncStorage.removeItem('userToken');
+            dispatch(verify(false));
             Toast.show({
                 type: 'success',
                 text1: 'Logout Successfully',
@@ -39,23 +47,12 @@ const Profile = ({navigation}) => {
             .collection('users')
             .get()
             .then(querySnapshot => {
-                //console.log('Total users: ', querySnapshot);
-                querySnapshot.forEach(documentSnapshot => {
-                    const {name, phoneNo, email} = documentSnapshot.data();
-                    productList.push({
-                        name: name,
-                        phoneNo: phoneNo,
-                        email: email,
-                    });
-                    // console.log(
-                    //     'User ID: ',
-                    //     name,
-                    //     phoneNo,
-                    //     email,
-                    //     //documentSnapshot.id,
-                    //     //documentSnapshot.data(),
-                    // );
+                console.log('Total users: ', querySnapshot.docs[0]._data);
+                let data = querySnapshot.docs.filter(r => {
+                    return r._data.email === user.email;
                 });
+                setUserData(data);
+                console.log(data);
             });
         setPosts(productList);
         console.log('GetValue', posts);
@@ -75,10 +72,6 @@ const Profile = ({navigation}) => {
             );
         });
     };
-
-    useEffect(() => {
-        getProfileData;
-    }, []);
 
     return (
         <View style={style.main}>
@@ -115,13 +108,15 @@ const Profile = ({navigation}) => {
                 }}>
                 <TouchableOpacity
                     style={style.button}
-                    onPress={() => navigation.navigate('EditProfile', {})}>
+                    onPress={() =>
+                        navigation.navigate('EditProfile', {data: userData})
+                    }>
                     <Text style={style.buttonText}>Edit Details</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={style.button}>
+                {/* <TouchableOpacity style={style.button}>
                     <Text style={style.buttonText}>Change Password</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={style.button} onPress={getProfileData}>
+                </TouchableOpacity> */}
+                <TouchableOpacity style={style.button} onPress={logOut}>
                     <Text style={style.buttonText}>Log Out</Text>
                 </TouchableOpacity>
             </View>

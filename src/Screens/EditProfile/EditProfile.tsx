@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useState, useEffect} from 'react';
 import {
     View,
     Dimensions,
@@ -7,6 +7,7 @@ import {
     Image,
     TouchableOpacity,
     TextInput,
+    ScrollView,
     Alert,
 } from 'react-native';
 import {UserContext} from '../../Context/AuthContext';
@@ -14,18 +15,34 @@ const {height, width} = Dimensions.get('screen');
 import Toast from 'react-native-toast-message';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import firestore from '@react-native-firebase/firestore';
-
+import {useRoute} from '@react-navigation/native';
 const EditProfile = ({navigation}) => {
     const {user, signOut} = useContext<any>(UserContext);
     const [validate, SetValiadate] = useState<boolean>(false);
-    const credential = {email: '123', password: '123'};
+    const [Value, setValue] = useState<any>({Name: '', PhoneNo: ''});
+    const [editValue, setEditValue] = useState({
+        name: '',
+        phoneNo: '',
+        email: '',
+    });
+    const Route = useRoute();
+    useEffect(() => {
+        getUserData();
+    }, []);
+
+    const getUserData = () => {
+        let data = Route.params;
+        console.log('editable value doc data>>>>>>>>>', data.data[0]);
+        setEditValue(data.data[0]._data);
+    };
     const [data, setData] = useState<any>({email: '', password: ''});
+
     const onPress = async () => {
         await firestore()
             .collection('users')
-            .doc('w035GhK8LaHSFeCjFeDG')
+            .doc('users')
             .update({
-                name: 'don',
+                name: Value.Name,
             })
             .then(() => {
                 console.log('User updated!');
@@ -34,48 +51,54 @@ const EditProfile = ({navigation}) => {
 
     return (
         <View style={style.main}>
-            <View style={{alignSelf: 'center'}}>
-                <Text
-                    style={{
-                        fontWeight: 'bold',
-                        fontSize: 25,
-                        paddingTop: 20,
-                    }}>
-                    Edit Profile
-                </Text>
-            </View>
-            <View style={{}}>
-                <Image
-                    style={style.image}
-                    source={require('../../Assets/avatar.jpeg')}
-                />
-                <Text style={style.textInputHeading}>Name</Text>
-                <TextInput
-                    style={style.input}
-                    placeholderTextColor="#1b94c4"
-                    keyboardType="email-address"
-                    placeholder="Name"
-                />
-                <Text style={style.textInputHeading}>Phone No</Text>
-                <TextInput
-                    style={style.input}
-                    placeholderTextColor="#1b94c4"
-                    keyboardType="email-address"
-                    placeholder="Phone No"
-                />
-                <TouchableOpacity
-                    style={style.button}
-                    onPress={
-                        onPress
-                        //() => navigation.navigate('Profile')
-                    }>
-                    <Text style={style.buttonText}>Submit</Text>
-                </TouchableOpacity>
-
-                <View>
-                    <Toast />
+            <ScrollView>
+                <View style={{alignSelf: 'center'}}>
+                    <Text
+                        style={{
+                            fontWeight: 'bold',
+                            fontSize: 25,
+                            paddingTop: 20,
+                        }}>
+                        Edit Profile
+                    </Text>
                 </View>
-            </View>
+                <View style={{}}>
+                    <Image
+                        style={style.image}
+                        source={require('../../Assets/avatar.jpeg')}
+                    />
+                    <Text style={style.textInputHeading}>Name</Text>
+                    <TextInput
+                        style={style.input}
+                        placeholderTextColor="#1b94c4"
+                        keyboardType="email-address"
+                        placeholder="Name"
+                        //value={editValue.name}
+                        onChangeText={e => setValue({...Value, Name: e})}
+                    />
+                    <Text style={style.textInputHeading}>Phone No</Text>
+                    <TextInput
+                        style={style.input}
+                        placeholderTextColor="#1b94c4"
+                        keyboardType="email-address"
+                        placeholder="Phone No"
+                        //value={editValue.phoneNo}
+                        onChangeText={e => setValue({...Value, PhoneNo: e})}
+                    />
+                    <TouchableOpacity
+                        style={style.button}
+                        onPress={
+                            onPress
+                            //() => navigation.navigate('Profile')
+                        }>
+                        <Text style={style.buttonText}>Submit</Text>
+                    </TouchableOpacity>
+
+                    <View>
+                        <Toast />
+                    </View>
+                </View>
+            </ScrollView>
         </View>
     );
 };
