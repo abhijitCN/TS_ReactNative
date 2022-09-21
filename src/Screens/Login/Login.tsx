@@ -14,6 +14,7 @@ import {firebase} from '@react-native-firebase/auth';
 import {verify} from '../../Reducers/verificationSlice';
 import {useDispatch, useSelector} from 'react-redux';
 import {signUpUser} from '../../Reducers/authSlice';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Login = ({navigation}) => {
     const {signIn} = useContext<any>(UserContext);
@@ -58,6 +59,7 @@ const Login = ({navigation}) => {
                     console.log('USER EMAIL', user.user.providerData[0].email);
                     Alert.alert('Login Successfully');
                     dispatch(verify(true));
+                    AsyncStorage.setItem('userToken', JSON.stringify(user));
                 }
             } catch (error) {
                 console.log('error', error);

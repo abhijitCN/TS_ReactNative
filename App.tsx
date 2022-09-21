@@ -3,6 +3,7 @@ import {StyleSheet, Text, useColorScheme, View} from 'react-native';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import {useSelector} from 'react-redux';
 import {AuthNavigator, MainStackNavigation} from './src/Navigator/index';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Section: React.FC<
     PropsWithChildren<{
@@ -36,6 +37,8 @@ const Section: React.FC<
 
 const App = () => {
     const verifi = useSelector(state => state.verification);
+    const isValid = AsyncStorage.getItem('userToken');
+    console.log('isValid?????????????', isValid);
     useEffect(() => {
         console.log('print', verifi.logUser);
     }, [verifi]);

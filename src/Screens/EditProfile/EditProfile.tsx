@@ -19,7 +19,7 @@ import {useRoute} from '@react-navigation/native';
 const EditProfile = ({navigation}) => {
     const {user, signOut} = useContext<any>(UserContext);
     const [validate, SetValiadate] = useState<boolean>(false);
-    const [Value, setValue] = useState<any>({Name: '', PhoneNo: ''});
+    // const [Value, setValue] = useState<any>({Name: '', PhoneNo: ''});
     const [editValue, setEditValue] = useState({
         name: '',
         phoneNo: '',
@@ -32,7 +32,7 @@ const EditProfile = ({navigation}) => {
 
     const getUserData = () => {
         let data = Route.params;
-        console.log('editable value doc data>>>>>>>>>', data.data[0]);
+        console.log('editable value doc data>>>>>>>>>', data.data[0]._data);
         setEditValue(data.data[0]._data);
     };
     const [data, setData] = useState<any>({email: '', password: ''});
@@ -40,9 +40,10 @@ const EditProfile = ({navigation}) => {
     const onPress = async () => {
         await firestore()
             .collection('users')
-            .doc('users')
+            .doc('yzjE14eBFFjWzFtAlLgz')
             .update({
-                name: Value.Name,
+                name: editValue.name,
+                phoneNo: editValue.phoneNo,
             })
             .then(() => {
                 console.log('User updated!');
@@ -73,8 +74,10 @@ const EditProfile = ({navigation}) => {
                         placeholderTextColor="#1b94c4"
                         keyboardType="email-address"
                         placeholder="Name"
-                        //value={editValue.name}
-                        onChangeText={e => setValue({...Value, Name: e})}
+                        value={editValue.name}
+                        onChangeText={e =>
+                            setEditValue({...editValue, name: e})
+                        }
                     />
                     <Text style={style.textInputHeading}>Phone No</Text>
                     <TextInput
@@ -82,8 +85,10 @@ const EditProfile = ({navigation}) => {
                         placeholderTextColor="#1b94c4"
                         keyboardType="email-address"
                         placeholder="Phone No"
-                        //value={editValue.phoneNo}
-                        onChangeText={e => setValue({...Value, PhoneNo: e})}
+                        value={editValue.phoneNo}
+                        onChangeText={e =>
+                            setEditValue({...editValue, phoneNo: e})
+                        }
                     />
                     <TouchableOpacity
                         style={style.button}
