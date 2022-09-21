@@ -10,22 +10,19 @@ import {
     ScrollView,
     Alert,
 } from 'react-native';
-import {UserContext} from '../../Context/AuthContext';
 const {height, width} = Dimensions.get('screen');
 import Toast from 'react-native-toast-message';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import firestore from '@react-native-firebase/firestore';
 import {useRoute} from '@react-navigation/native';
 const EditProfile = ({navigation}) => {
-    const {user, signOut} = useContext<any>(UserContext);
-    const [validate, SetValiadate] = useState<boolean>(false);
-    // const [Value, setValue] = useState<any>({Name: '', PhoneNo: ''});
     const [editValue, setEditValue] = useState({
         name: '',
         phoneNo: '',
         email: '',
     });
+
     const Route = useRoute();
+
     useEffect(() => {
         getUserData();
     }, []);
@@ -35,7 +32,6 @@ const EditProfile = ({navigation}) => {
         console.log('editable value doc data>>>>>>>>>', data.data[0]._data);
         setEditValue(data.data[0]._data);
     };
-    const [data, setData] = useState<any>({email: '', password: ''});
 
     const onPress = async () => {
         await firestore()
@@ -46,6 +42,7 @@ const EditProfile = ({navigation}) => {
                 phoneNo: editValue.phoneNo,
             })
             .then(() => {
+                navigation.navigate('Home');
                 console.log('User updated!');
             });
     };
@@ -90,12 +87,7 @@ const EditProfile = ({navigation}) => {
                             setEditValue({...editValue, phoneNo: e})
                         }
                     />
-                    <TouchableOpacity
-                        style={style.button}
-                        onPress={
-                            onPress
-                            //() => navigation.navigate('Profile')
-                        }>
+                    <TouchableOpacity style={style.button} onPress={onPress}>
                         <Text style={style.buttonText}>Submit</Text>
                     </TouchableOpacity>
 
@@ -110,9 +102,7 @@ const EditProfile = ({navigation}) => {
 
 const style = StyleSheet.create({
     main: {
-        //alignItems: 'center',
         flex: 1,
-        //justifyContent: 'center',
     },
     button: {
         alignItems: 'center',
@@ -120,7 +110,6 @@ const style = StyleSheet.create({
         padding: 10,
         marginHorizontal: 10,
         borderRadius: 25,
-        //width: '90%',
         marginTop: 50,
     },
     buttonText: {

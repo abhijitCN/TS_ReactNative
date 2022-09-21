@@ -6,9 +6,10 @@ import RegistrationScreen from '../Screens/Registration/Registration';
 import HomeScreen from '../Screens/Home/Home';
 import ProfileScreen from '../Screens/Profile/Profile';
 import EditProfileScreen from '../Screens/EditProfile/EditProfile';
+import {MainStackParamList} from './types';
 
-const AuthStack = createStackNavigator();
-const MainStack = createStackNavigator();
+const AuthStack = createStackNavigator<MainStackParamList>();
+const MainStack = createStackNavigator<MainStackParamList>();
 const StackScreens = () => (
     <AuthStack.Navigator
         screenOptions={{headerShown: false}}

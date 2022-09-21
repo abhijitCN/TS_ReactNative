@@ -1,7 +1,11 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const initialState = {
+interface Initial {
+    logUser: boolean;
+}
+
+const initialState: Initial = {
     logUser: false,
 };
 
