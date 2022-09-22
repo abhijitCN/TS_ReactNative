@@ -13,9 +13,21 @@ import {
 const {height, width} = Dimensions.get('screen');
 import Toast from 'react-native-toast-message';
 import firestore from '@react-native-firebase/firestore';
-import {useRoute} from '@react-navigation/native';
-const EditProfile = ({navigation}) => {
-    const [editValue, setEditValue] = useState({
+import {useNavigation, useRoute} from '@react-navigation/native';
+
+interface editValue {
+    name: string;
+    phoneNo: string;
+    email: string;
+}
+interface DescribableFunction {
+    description: string;
+    (someArg: number): boolean;
+}
+const EditProfile = () => {
+    const navigation = useNavigation();
+
+    const [editValue, setEditValue] = useState<editValue | any>({
         name: '',
         phoneNo: '',
         email: '',
@@ -27,19 +39,18 @@ const EditProfile = ({navigation}) => {
         getUserData();
     }, []);
 
-    const getUserData = () => {
+    const getUserData = (fn: DescribableFunction) => {
         let data = Route.params;
-        console.log('editable value doc data>>>>>>>>>', data.data[0]._data);
-        setEditValue(data.data[0]._data);
+        setEditValue(data.data[0]._data ? data.data[0]._data : null);
     };
 
     const onPress = async () => {
         await firestore()
             .collection('users')
-            .doc('yzjE14eBFFjWzFtAlLgz')
+            .doc('KGjjNYWQTUub9nkHqgWl')
             .update({
-                name: editValue.name,
-                phoneNo: editValue.phoneNo,
+                name: editValue.name ? editValue.name : null,
+                phoneNo: editValue.phoneNo ? editValue.phoneNo : null,
             })
             .then(() => {
                 navigation.navigate('Home');
@@ -71,7 +82,7 @@ const EditProfile = ({navigation}) => {
                         placeholderTextColor="#1b94c4"
                         keyboardType="email-address"
                         placeholder="Name"
-                        value={editValue.name}
+                        value={editValue.name ? editValue.name : null}
                         onChangeText={e =>
                             setEditValue({...editValue, name: e})
                         }
@@ -82,7 +93,7 @@ const EditProfile = ({navigation}) => {
                         placeholderTextColor="#1b94c4"
                         keyboardType="email-address"
                         placeholder="Phone No"
-                        value={editValue.phoneNo}
+                        value={editValue.phoneNo ? editValue.phoneNo : null}
                         onChangeText={e =>
                             setEditValue({...editValue, phoneNo: e})
                         }

@@ -16,10 +16,15 @@ import {useDispatch, useSelector} from 'react-redux';
 import {signUpUser} from '../../Reducers/authSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+interface textFields {
+    email: string;
+    password: string;
+}
+
 const Login = ({navigation}) => {
     const {signIn} = useContext<any>(UserContext);
     const credential = {email: '123', password: '123'};
-    const [data, setData] = useState<any>({email: '', password: ''});
+    const [data, setData] = useState<textFields>({email: '', password: ''});
     const [validate, SetValiadate] = useState<boolean>(false);
     const dispatch = useDispatch();
 

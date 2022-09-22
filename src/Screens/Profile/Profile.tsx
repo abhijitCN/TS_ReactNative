@@ -7,20 +7,21 @@ import {
     Image,
     TouchableOpacity,
 } from 'react-native';
-import {UserContext} from '../../Context/AuthContext';
 const {height, width} = Dimensions.get('screen');
 import Toast from 'react-native-toast-message';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import firestore from '@react-native-firebase/firestore';
 import {useDispatch, useSelector} from 'react-redux';
 import {verify} from '../../Reducers/verificationSlice';
+import {useNavigation} from '@react-navigation/native';
 
-const Profile = ({navigation}) => {
+const Profile = () => {
+    const navigation = useNavigation();
     //const {user, signOut} = useContext<any>(UserContext);
     const dispatch = useDispatch();
     const [posts, setPosts] = useState<any>([]);
-    const [userData, setUserData] = useState({});
-    const user = useSelector(state => state.user);
+    const [userData, setUserData] = useState<any>({});
+    const user = useSelector<any>(state => state.user);
     useEffect(() => {
         getProfileData();
     }, []);
@@ -47,7 +48,12 @@ const Profile = ({navigation}) => {
             .collection('users')
             .get()
             .then(querySnapshot => {
-                console.log('Total users: ', querySnapshot.docs[0]._data);
+                console.log(
+                    'Total users: ',
+                    querySnapshot.docs[0]._data
+                        ? querySnapshot.docs[0]._data
+                        : null,
+                );
                 let data = querySnapshot.docs.filter(r => {
                     return r._data.email === user.email;
                 });
@@ -57,9 +63,6 @@ const Profile = ({navigation}) => {
         setPosts(productList);
         console.log('GetValue', posts);
     };
-    // const valueName = posts[0].name;
-    // const valueEmail = posts[0].email;
-    // const valuePhoneNo = posts[0].phoneNo;
 
     const lapsList = () => {
         return posts.map((data: any) => {

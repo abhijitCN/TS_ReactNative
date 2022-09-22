@@ -1,24 +1,13 @@
 import {createStackNavigator} from '@react-navigation/stack';
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
-import LoginScreen from '../Screens/Login/Login';
-import RegistrationScreen from '../Screens/Registration/Registration';
 import HomeScreen from '../Screens/Home/Home';
 import ProfileScreen from '../Screens/Profile/Profile';
 import EditProfileScreen from '../Screens/EditProfile/EditProfile';
-import {MainStackParamList} from './types';
+import {MainRootStackParamList} from './types';
 
-const AuthStack = createStackNavigator<MainStackParamList>();
-const MainStack = createStackNavigator<MainStackParamList>();
-const StackScreens = () => (
-    <AuthStack.Navigator
-        screenOptions={{headerShown: false}}
-        initialRouteName="SignUp">
-        <AuthStack.Screen name="SignUp" component={LoginScreen} />
-        <AuthStack.Screen name="Login" component={RegistrationScreen} />
-        <AuthStack.Screen name="Home" component={HomeScreen} />
-    </AuthStack.Navigator>
-);
+const MainStack = createStackNavigator<MainRootStackParamList>();
+
 const MainStackScreens = () => (
     <MainStack.Navigator
         screenOptions={{headerShown: false}}
@@ -32,7 +21,6 @@ const MainStackScreens = () => (
 export default () => {
     return (
         <NavigationContainer>
-            {/* <StackScreens /> */}
             <MainStackScreens />
         </NavigationContainer>
     );

@@ -13,13 +13,25 @@ import {
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {signUpUser} from '../../Reducers/authSlice';
+import {useNavigation} from '@react-navigation/native';
 //import {selectEmail} from '../../Reducers/authSlice';
+import {deleteDoc, doc, getDoc, setDoc} from 'firebase/firestore';
+import {db} from '../../Constant/Firebase';
 
-function Registration({navigation}) {
-    const user = useSelector(state => state.user);
+interface textFields {
+    name: string;
+    email: string;
+    phoneNo: string;
+    password: string;
+    isLoading: boolean;
+}
+
+function Registration() {
+    const navigation = useNavigation();
+    //const user = useSelector(state => state.user);
     //const myEmail = useSelector(selectEmail);
 
-    const [data, setData] = useState<any>({
+    const [data, setData] = useState<textFields>({
         name: '',
         email: '',
         phoneNo: '',
@@ -65,11 +77,18 @@ function Registration({navigation}) {
             SetValiadate(true);
         }
     };
-    useEffect(() => {
-        console.log('print', user);
-    }, [user]);
+    // useEffect(() => {
+    //     console.log('print', user);
+    // }, [user]);
 
     const Authenticate = async () => {
+        const myDoc = doc(db, 'User', 'UserData');
+
+        const docData = {
+            name: data.name,
+            phoneNo: data.phoneNo,
+        };
+
         if (data.password && data.email && data.name && data.phoneNo) {
             console.log(
                 '??',
@@ -83,10 +102,20 @@ function Registration({navigation}) {
                 const {user} = await firebase
                     .auth()
                     .createUserWithEmailAndPassword(data.email, data.password);
-                console.log('DATA', data);
+                console.log('DATA', user.uid);
                 //dispatch(signUpUser(data));
-                if (user) {
-                    //console.log('>>>>>', JSON.stringify(user.email));
+                if (user.uid) {
+                    console.log('user.ID>>>>>');
+                    // setDoc(myDoc, docData)
+                    //     // Handling Promises
+                    //     .then(() => {
+                    //         // MARK: Success
+                    //         Alert.alert('Document Created!');
+                    //     })
+                    //     .catch(error => {
+                    //         // MARK: Failure
+                    //         Alert.alert(error.message);
+                    //     });
                     firestore()
                         .collection('users')
                         .add({
@@ -125,9 +154,7 @@ function Registration({navigation}) {
         <View style={style.main}>
             <ScrollView>
                 <View style={{justifyContent: 'center', flex: 1}}>
-                    <Text style={style.loginText}>
-                        Registration{user.email}
-                    </Text>
+                    <Text style={style.loginText}>Registration</Text>
                     <Text style={style.sentence}>Enter your details</Text>
                     <View style={{}}>
                         <Text style={style.textInputHeading}>Name</Text>

@@ -16,12 +16,12 @@ import {useDispatch, useSelector} from 'react-redux';
 import firestore from '@react-native-firebase/firestore';
 import {db} from '../../Constant/Firebase';
 import {deleteDoc, doc, getDoc, setDoc} from 'firebase/firestore';
+import {useNavigation} from '@react-navigation/native';
 
-function Home({navigation}) {
+function Home() {
+    const navigation = useNavigation();
     const [animate, setAnimate] = useState<boolean>(true);
-    const [posts, setPosts] = useState<any>([]);
-    const user = useSelector(state => state.user);
-
+    const user: any = useSelector<any>(state => state.user);
     useEffect(() => {
         setTimeout(() => {
             setAnimate(false);
@@ -30,15 +30,8 @@ function Home({navigation}) {
 
     return (
         <View style={style.main}>
-            <View
-                style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                }}>
-                <Text style={{marginTop: 20, fontWeight: 'bold', fontSize: 25}}>
-                    Home
-                </Text>
+            <View style={style.container}>
+                <Text style={style.header}>Home</Text>
                 <TouchableOpacity
                     onPress={() => navigation.navigate('Profile')}
                     style={{
@@ -48,12 +41,12 @@ function Home({navigation}) {
                         padding: 5,
                     }}>
                     <Image
-                        style={{width: 50, height: 50}}
+                        style={style.image}
                         source={require('../../Assets/avatar.jpeg')}
                     />
                 </TouchableOpacity>
             </View>
-            {/* {animate === true ? (
+            {animate === true ? (
                 <>
                     <View
                         style={{
@@ -64,18 +57,16 @@ function Home({navigation}) {
                         <ActivityIndicator color="red" size="large" />
                     </View>
                 </>
-            ) : ( */}
-            <View
-                style={{
-                    alignItems: 'center',
-                    flex: 1,
-                    justifyContent: 'center',
-                }}>
-                <Text style={{fontSize: 20, fontWeight: 'bold'}}>
-                    Hello,{user.email}
-                </Text>
-            </View>
-            {/* )} */}
+            ) : (
+                <View
+                    style={{
+                        alignItems: 'center',
+                        flex: 1,
+                        justifyContent: 'center',
+                    }}>
+                    <Text style={style.helloText}>Hello,{user.email}</Text>
+                </View>
+            )}
         </View>
     );
 }
@@ -104,6 +95,14 @@ const style = StyleSheet.create({
         textAlign: 'center',
         fontWeight: '600',
         marginHorizontal: 10,
+    },
+    header: {marginTop: 20, fontWeight: 'bold', fontSize: 25},
+    helloText: {fontSize: 20, fontWeight: 'bold'},
+    image: {width: 50, height: 50},
+    container: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
 });
 export default Home;
