@@ -157,6 +157,36 @@ function Sample({navigation}) {
             });
     };
 
+    const App = () => {
+        const verifi = useSelector((state: rootState) => state.verification);
+        const isValid = AsyncStorage.getItem('userToken');
+        console.log('isValid?????????????', isValid);
+        useEffect(() => {
+            console.log('print', verifi.logUser);
+        }, [verifi]);
+        useEffect(() => getUser(), []);
+
+        const getUser = async () => {
+            try {
+                const value = await AsyncStorage.getItem('userToken');
+                console.log('#######', value);
+                if (value != null) {
+                    //setUser(JSON.parse(value));
+                    console.log('?????', value);
+                }
+                console.log('=====', value);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        const isAuthenticate = !!verifi.logUser;
+        console.log('NOT NOT isAuthenticate', isAuthenticate);
+
+        return (
+            <>{isAuthenticate ? <AuthNavigator /> : <MainStackNavigation />}</>
+        );
+    };
+
     return (
         <View style={style.main}>
             <View

@@ -34,20 +34,23 @@ const EditProfile = () => {
     });
 
     const Route = useRoute();
-
+    let data = Route.params;
+    let Phone = data.data.phoneNo;
+    console.log('Global Route data', Phone);
     useEffect(() => {
         getUserData();
     }, []);
 
     const getUserData = (fn: DescribableFunction) => {
         let data = Route.params;
-        setEditValue(data.data[0]._data ? data.data[0]._data : null);
+        console.log('This page data', data.data);
+        setEditValue(data.data ? data.data : null);
     };
 
     const onPress = async () => {
         await firestore()
-            .collection('users')
-            .doc('KGjjNYWQTUub9nkHqgWl')
+            .collection('People')
+            .doc(Phone)
             .update({
                 name: editValue.name ? editValue.name : null,
                 phoneNo: editValue.phoneNo ? editValue.phoneNo : null,
@@ -74,7 +77,7 @@ const EditProfile = () => {
                 <View style={{}}>
                     <Image
                         style={style.image}
-                        source={require('../../Assets/avatar.jpeg')}
+                        source={require('../../Assets/avatar2.png')}
                     />
                     <Text style={style.textInputHeading}>Name</Text>
                     <TextInput
@@ -87,7 +90,7 @@ const EditProfile = () => {
                             setEditValue({...editValue, name: e})
                         }
                     />
-                    <Text style={style.textInputHeading}>Phone No</Text>
+                    {/* <Text style={style.textInputHeading}>Phone No</Text>
                     <TextInput
                         style={style.input}
                         placeholderTextColor="#1b94c4"
@@ -97,7 +100,7 @@ const EditProfile = () => {
                         onChangeText={e =>
                             setEditValue({...editValue, phoneNo: e})
                         }
-                    />
+                    /> */}
                     <TouchableOpacity style={style.button} onPress={onPress}>
                         <Text style={style.buttonText}>Submit</Text>
                     </TouchableOpacity>
@@ -121,7 +124,7 @@ const style = StyleSheet.create({
         padding: 10,
         marginHorizontal: 10,
         borderRadius: 25,
-        marginTop: 50,
+        marginTop: 30,
     },
     buttonText: {
         fontSize: 17,

@@ -118,8 +118,7 @@ const Login = ({navigation}) => {
                     value={data.password}
                     //value={'123'}
                     placeholderTextColor="#1b94c4"
-                    //keyboardType="default"
-                    //keyboardAppearance="light"
+                    secureTextEntry={true}
                     placeholder="Password"
                 />
                 {validate && data.password === '' && (

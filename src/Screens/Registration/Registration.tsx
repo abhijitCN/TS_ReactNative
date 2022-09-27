@@ -117,8 +117,9 @@ function Registration() {
                     //         Alert.alert(error.message);
                     //     });
                     firestore()
-                        .collection('users')
-                        .add({
+                        .collection('People')
+                        .doc(data.phoneNo)
+                        .set({
                             name: data.name,
                             email: data.email,
                             phoneNo: data.phoneNo,
@@ -237,8 +238,9 @@ function Registration() {
                                 },
                             ]}
                             placeholderTextColor="#1b94c4"
-                            keyboardType="email-address"
+                            keyboardType="number-pad"
                             placeholder="password"
+                            secureTextEntry={true}
                             onChangeText={e => setData({...data, password: e})}
                         />
                         {validate && data.password === '' && (

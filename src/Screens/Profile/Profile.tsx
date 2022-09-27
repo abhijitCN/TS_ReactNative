@@ -23,12 +23,13 @@ const Profile = () => {
     const [userData, setUserData] = useState<any>({});
     const user = useSelector<any>(state => state.user);
     useEffect(() => {
-        getProfileData();
+        //getProfileData();
+        sample();
     }, []);
 
     const logOut = async () => {
         try {
-            //await AsyncStorage.removeItem('userToken');
+            await AsyncStorage.removeItem('userToken');
             dispatch(verify(false));
             Toast.show({
                 type: 'success',
@@ -49,7 +50,7 @@ const Profile = () => {
             .get()
             .then(querySnapshot => {
                 console.log(
-                    'Total users: ',
+                    'Total DATA: ',
                     querySnapshot.docs[0]._data
                         ? querySnapshot.docs[0]._data
                         : null,
@@ -64,16 +65,23 @@ const Profile = () => {
         console.log('GetValue', posts);
     };
 
-    const lapsList = () => {
-        return posts.map((data: any) => {
-            return (
-                <View>
-                    <Text style={style.text}>{data.name}</Text>
-                    <Text style={style.text}>{data.email}</Text>
-                    <Text style={style.text}>{data.phoneNo}</Text>
-                </View>
-            );
-        });
+    const sample = async () => {
+        console.log('called sample');
+        await firestore()
+            .collection('People')
+            .get()
+            .then(querySnapshot => {
+                console.log('Total querySnapshot: ', querySnapshot.size);
+                querySnapshot.forEach(documentSnapshot => {
+                    var key = Object(documentSnapshot.data());
+                    console.log('KEYS ?? ', key.email);
+                    //console.log('User Email ?? ', user.email);
+                    if (key.email === user.email) {
+                        console.log('FIND', key);
+                        setUserData(key);
+                    }
+                });
+            });
     };
 
     return (
@@ -96,9 +104,8 @@ const Profile = () => {
                         marginTop: 40,
                         marginBottom: 5,
                     }}
-                    source={require('../../Assets/avatar.jpeg')}
+                    source={require('../../Assets/avatar2.png')}
                 />
-                <View>{lapsList()}</View>
                 <View>
                     <Toast />
                 </View>

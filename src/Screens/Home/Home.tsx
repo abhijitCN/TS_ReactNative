@@ -42,7 +42,7 @@ function Home() {
                     }}>
                     <Image
                         style={style.image}
-                        source={require('../../Assets/avatar.jpeg')}
+                        source={require('../../Assets/avatar2.png')}
                     />
                 </TouchableOpacity>
             </View>
