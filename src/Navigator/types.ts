@@ -5,5 +5,6 @@ export type AuthRootStackParamList = {
 export type MainRootStackParamList = {
     Home: {showMsg: boolean};
     Profile: any;
-    EditProfile:any
+    EditProfile:any;
+    ChangePassword:any
 };

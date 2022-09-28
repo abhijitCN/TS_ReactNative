@@ -123,9 +123,11 @@ const Profile = () => {
                     }>
                     <Text style={style.buttonText}>Edit Details</Text>
                 </TouchableOpacity>
-                {/* <TouchableOpacity style={style.button}>
+                <TouchableOpacity
+                    style={style.button}
+                    onPress={() => navigation.navigate('ChangePassword')}>
                     <Text style={style.buttonText}>Change Password</Text>
-                </TouchableOpacity> */}
+                </TouchableOpacity>
                 <TouchableOpacity style={style.button} onPress={logOut}>
                     <Text style={style.buttonText}>Log Out</Text>
                 </TouchableOpacity>

@@ -160,7 +160,7 @@ function Sample({navigation}) {
     const App = () => {
         const verifi = useSelector((state: rootState) => state.verification);
         const isValid = AsyncStorage.getItem('userToken');
-        console.log('isValid?????????????', isValid);
+        //console.log('isValid?????????????', isValid);
         useEffect(() => {
             console.log('print', verifi.logUser);
         }, [verifi]);

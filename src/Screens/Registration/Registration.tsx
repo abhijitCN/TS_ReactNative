@@ -17,6 +17,7 @@ import {useNavigation} from '@react-navigation/native';
 //import {selectEmail} from '../../Reducers/authSlice';
 import {deleteDoc, doc, getDoc, setDoc} from 'firebase/firestore';
 import {db} from '../../Constant/Firebase';
+import Toast from 'react-native-toast-message';
 
 interface textFields {
     name: string;
@@ -66,7 +67,12 @@ function Registration() {
                             phoneNo: data.phoneNo,
                         })
                         .then(() => {
-                            Alert.alert('Register Successfully');
+                            //Alert.alert('Register Successfully');
+                            Toast.show({
+                                type: 'success',
+                                text1: 'Register Successfully',
+                                position: 'top',
+                            });
                             navigation.navigate('Login');
                         });
                 }
@@ -248,7 +254,9 @@ function Registration() {
                                 Password required
                             </Text>
                         )}
-
+                        <View>
+                            <Toast />
+                        </View>
                         <TouchableOpacity
                             style={style.button}
                             onPress={Authenticate}>

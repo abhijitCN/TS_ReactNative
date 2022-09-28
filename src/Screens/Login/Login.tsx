@@ -12,21 +12,23 @@ import Toast from 'react-native-toast-message';
 import {UserContext} from '../../Context/AuthContext';
 import {firebase} from '@react-native-firebase/auth';
 import {verify} from '../../Reducers/verificationSlice';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch} from 'react-redux';
 import {signUpUser} from '../../Reducers/authSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useNavigation} from '@react-navigation/native';
 
 interface textFields {
     email: string;
     password: string;
 }
 
-const Login = ({navigation}) => {
+const Login = () => {
     const {signIn} = useContext<any>(UserContext);
     const credential = {email: '123', password: '123'};
     const [data, setData] = useState<textFields>({email: '', password: ''});
     const [validate, SetValiadate] = useState<boolean>(false);
     const dispatch = useDispatch();
+    const navigation = useNavigation();
 
     const onPress = () => {
         if (
@@ -57,6 +59,11 @@ const Login = ({navigation}) => {
                 const user = await firebase
                     .auth()
                     .signInWithEmailAndPassword(data.email, data.password);
+                Toast.show({
+                    type: 'success',
+                    text1: 'Logout Successfully',
+                    position: 'top',
+                });
                 if (user.user.providerData[0].email) {
                     dispatch(
                         signUpUser({email: user.user.providerData[0].email}),
@@ -64,7 +71,10 @@ const Login = ({navigation}) => {
                     console.log('USER EMAIL', user.user.providerData[0].email);
                     Alert.alert('Login Successfully');
                     dispatch(verify(true));
-                    AsyncStorage.setItem('userToken', JSON.stringify(user));
+                    AsyncStorage.setItem(
+                        'userToken',
+                        JSON.stringify(dispatch(verify(true))),
+                    );
                 }
             } catch (error) {
                 console.log('error', error);
@@ -126,6 +136,9 @@ const Login = ({navigation}) => {
                         Password required
                     </Text>
                 )}
+                <View>
+                    <Toast />
+                </View>
                 <TouchableOpacity style={style.button} onPress={FBLogin}>
                     <Text style={style.buttonText}>Submit</Text>
                 </TouchableOpacity>

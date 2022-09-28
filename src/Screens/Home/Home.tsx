@@ -22,6 +22,7 @@ function Home() {
     const navigation = useNavigation();
     const [animate, setAnimate] = useState<boolean>(true);
     const user: any = useSelector<any>(state => state.user);
+    console.log('YOU USER', user);
     useEffect(() => {
         setTimeout(() => {
             setAnimate(false);
@@ -64,7 +65,7 @@ function Home() {
                         flex: 1,
                         justifyContent: 'center',
                     }}>
-                    <Text style={style.helloText}>Hello,{user.email}</Text>
+                    <Text style={style.helloText}>Hello,{user?.email}</Text>
                 </View>
             )}
         </View>
