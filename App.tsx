@@ -36,13 +36,13 @@ const Section: React.FC<
 };
 
 const App = () => {
-    const verifi = useSelector((state: rootState) => state.verification);
+    const verify = useSelector((state: rootState) => state.verification);
     const isValid = AsyncStorage.getItem('userToken');
     console.log('isValid?????????????', isValid);
     useEffect(() => {
-        console.log('print', verifi.logUser);
-    }, [verifi]);
-    return <>{verifi.logUser ? <MainStackNavigation /> : <AuthNavigator />}</>;
+        console.log('print', verify.logUser);
+    }, [verify]);
+    return <>{verify.logUser ? <MainStackNavigation /> : <AuthNavigator />}</>;
 };
 
 const styles = StyleSheet.create({
