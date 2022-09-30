@@ -6,6 +6,8 @@ import ProfileScreen from '../Screens/Profile/Profile';
 import EditProfileScreen from '../Screens/EditProfile/EditProfile';
 import {MainRootStackParamList} from './types';
 import ChangePasswordScreen from '../Screens/ChangePassword/ChangePassword';
+import AddAddressScreen from '../Screens/AddAddress/AddAddress';
+import MapScreen from '../Screens/Map/Map';
 
 const MainStack = createStackNavigator<MainRootStackParamList>();
 
@@ -16,6 +18,9 @@ const MainStackScreens = () => (
         <MainStack.Screen name="Home" component={HomeScreen} />
         <MainStack.Screen name="Profile" component={ProfileScreen} />
         <MainStack.Screen name="EditProfile" component={EditProfileScreen} />
+        <MainStack.Screen name="AddAddress" component={AddAddressScreen} />
+        <MainStack.Screen name="Map" component={MapScreen} />
+
         <MainStack.Screen
             name="ChangePassword"
             component={ChangePasswordScreen}

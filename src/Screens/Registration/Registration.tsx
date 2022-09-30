@@ -10,6 +10,7 @@ import {
     SafeAreaView,
     Alert,
     ScrollView,
+    Image,
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {signUpUser} from '../../Reducers/authSlice';
@@ -164,6 +165,18 @@ function Registration() {
                     <Text style={style.loginText}>Registration</Text>
                     <Text style={style.sentence}>Enter your details</Text>
                     <View style={{}}>
+                        <TouchableOpacity onPress={() => Alert.alert('IMAGE')}>
+                            <Image
+                                style={{
+                                    width: 90,
+                                    height: 90,
+                                    backgroundColor: '#eafafc',
+                                    alignSelf: 'center',
+                                    borderRadius: 90,
+                                }}
+                                source={require('../../Assets/avatar2.png')}
+                            />
+                        </TouchableOpacity>
                         <Text style={style.textInputHeading}>Name</Text>
                         <TextInput
                             style={[
@@ -313,7 +326,7 @@ const style = StyleSheet.create({
     },
     sentence: {
         marginLeft: 12,
-        marginBottom: 10,
+        marginBottom: 5,
         fontSize: 20,
         color: '#1b94c4',
     },
