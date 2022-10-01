@@ -6,6 +6,7 @@ import {
     StyleSheet,
     Image,
     TouchableOpacity,
+    Alert,
 } from 'react-native';
 const {height, width} = Dimensions.get('screen');
 import Toast from 'react-native-toast-message';
@@ -97,15 +98,17 @@ const Profile = () => {
                         Profile
                     </Text>
                 </View>
-                <Image
-                    style={{
-                        width: 200,
-                        height: 200,
-                        marginTop: 40,
-                        marginBottom: 5,
-                    }}
-                    source={require('../../Assets/avatar2.png')}
-                />
+                <TouchableOpacity onPress={() => Alert.alert('IMAGE')}>
+                    <Image
+                        style={{
+                            width: 200,
+                            height: 200,
+                            marginTop: 40,
+                            marginBottom: 5,
+                        }}
+                        source={require('../../Assets/avatar2.png')}
+                    />
+                </TouchableOpacity>
                 <View>
                     <Toast />
                 </View>
@@ -122,6 +125,13 @@ const Profile = () => {
                         navigation.navigate('EditProfile', {data: userData})
                     }>
                     <Text style={style.buttonText}>Edit Details</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={style.button}
+                    onPress={() =>
+                        navigation.navigate('AddAddress', {data: userData})
+                    }>
+                    <Text style={style.buttonText}>Add Address</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={style.button}
