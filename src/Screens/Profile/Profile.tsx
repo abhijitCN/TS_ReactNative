@@ -93,22 +93,23 @@ const Profile = () => {
                         style={{
                             fontWeight: 'bold',
                             fontSize: 25,
-                            paddingTop: 20,
+                            paddingVertical: 20,
                         }}>
                         Profile
                     </Text>
                 </View>
-                <TouchableOpacity onPress={() => Alert.alert('IMAGE')}>
+                <View>
                     <Image
                         style={{
-                            width: 200,
-                            height: 200,
-                            marginTop: 40,
-                            marginBottom: 5,
+                            width: 150,
+                            height: 150,
+                            backgroundColor: '#eafafc',
+                            alignSelf: 'center',
+                            borderRadius: 90,
                         }}
                         source={require('../../Assets/avatar2.png')}
                     />
-                </TouchableOpacity>
+                </View>
                 <View>
                     <Toast />
                 </View>

@@ -19,6 +19,7 @@ import {useNavigation} from '@react-navigation/native';
 import {deleteDoc, doc, getDoc, setDoc} from 'firebase/firestore';
 import {db} from '../../Constant/Firebase';
 import Toast from 'react-native-toast-message';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 interface textFields {
     name: string;
@@ -160,12 +161,17 @@ function Registration() {
     };
     return (
         <View style={style.main}>
-            <ScrollView>
-                <View style={{justifyContent: 'center', flex: 1}}>
+            <ScrollView style={{}}>
+                <View
+                    style={{
+                        justifyContent: 'center',
+                        flex: 1,
+                        marginVertical: 25,
+                    }}>
                     <Text style={style.loginText}>Registration</Text>
                     <Text style={style.sentence}>Enter your details</Text>
                     <View style={{}}>
-                        <TouchableOpacity onPress={() => Alert.alert('IMAGE')}>
+                        <TouchableOpacity onPress={() => console.log('IMAGE')}>
                             <Image
                                 style={{
                                     width: 90,
@@ -176,6 +182,25 @@ function Registration() {
                                 }}
                                 source={require('../../Assets/avatar2.png')}
                             />
+                            <View
+                                style={{
+                                    flex: 1,
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    position: 'absolute',
+                                    left: 225,
+                                    backgroundColor: '#95d6f0',
+                                    borderRadius: 100,
+                                    padding: 5,
+                                    width: 30,
+                                    height: 30,
+                                }}>
+                                <Icon
+                                    name="pencil"
+                                    color={'#0a3749'}
+                                    size={17}
+                                />
+                            </View>
                         </TouchableOpacity>
                         <Text style={style.textInputHeading}>Name</Text>
                         <TextInput

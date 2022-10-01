@@ -69,7 +69,7 @@ const Login = () => {
                         signUpUser({email: user.user.providerData[0].email}),
                     );
                     console.log('USER EMAIL', user.user.providerData[0].email);
-                    Alert.alert('Login Successfully');
+                    console.log('Login Successfully');
                     dispatch(verify(true));
                     AsyncStorage.setItem(
                         'userToken',

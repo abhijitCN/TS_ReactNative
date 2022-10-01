@@ -27,7 +27,7 @@ const AddAddress = () => {
                         Add Address
                     </Text>
                 </View>
-                <View style={{marginTop: 50}}>
+                <View style={{marginTop: 20}}>
                     <View style={{flexDirection: 'row', alignItems: 'center'}}>
                         <TextInput
                             style={styles.input}
@@ -38,13 +38,24 @@ const AddAddress = () => {
                         <TouchableOpacity
                             onPress={() => navigation.navigate('Map')}
                             style={{
-                                backgroundColor: '#9999',
+                                backgroundColor: '#95d6f0',
                                 height: '70%',
                                 width: '10%',
-                            }}></TouchableOpacity>
-                        {/* <View>
-                            <Icon name="rocket" size={30} color="#900" />;
-                        </View> */}
+                                borderRadius: 10,
+                            }}>
+                            <View
+                                style={{
+                                    flex: 1,
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                }}>
+                                <Icon
+                                    name="map-marker"
+                                    color={'#0a3749'}
+                                    size={30}
+                                />
+                            </View>
+                        </TouchableOpacity>
                     </View>
                     <TouchableOpacity style={styles.button}>
                         <Text style={styles.buttonText}>Add</Text>
@@ -68,7 +79,7 @@ const styles = StyleSheet.create({
     },
     buttonText: {
         fontSize: 17,
-        fontWeight: '500',
+        fontWeight: '900',
         color: '#0a3749',
     },
     buttonContainer: {

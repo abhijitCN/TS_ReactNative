@@ -14,6 +14,7 @@ const {height, width} = Dimensions.get('screen');
 import Toast from 'react-native-toast-message';
 import firestore from '@react-native-firebase/firestore';
 import {useNavigation, useRoute} from '@react-navigation/native';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 interface editValue {
     name: string;
@@ -69,16 +70,47 @@ const EditProfile = () => {
                         style={{
                             fontWeight: 'bold',
                             fontSize: 25,
-                            paddingTop: 20,
+                            paddingVertical: 20,
                         }}>
                         Edit Profile
                     </Text>
                 </View>
                 <View style={{}}>
-                    <Image
-                        style={style.image}
-                        source={require('../../Assets/avatar2.png')}
-                    />
+                    <TouchableOpacity
+                        onPress={() => console.log('IMAGE')}
+                        style={
+                            {
+                                //flex: 1,
+                                //flexDirection: 'row',
+                            }
+                        }>
+                        <Image
+                            style={{
+                                width: 150,
+                                height: 150,
+                                backgroundColor: '#eafafc',
+                                alignSelf: 'center',
+                                borderRadius: 90,
+                                //marginTop: 40,
+                            }}
+                            source={require('../../Assets/avatar2.png')}
+                        />
+                        <View
+                            style={{
+                                flex: 1,
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                position: 'absolute',
+                                left: 245,
+                                backgroundColor: '#95d6f0',
+                                borderRadius: 100,
+                                padding: 5,
+                                width: 40,
+                                height: 40,
+                            }}>
+                            <Icon name="pencil" color={'#0a3749'} size={25} />
+                        </View>
+                    </TouchableOpacity>
                     <Text style={style.textInputHeading}>Name</Text>
                     <TextInput
                         style={style.input}
