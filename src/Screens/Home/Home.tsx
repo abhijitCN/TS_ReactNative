@@ -17,11 +17,13 @@ import firestore from '@react-native-firebase/firestore';
 import {db} from '../../Constant/Firebase';
 import {deleteDoc, doc, getDoc, setDoc} from 'firebase/firestore';
 import {useNavigation} from '@react-navigation/native';
+import {rootState} from '../../Reducers/store';
 
 function Home() {
     const navigation = useNavigation();
     const [animate, setAnimate] = useState<boolean>(true);
-    const user: any = useSelector<any>(state => state.user);
+    const user: any = useSelector<any>((state: rootState) => state.user);
+
     console.log('YOU USER', user);
     useEffect(() => {
         setTimeout(() => {
@@ -47,7 +49,7 @@ function Home() {
                     />
                 </TouchableOpacity>
             </View>
-            {animate === true ? (
+            {/* {animate === true ? (
                 <>
                     <View
                         style={{
@@ -58,16 +60,16 @@ function Home() {
                         <ActivityIndicator color="red" size="large" />
                     </View>
                 </>
-            ) : (
-                <View
-                    style={{
-                        alignItems: 'center',
-                        flex: 1,
-                        justifyContent: 'center',
-                    }}>
-                    <Text style={style.helloText}>Hello,{user?.email}</Text>
-                </View>
-            )}
+            ) : ( */}
+            <View
+                style={{
+                    alignItems: 'center',
+                    flex: 1,
+                    justifyContent: 'center',
+                }}>
+                <Text style={style.helloText}>Hello,{user?.email}</Text>
+            </View>
+            {/* )} */}
         </View>
     );
 }

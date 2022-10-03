@@ -36,12 +36,12 @@ const Section: React.FC<
 };
 
 const App = () => {
-    const verify: any = useSelector((state: rootState) => state.verification);
-    const isValid = AsyncStorage.getItem('userToken');
+    //const verify: any = useSelector((state: rootState) => state.verification);
+    //const isValid = AsyncStorage.getItem('userToken');
+    const verify: any = useSelector((state: rootState) => state.user);
     const [isUser, setIsUser] = useState('');
-    //console.log('isValid?????????????', isValid);
     useEffect(() => {
-        console.log('print', verify);
+        console.log('Is Authenticate', verify.isLoading);
         displayData();
     }, [verify]);
 
@@ -49,14 +49,15 @@ const App = () => {
         try {
             let user: any = await AsyncStorage.getItem('userToken');
             let parsed = JSON.parse(user);
-            console.log('parsed Value >> ', parsed ? parsed.payload : null);
             setIsUser(parsed ? parsed.payload : null);
         } catch (error) {
             console.log('ERROR', error);
         }
     };
 
-    return <>{verify.logUser ? <MainStackNavigation /> : <AuthNavigator />}</>;
+    return (
+        <>{verify.isLoading ? <MainStackNavigation /> : <AuthNavigator />}</>
+    );
 };
 
 const styles = StyleSheet.create({

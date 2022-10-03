@@ -30,18 +30,17 @@ interface DescribableFunction {
 }
 const EditProfile = () => {
     const navigation = useNavigation();
-
     const [editValue, setEditValue] = useState<editValue | any>({
         name: '',
         phoneNo: '',
         email: '',
         Image: '',
     });
-
     const Route = useRoute();
     let data = Route.params;
     let Phone = data.data.phoneNo;
     console.log('Global Route data', Phone);
+
     useEffect(() => {
         getUserData();
     }, []);
@@ -56,32 +55,30 @@ const EditProfile = () => {
         console.log('pick Image And Upload');
 
         launchImageLibrary({quality: 0.5}, fileobj => {
-            const storage = getStorage();
+            //const storage = getStorage();
             const mountainsRef = ref(storage, fileobj.assets[0].uri);
-
             console.log('click on image ?? ', mountainsRef);
-            // const uploadTask = storage()
+            // const uploadTask = storage
             //     .ref()
             //     .child(`/userprofile/${Date.now()}`)
-            //     .putFile(fileobj.uri);
+            //     .putFile(mountainsRef);
             // uploadTask.on(
             //     'state_changed',
             //     snapshot => {
             //         var progress =
             //             (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-            //         if (progress == 100)
-            //         console.log('image uploaded');
+            //         if (progress == 100) console.log('image uploaded');
             //     },
             //     error => {
             //         console.log('error uploading image');
             //     },
-            //     () => {
-            //         uploadTask.snapshot.ref
-            //             .getDownloadURL()
-            //             .then(downloadURL => {
-            //                 Image(downloadURL);
-            //             });
-            //     },
+            //     // () => {
+            //     //     uploadTask.snapshot.ref
+            //     //         .getDownloadURL()
+            //     //         .then(downloadURL => {
+            //     //             Image(downloadURL);
+            //     //         });
+            //     // },
             // );
         });
     };

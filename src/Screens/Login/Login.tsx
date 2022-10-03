@@ -13,7 +13,7 @@ import {UserContext} from '../../Context/AuthContext';
 import {firebase} from '@react-native-firebase/auth';
 import {verify} from '../../Reducers/verificationSlice';
 import {useDispatch} from 'react-redux';
-import {signUpUser} from '../../Reducers/authSlice';
+import {signInUser, signUpUser} from '../../Reducers/authSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useNavigation} from '@react-navigation/native';
 
@@ -59,30 +59,32 @@ const Login = () => {
                 const user = await firebase
                     .auth()
                     .signInWithEmailAndPassword(data.email, data.password);
-                Toast.show({
-                    type: 'success',
-                    text1: 'Logout Successfully',
-                    position: 'top',
-                });
                 if (user.user.providerData[0].email) {
                     dispatch(
                         signUpUser({email: user.user.providerData[0].email}),
                     );
-                    console.log('USER EMAIL', user.user.providerData[0].email);
-                    console.log('Login Successfully');
-                    dispatch(verify(true));
-                    AsyncStorage.setItem(
-                        'userToken',
-                        JSON.stringify(dispatch(verify(true))),
+                    console.log(
+                        'log USER EMAIL',
+                        user.user.providerData[0].email,
                     );
+                    console.log('Login Successfully');
+                    //dispatch(verify(true));
+                    dispatch(signUpUser({isLoading: true}));
+                    // AsyncStorage.setItem(
+                    //     'userToken',
+                    //     JSON.stringify(dispatch(verify(true))),
+                    // );
                 }
             } catch (error) {
                 console.log('error', error);
-                dispatch(verify(false));
             }
         } else {
             SetValiadate(true);
         }
+    };
+
+    const Authenticate = () => {
+        dispatch(signInUser(data));
     };
 
     return (
@@ -139,7 +141,7 @@ const Login = () => {
                 <View>
                     <Toast />
                 </View>
-                <TouchableOpacity style={style.button} onPress={FBLogin}>
+                <TouchableOpacity style={style.button} onPress={Authenticate}>
                     <Text style={style.buttonText}>Submit</Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
