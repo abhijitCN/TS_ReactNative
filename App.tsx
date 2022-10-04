@@ -36,24 +36,22 @@ const Section: React.FC<
 };
 
 const App = () => {
-    //const verify: any = useSelector((state: rootState) => state.verification);
-    //const isValid = AsyncStorage.getItem('userToken');
     const verify: any = useSelector((state: rootState) => state.user);
     const [isUser, setIsUser] = useState('');
     useEffect(() => {
         console.log('Is Authenticate', verify.isLoading);
-        displayData();
-    }, [verify]);
+        //displayData();
+    }, []);
 
-    const displayData = async () => {
-        try {
-            let user: any = await AsyncStorage.getItem('userToken');
-            let parsed = JSON.parse(user);
-            setIsUser(parsed ? parsed.payload : null);
-        } catch (error) {
-            console.log('ERROR', error);
-        }
-    };
+    // const displayData = async () => {
+    //     try {
+    //         let user: any = await AsyncStorage.getItem('userToken');
+    //         let parsed = JSON.parse(user);
+    //         setIsUser(parsed ? parsed.payload : null);
+    //     } catch (error) {
+    //         console.log('ERROR', error);
+    //     }
+    // };
 
     return (
         <>{verify.isLoading ? <MainStackNavigation /> : <AuthNavigator />}</>

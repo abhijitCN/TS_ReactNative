@@ -15,22 +15,18 @@ const initialState: Initial = {
 };
 
 export const signInUser: any = createAsyncThunk('SignInUser', async body => {
-    //const dispatch = useDispatch();
     console.log(' ?? ', body.email, body.password);
     try {
         const user = await firebase
             .auth()
             .signInWithEmailAndPassword(body.email, body.password);
-        if (user?.user) {
-            //dispatch(signUpUser({email: user.user.providerData[0].email}));
-            console.log('LOG USER EMAIL', user.user?._user?.email);
-            console.log('Login Successfully');
+        if (user) {
+            // console.log('LOG USER EMAIL', user.user?._user?.email);
+            // console.log('Login Successfully');
             return user?.user?._user?.email;
-            //dispatch(verify(true));
         }
     } catch (error) {
         console.log('error', error);
-        //dispatch(verify(false));
     }
 });
 
@@ -51,9 +47,8 @@ const authSlice = createSlice({
         },
         [signInUser.fulfilled]: (state, action) => {
             state.isLoading = false;
-            state.email = action.payload.email;
-            //console.log('STATE', state.email);
-            return state;
+            state.email = action.payload;
+            //console.log('STATE', action);
         },
         [signInUser.rejected]: (state, action) => {
             state.isLoading = false;

@@ -10,26 +10,26 @@ import {
     Button,
     TextInput,
 } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import Toast from 'react-native-toast-message';
+//import AsyncStorage from '@react-native-async-storage/async-storage';
+//import Toast from 'react-native-toast-message';
 import {useDispatch, useSelector} from 'react-redux';
-import firestore from '@react-native-firebase/firestore';
-import {db} from '../../Constant/Firebase';
-import {deleteDoc, doc, getDoc, setDoc} from 'firebase/firestore';
+//import firestore from '@react-native-firebase/firestore';
+//import {db} from '../../Constant/Firebase';
+//import {deleteDoc, doc, getDoc, setDoc} from 'firebase/firestore';
 import {useNavigation} from '@react-navigation/native';
 import {rootState} from '../../Reducers/store';
 
 function Home() {
     const navigation = useNavigation();
-    const [animate, setAnimate] = useState<boolean>(true);
+    //const [animate, setAnimate] = useState<boolean>(true);
     const user: any = useSelector<any>((state: rootState) => state.user);
 
     console.log('YOU USER', user);
-    useEffect(() => {
-        setTimeout(() => {
-            setAnimate(false);
-        }, 2000);
-    });
+    // useEffect(() => {
+    //     setTimeout(() => {
+    //         setAnimate(false);
+    //     }, 2000);
+    // });
 
     return (
         <View style={style.main}>
