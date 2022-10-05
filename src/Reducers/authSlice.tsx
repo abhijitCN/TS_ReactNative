@@ -1,12 +1,13 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {firebase} from '@react-native-firebase/auth';
-import {Alert} from 'react-native';
+import {Alert, ActivityIndicator} from 'react-native';
 import {useDispatch} from 'react-redux';
 import {verify} from './verificationSlice';
 import firestore from '@react-native-firebase/firestore';
 import {deleteDoc, doc, getDoc, setDoc} from 'firebase/firestore';
 import {db} from '../Constant/Firebase';
+import Toast from 'react-native-toast-message';
 
 interface Initial {
     email: string;
@@ -25,14 +26,13 @@ export const signInUser: any = createAsyncThunk('SignInUser', async body => {
             .auth()
             .signInWithEmailAndPassword(body.email, body.password);
         if (user) {
-            // console.log('LOG USER EMAIL', user.user?._user?.email);
-            // console.log('Login Successfully');
             return user?.user?._user?.email;
         }
     } catch (error) {
         console.log('error', error);
     }
 });
+
 export const signUpUser: any = createAsyncThunk('SignUpUser', async body => {
     const myDoc = doc(db, 'User', 'UserData');
     if (body.password && body.email && body.name && body.phoneNo) {
@@ -70,6 +70,20 @@ export const signUpUser: any = createAsyncThunk('SignUpUser', async body => {
     }
 });
 
+export const signOut: any = createAsyncThunk('SignOut', async body => {
+    try {
+        await AsyncStorage.removeItem('userToken');
+        Toast.show({
+            type: 'success',
+            text1: 'Logout Successfully',
+            position: 'top',
+        });
+        console.log('Logout');
+    } catch (error) {
+        console.log('Logout error');
+    }
+});
+
 const authSlice = createSlice({
     name: 'userAuth',
     initialState: initialState,
@@ -82,16 +96,31 @@ const authSlice = createSlice({
         // },
     },
     extraReducers: {
+        //SignIn
         [signInUser.pending]: (state, action) => {
-            state.isLoading = true;
+            //state.isLoading = false;
+            <ActivityIndicator color="red" size="large" />;
         },
         [signInUser.fulfilled]: (state, action) => {
-            state.isLoading = false;
+            state.isLoading = true;
             state.email = action.payload;
-            //console.log('STATE', action);
+            AsyncStorage.setItem(
+                'userToken',
+                JSON.stringify((state.isLoading = true)),
+            );
         },
         [signInUser.rejected]: (state, action) => {
             state.isLoading = false;
+        },
+        //SignOut
+        [signOut.pending]: (state, action) => {
+            state.isLoading = true;
+        },
+        [signOut.fulfilled]: (state, action) => {
+            state.isLoading = false;
+        },
+        [signOut.rejected]: (state, action) => {
+            state.isLoading = true;
         },
     },
     // },

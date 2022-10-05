@@ -40,18 +40,23 @@ const App = () => {
     const [isUser, setIsUser] = useState('');
     useEffect(() => {
         console.log('Is Authenticate', verify.isLoading);
-        //displayData();
+        displayData();
     }, []);
 
-    // const displayData = async () => {
-    //     try {
-    //         let user: any = await AsyncStorage.getItem('userToken');
-    //         let parsed = JSON.parse(user);
-    //         setIsUser(parsed ? parsed.payload : null);
-    //     } catch (error) {
-    //         console.log('ERROR', error);
-    //     }
-    // };
+    const displayData = async () => {
+        try {
+            let user: any = await AsyncStorage.getItem('userToken');
+            let parsed = JSON.parse(user);
+            console.log('parsed ?? ', parsed);
+            setIsUser(parsed);
+            console.log('IS USER >> ', isUser);
+        } catch (error) {
+            console.log('ERROR', error);
+        }
+    };
+
+    const isAuthenticate = verify.isLoading && isUser;
+    console.log('isAuthenticate', isAuthenticate);
 
     return (
         <>{verify.isLoading ? <MainStackNavigation /> : <AuthNavigator />}</>

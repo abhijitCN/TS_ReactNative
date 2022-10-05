@@ -23,6 +23,7 @@ function Home() {
     const navigation = useNavigation();
     //const [animate, setAnimate] = useState<boolean>(true);
     const user: any = useSelector<any>((state: rootState) => state.user);
+    const Loading: any = useSelector<any>((state: rootState) => state.user);
 
     console.log('YOU USER', user);
     // useEffect(() => {
@@ -49,7 +50,7 @@ function Home() {
                     />
                 </TouchableOpacity>
             </View>
-            {/* {animate === true ? (
+            {/* {Loading.isLoading === true ? (
                 <>
                     <View
                         style={{

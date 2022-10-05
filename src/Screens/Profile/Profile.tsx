@@ -15,6 +15,7 @@ import firestore from '@react-native-firebase/firestore';
 import {useDispatch, useSelector} from 'react-redux';
 import {verify} from '../../Reducers/verificationSlice';
 import {useNavigation} from '@react-navigation/native';
+import {signOut} from '../../Reducers/authSlice';
 
 const Profile = () => {
     const navigation = useNavigation();
@@ -41,6 +42,10 @@ const Profile = () => {
         } catch (error) {
             console.log('Logout error');
         }
+    };
+
+    const logOut2 = () => {
+        dispatch(signOut());
     };
 
     const getProfileData = async () => {
@@ -139,7 +144,7 @@ const Profile = () => {
                     onPress={() => navigation.navigate('ChangePassword')}>
                     <Text style={style.buttonText}>Change Password</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={style.button} onPress={logOut}>
+                <TouchableOpacity style={style.button} onPress={logOut2}>
                     <Text style={style.buttonText}>Log Out</Text>
                 </TouchableOpacity>
             </View>
