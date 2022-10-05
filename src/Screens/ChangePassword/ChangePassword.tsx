@@ -11,9 +11,13 @@ import {
 } from 'react-native';
 import {firebase} from '@react-native-firebase/auth';
 import {useNavigation} from '@react-navigation/native';
+import {passwordChange} from '../../Reducers/profileSlice';
+import {useDispatch} from 'react-redux';
 
 const ChangePassword = () => {
     const navigation = useNavigation();
+    const dispatch = useDispatch();
+
     interface editValue {
         currentPassword: string;
         newPassword: string;
@@ -52,6 +56,10 @@ const ChangePassword = () => {
             });
     };
 
+    const ChangePassword2 = () => {
+        dispatch(passwordChange(editValue));
+    };
+
     return (
         <View style={styles.main}>
             <ScrollView>
@@ -86,7 +94,7 @@ const ChangePassword = () => {
                     />
                     <TouchableOpacity
                         style={styles.button}
-                        onPress={onChangePasswordPress}>
+                        onPress={ChangePassword2}>
                         <Text style={styles.buttonText}>Submit</Text>
                     </TouchableOpacity>
                 </View>

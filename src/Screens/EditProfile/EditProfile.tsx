@@ -55,7 +55,7 @@ const EditProfile = () => {
         console.log('pick Image And Upload');
 
         launchImageLibrary({quality: 0.5}, fileobj => {
-            //const storage = getStorage();
+            const storage = getStorage();
             const mountainsRef = ref(storage, fileobj.assets[0].uri);
             console.log('click on image ?? ', mountainsRef);
             // const uploadTask = storage
