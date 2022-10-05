@@ -145,6 +145,10 @@ function Registration() {
         }
     };
 
+    const Authenticate2 = () => {
+        dispatch(signUpUser(data));
+    };
+
     const signIn = async () => {
         if (data.name && data.email && data.Phone && data.password) {
             try {
@@ -297,7 +301,7 @@ function Registration() {
                         </View>
                         <TouchableOpacity
                             style={style.button}
-                            onPress={Authenticate}>
+                            onPress={Authenticate2}>
                             <Text style={style.buttonText}>Submit</Text>
                         </TouchableOpacity>
                         <TouchableOpacity

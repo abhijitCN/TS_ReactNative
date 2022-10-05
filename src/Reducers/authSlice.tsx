@@ -4,6 +4,10 @@ import {firebase} from '@react-native-firebase/auth';
 import {Alert} from 'react-native';
 import {useDispatch} from 'react-redux';
 import {verify} from './verificationSlice';
+import firestore from '@react-native-firebase/firestore';
+import {deleteDoc, doc, getDoc, setDoc} from 'firebase/firestore';
+import {db} from '../Constant/Firebase';
+
 interface Initial {
     email: string;
     isLoading: boolean;
@@ -27,6 +31,42 @@ export const signInUser: any = createAsyncThunk('SignInUser', async body => {
         }
     } catch (error) {
         console.log('error', error);
+    }
+});
+export const signUpUser: any = createAsyncThunk('SignUpUser', async body => {
+    const myDoc = doc(db, 'User', 'UserData');
+    if (body.password && body.email && body.name && body.phoneNo) {
+        console.log(
+            '??',
+            body.email,
+            body.password,
+            body.name,
+            body.phoneNo,
+            body.isLoading,
+        );
+        try {
+            const {user} = await firebase
+                .auth()
+                .createUserWithEmailAndPassword(body.email, body.password);
+            console.log('DATA', user.uid);
+            if (user?.uid) {
+                console.log('user.ID>>>>>', user?.uid);
+                firestore()
+                    .collection('People')
+                    .doc(body.phoneNo)
+                    .set({
+                        name: body.name,
+                        email: body.email,
+                        phoneNo: body.phoneNo,
+                    })
+                    .then(() => {
+                        Alert.alert('Register Successfully');
+                    });
+            }
+        } catch (error) {
+            console.log('error', error);
+        }
+    } else {
     }
 });
 
