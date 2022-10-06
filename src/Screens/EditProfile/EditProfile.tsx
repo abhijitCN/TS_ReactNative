@@ -17,6 +17,10 @@ import {useNavigation, useRoute} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {getStorage, ref, uploadBytes} from 'firebase/storage';
 import {launchImageLibrary} from 'react-native-image-picker';
+import storage from '@react-native-firebase/storage';
+import {useDispatch, useSelector} from 'react-redux';
+import {PickImageAndUpload} from '../../Reducers/profileSlice';
+import {rootState} from '../../Reducers/store';
 
 interface editValue {
     name: string;
@@ -30,12 +34,19 @@ interface DescribableFunction {
 }
 const EditProfile = () => {
     const navigation = useNavigation();
+    const dispatch = useDispatch();
+    const userProfilePicture: any = useSelector<any>(
+        (state: rootState) => state.profile,
+    );
+    console.log('userProfilePicture <<<>>>  ', userProfilePicture);
     const [editValue, setEditValue] = useState<editValue | any>({
         name: '',
         phoneNo: '',
         email: '',
         Image: '',
     });
+    const [image, setImage] = useState('');
+
     const Route = useRoute();
     let data = Route.params;
     let Phone = data.data.phoneNo;
@@ -43,6 +54,7 @@ const EditProfile = () => {
 
     useEffect(() => {
         getUserData();
+        console.log('userProfilePicture <<<>>>  ', userProfilePicture);
     }, []);
 
     const getUserData = (fn: DescribableFunction) => {
@@ -53,34 +65,36 @@ const EditProfile = () => {
 
     const pickImageAndUpload = () => {
         console.log('pick Image And Upload');
-
         launchImageLibrary({quality: 0.5}, fileobj => {
-            const storage = getStorage();
-            const mountainsRef = ref(storage, fileobj.assets[0].uri);
-            console.log('click on image ?? ', mountainsRef);
-            // const uploadTask = storage
-            //     .ref()
-            //     .child(`/userprofile/${Date.now()}`)
-            //     .putFile(mountainsRef);
-            // uploadTask.on(
-            //     'state_changed',
-            //     snapshot => {
-            //         var progress =
-            //             (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-            //         if (progress == 100) console.log('image uploaded');
-            //     },
-            //     error => {
-            //         console.log('error uploading image');
-            //     },
-            //     // () => {
-            //     //     uploadTask.snapshot.ref
-            //     //         .getDownloadURL()
-            //     //         .then(downloadURL => {
-            //     //             Image(downloadURL);
-            //     //         });
-            //     // },
-            // );
+            const uploadTask = storage()
+                .ref()
+                .child(`/userprofile/${Date.now()}`)
+                .putFile(fileobj.assets[0].uri);
+            uploadTask.on(
+                'state_changed',
+                snapshot => {
+                    var progress =
+                        (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    if (progress == 100)
+                        console.log('Image Uploaded Successfully');
+                },
+                error => {
+                    console.log('error uploading image');
+                },
+                () => {
+                    uploadTask.snapshot?.ref
+                        .getDownloadURL()
+                        .then(downloadURL => {
+                            console.log('DOWNLOADED IMAGE  ?? ', downloadURL);
+                            setImage(downloadURL);
+                        });
+                },
+            );
         });
+    };
+
+    const pickImageAndUpload2 = () => {
+        dispatch(PickImageAndUpload());
     };
 
     const onPress = async () => {
@@ -112,24 +126,50 @@ const EditProfile = () => {
                 </View>
                 <View style={{}}>
                     <TouchableOpacity
-                        onPress={() => pickImageAndUpload()}
+                        onPress={() =>
+                            // uploadImageToStorage(
+                            //     'data/user/0/com.tsreactnative/cache/rn_image_picker_lib_temp_0a9c0e6f-dcf9-4890-afd7-3c0345c25610.jpg',
+                            //     'abhijit',
+                            // )
+                            pickImageAndUpload()
+                        }
                         style={
                             {
                                 //flex: 1,
                                 //flexDirection: 'row',
                             }
                         }>
-                        <Image
-                            style={{
-                                width: 150,
-                                height: 150,
-                                backgroundColor: '#eafafc',
-                                alignSelf: 'center',
-                                borderRadius: 90,
-                                //marginTop: 40,
-                            }}
-                            source={require('../../Assets/avatar2.png')}
-                        />
+                        {image != '' ? (
+                            <>
+                                <Image
+                                    style={{
+                                        width: 150,
+                                        height: 150,
+                                        backgroundColor: '#eafafc',
+                                        alignSelf: 'center',
+                                        borderRadius: 90,
+                                        //marginTop: 40,
+                                    }}
+                                    source={{
+                                        uri: image,
+                                    }}
+                                />
+                            </>
+                        ) : (
+                            <>
+                                <Image
+                                    style={{
+                                        width: 150,
+                                        height: 150,
+                                        backgroundColor: '#eafafc',
+                                        alignSelf: 'center',
+                                        borderRadius: 90,
+                                        //marginTop: 40,
+                                    }}
+                                    source={require('../../Assets/avatar2.png')}
+                                />
+                            </>
+                        )}
                         <View
                             style={{
                                 flex: 1,

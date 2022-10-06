@@ -94,7 +94,7 @@ const ChangePassword = () => {
                     />
                     <TouchableOpacity
                         style={styles.button}
-                        onPress={ChangePassword2}>
+                        onPress={onChangePasswordPress}>
                         <Text style={styles.buttonText}>Submit</Text>
                     </TouchableOpacity>
                 </View>

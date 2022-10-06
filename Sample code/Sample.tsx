@@ -186,7 +186,48 @@ function Sample({navigation}) {
             <>{isAuthenticate ? <AuthNavigator /> : <MainStackNavigation />}</>
         );
     };
-
+    const pickImageAndUpload = (path, imageName) => {
+        console.log('pick Image And Upload');
+        launchImageLibrary({quality: 0.5}, fileobj => {
+            let reference = storage().ref().child(`/userprofile/${Date.now()}`);
+            let task = reference.putFile(path);
+            //const storage = getStorage();
+            //const mountainsRef = ref(storage, fileobj.assets[0].uri);
+            console.log('click on image ?? ', fileobj.assets[0].uri);
+            //let selectedImage = fileobj.assets[0].uri
+            //setEditValue({Image:selectedImage})
+            task.then(() => {
+                console.log('Image uploaded to the bucket!');
+                //console.log("selectedImage ?? >> ",editValue.Image)
+            }).catch(e => console.log('uploading image error => ', e));
+            // const uploadTask = storage
+            //     .ref()
+            //     .child(`/userprofile/${Date.now()}`)
+            //     .putFile(mountainsRef);
+            // uploadTask.on(
+            //     'state_changed',
+            //     snapshot => {
+            //         var progress =
+            //             (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            //         if (progress == 100) console.log('image uploaded');
+            //     },
+            //     error => {
+            //         console.log('error uploading image');
+            //     },
+            //     // () => {
+            //     //     uploadTask.snapshot.ref
+            //     //         .getDownloadURL()
+            //     //         .then(downloadURL => {
+            //     //             Image(downloadURL);
+            //     //         });
+            //     // },
+            // );
+        });
+    };
+    pickImageAndUpload(
+        'data/user/0/com.tsreactnative/cache/rn_image_picker_lib_temp_0a9c0e6f-dcf9-4890-afd7-3c0345c25610.jpg',
+        'ab',
+    );
     return (
         <View style={style.main}>
             <View

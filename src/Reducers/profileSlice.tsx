@@ -8,16 +8,57 @@ import firestore from '@react-native-firebase/firestore';
 import {deleteDoc, doc, getDoc, setDoc} from 'firebase/firestore';
 import {db} from '../Constant/Firebase';
 import Toast from 'react-native-toast-message';
+import {useState} from 'react';
+import {launchImageLibrary} from 'react-native-image-picker';
+import storage from '@react-native-firebase/storage';
 
 interface Initial {
     Email: string;
     IsLoading: boolean;
+    Image: string;
 }
 
 const initialState: Initial = {
     Email: '',
     IsLoading: false,
+    Image: '',
 };
+
+export const PickImageAndUpload: any = createAsyncThunk(
+    'PickImageAndUpload',
+    async () => {
+        //const [image, setImage] = useState('');
+        console.log('pick Image And Upload');
+        launchImageLibrary({quality: 0.5}, fileobj => {
+            const uploadTask = storage()
+                .ref()
+                .child(`/userprofile/${Date.now()}`)
+                .putFile(fileobj.assets[0].uri);
+            uploadTask.on(
+                'state_changed',
+                snapshot => {
+                    var progress =
+                        (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    if (progress == 100)
+                        console.log('Image Uploaded Successfully');
+                },
+                error => {
+                    console.log('error uploading image');
+                },
+                () => {
+                    uploadTask.snapshot?.ref
+                        .getDownloadURL()
+                        .then(downloadURL => {
+                            console.log('DOWNLOADED IMAGE  ?? ', downloadURL);
+                            //setImage(downloadURL);
+                            return downloadURL;
+                        });
+                },
+            );
+            //return image;
+        });
+    },
+);
 
 const reauthenticate: any = createAsyncThunk('ReAuthenticate', async body => {
     console.log('ReAuthenticate', body);
@@ -57,7 +98,17 @@ const profileSlice = createSlice({
     name: 'userAuth',
     initialState: initialState,
     reducers: {},
-    extraReducers: {},
+    extraReducers: {
+        [PickImageAndUpload.pending]: (state, action) => {
+            <ActivityIndicator color="red" size="large" />;
+        },
+        [PickImageAndUpload.fulfilled]: (state, action) => {
+            state.Image = action.payload;
+        },
+        [PickImageAndUpload.rejected]: (state, action) => {
+            <ActivityIndicator color="red" size="large" />;
+        },
+    },
 });
 
 export default profileSlice.reducer;
