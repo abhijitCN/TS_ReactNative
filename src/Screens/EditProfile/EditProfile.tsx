@@ -16,7 +16,7 @@ import firestore from '@react-native-firebase/firestore';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {getStorage, ref, uploadBytes} from 'firebase/storage';
-import {launchImageLibrary} from 'react-native-image-picker';
+import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
 import storage from '@react-native-firebase/storage';
 import {useDispatch, useSelector} from 'react-redux';
 import {PickImageAndUpload} from '../../Reducers/profileSlice';
@@ -65,7 +65,7 @@ const EditProfile = () => {
 
     const pickImageAndUpload = () => {
         console.log('pick Image And Upload');
-        launchImageLibrary({quality: 0.5}, fileobj => {
+        launchCamera({quality: 0.5}, fileobj => {
             const uploadTask = storage()
                 .ref()
                 .child(`/userprofile/${Date.now()}`)
