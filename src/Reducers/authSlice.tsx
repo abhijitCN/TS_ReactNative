@@ -2,30 +2,41 @@ import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {firebase} from '@react-native-firebase/auth';
 import {Alert, ActivityIndicator} from 'react-native';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {verify} from './verificationSlice';
 import firestore from '@react-native-firebase/firestore';
 import {deleteDoc, doc, getDoc, setDoc} from 'firebase/firestore';
 import {db} from '../Constant/Firebase';
 import Toast from 'react-native-toast-message';
+import {rootState} from './store';
+import {toggleSpinner} from './toggleSpinnerSlice';
 
 interface Initial {
     email: string;
     isLoading: boolean;
+    globalLoading: boolean;
 }
 
 const initialState: Initial = {
     email: '',
     isLoading: false,
+    globalLoading: false,
 };
 
 export const signInUser: any = createAsyncThunk('SignInUser', async body => {
+    // const SPINNER: any = useSelector<any>(
+    //     (state: rootState) => state.toggleSpinner,
+    // );
+    // console.log(' <SPINNER> ', SPINNER);
+    //const dispatch = useDispatch();
+
     console.log(' ?? ', body.email, body.password);
     try {
         const user = await firebase
             .auth()
             .signInWithEmailAndPassword(body.email, body.password);
         if (user) {
+            //dispatch(toggleSpinner(false));
             return user?.user?._user?.email;
         }
     } catch (error) {
@@ -98,19 +109,21 @@ const authSlice = createSlice({
     extraReducers: {
         //SignIn
         [signInUser.pending]: (state, action) => {
-            //state.isLoading = false;
-            <ActivityIndicator color="red" size="large" />;
+            //state.isLoading = true;
+            state.globalLoading = true;
+            // <ActivityIndicator color="red" size="large" />;
         },
         [signInUser.fulfilled]: (state, action) => {
-            state.isLoading = true;
+            //state.globalLoading = true;
             state.email = action.payload;
             AsyncStorage.setItem(
                 'userToken',
                 JSON.stringify((state.isLoading = true)),
             );
+            state.globalLoading = false;
         },
         [signInUser.rejected]: (state, action) => {
-            state.isLoading = false;
+            state.globalLoading = false;
         },
         //SignOut
         [signOut.pending]: (state, action) => {

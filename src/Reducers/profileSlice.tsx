@@ -97,7 +97,13 @@ export const passwordChange: any = createAsyncThunk(
 const profileSlice = createSlice({
     name: 'userAuth',
     initialState: initialState,
-    reducers: {},
+    reducers: {
+        profileImage: (state, action) => {
+            state.Image = action.payload;
+            console.log('state.Image ?? ', state.Image);
+            return state;
+        },
+    },
     extraReducers: {
         [PickImageAndUpload.pending]: (state, action) => {
             <ActivityIndicator color="red" size="large" />;
@@ -110,5 +116,5 @@ const profileSlice = createSlice({
         },
     },
 });
-
+export const {profileImage} = profileSlice.actions;
 export default profileSlice.reducer;

@@ -4,16 +4,13 @@ export const toggleSpinnerSlice = createSlice({
     name: 'spinnerSlice',
     initialState: {
         show: false,
-        //disableGlobal: false,
     },
     reducers: {
         toggleSpinner(state, action) {
             state.show = action.payload;
+            console.log('action.payload', action.payload);
             return state;
         },
-        // toggleGlobalSpinner(state) {
-        //   state.disableGlobal = !state.disableGlobal;
-        // },
     },
 });
 

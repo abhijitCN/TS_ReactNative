@@ -18,20 +18,41 @@ import {useDispatch, useSelector} from 'react-redux';
 //import {deleteDoc, doc, getDoc, setDoc} from 'firebase/firestore';
 import {useNavigation} from '@react-navigation/native';
 import {rootState} from '../../Reducers/store';
+import {toggleSpinner} from '../../Reducers/toggleSpinnerSlice';
+import {getStorage, ref, uploadBytes, getMetadata} from 'firebase/storage';
 
 function Home() {
     const navigation = useNavigation();
+    const dispatch = useDispatch();
     //const [animate, setAnimate] = useState<boolean>(true);
     const user: any = useSelector<any>((state: rootState) => state.user);
-    const Loading: any = useSelector<any>((state: rootState) => state.user);
-
+    const profile: any = useSelector<any>((state: rootState) => state.profile);
+    console.log(' < profile > ', profile);
+    const SPINNER: any = useSelector<any>(
+        (state: rootState) => state.toggleSpinner,
+    );
+    console.log(' < SPINNER > ', SPINNER);
     console.log('YOU USER', user);
+    console.log(' < globalLoading > ', user.globalLoading);
+    useEffect(() => {
+        setTimeout(() => {
+            //setAnimate(false);
+            dispatch(toggleSpinner(false));
+        }, 500);
+    }, [SPINNER.show]);
     // useEffect(() => {
-    //     setTimeout(() => {
-    //         setAnimate(false);
-    //     }, 2000);
-    // });
-
+    //     callImageFromStorage();
+    // }, []);
+    // const callImageFromStorage = () => {
+    //     const storage = getStorage();
+    //     const forestRef = ref(storage, `/userprofile/`);
+    //     getMetadata(forestRef)
+    //         .then(metadata => {
+    //             console.log('metadata ?? ', metadata);
+    //         })
+    //         .catch(error => {
+    //         });
+    // };
     return (
         <View style={style.main}>
             <View style={style.container}>
@@ -44,13 +65,26 @@ function Home() {
                         right: 0,
                         padding: 5,
                     }}>
-                    <Image
-                        style={style.image}
-                        source={require('../../Assets/avatar2.png')}
-                    />
+                    {profile?.Image ? (
+                        <>
+                            <Image
+                                style={style.image}
+                                source={{
+                                    uri: profile?.Image,
+                                }}
+                            />
+                        </>
+                    ) : (
+                        <>
+                            <Image
+                                style={style.image}
+                                source={require('../../Assets/avatar2.png')}
+                            />
+                        </>
+                    )}
                 </TouchableOpacity>
             </View>
-            {/* {Loading.isLoading === true ? (
+            {SPINNER.show === true ? (
                 <>
                     <View
                         style={{
@@ -61,16 +95,16 @@ function Home() {
                         <ActivityIndicator color="red" size="large" />
                     </View>
                 </>
-            ) : ( */}
-            <View
-                style={{
-                    alignItems: 'center',
-                    flex: 1,
-                    justifyContent: 'center',
-                }}>
-                <Text style={style.helloText}>Hello,{user?.email}</Text>
-            </View>
-            {/* )} */}
+            ) : (
+                <View
+                    style={{
+                        alignItems: 'center',
+                        flex: 1,
+                        justifyContent: 'center',
+                    }}>
+                    <Text style={style.helloText}>Hello,{user?.email}</Text>
+                </View>
+            )}
         </View>
     );
 }
@@ -102,7 +136,7 @@ const style = StyleSheet.create({
     },
     header: {marginTop: 20, fontWeight: 'bold', fontSize: 25},
     helloText: {fontSize: 20, fontWeight: 'bold'},
-    image: {width: 50, height: 50},
+    image: {width: 50, height: 50, borderRadius: 25},
     container: {
         flexDirection: 'row',
         alignItems: 'center',

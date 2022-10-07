@@ -228,6 +228,73 @@ function Sample({navigation}) {
         'data/user/0/com.tsreactnative/cache/rn_image_picker_lib_temp_0a9c0e6f-dcf9-4890-afd7-3c0345c25610.jpg',
         'ab',
     );
+
+    // Import: Packages
+    import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
+    import axios from 'axios';
+
+    // AsyncThunk: getUserDetails
+    export const getUserDetails = createAsyncThunk(
+        'userDetails/getUserDetails',
+        async () => {
+            try {
+                const apiUrl = process.env.REACT_APP_URL;
+
+                var config = {
+                    method: 'get',
+                    url: `${apiUrl}/claimSet?UserName=${state.loginDetails.username}&Password=${state.loginDetails.password}`,
+                    headers: {
+                        accept: 'application/json',
+                    },
+                };
+
+                const response = await axios(config);
+                const data = await response.data;
+                return data;
+            } catch (error) {
+                console.log(error);
+            }
+        },
+    );
+
+    // Slice: userDetailsSlice
+    export const userDetailsSlice = createSlice({
+        name: 'userDetails',
+        initialState: {
+            loginDetails: {
+                username: '',
+                password: '',
+            },
+            details: [],
+            status: null,
+        },
+        reducers: {
+            addUsername: (state, {payload}) => {
+                state.loginDetails.username = payload;
+            },
+            addPassword: (state, {payload}) => {
+                state.loginDetails.password = payload;
+            },
+        },
+        extraReducers: {
+            [getUserDetails.pending]: (state, action) => {
+                state.status = 'loading';
+            },
+            [getUserDetails.fulfilled]: (state, {payload}) => {
+                state.details = payload;
+                state.status = 'success';
+            },
+            [getUserDetails.rejected]: (state, action) => {
+                state.status = 'failed';
+            },
+        },
+    });
+
+    // Actions: addUsername, addPassword
+    export const {addUsername, addPassword} = userDetailsSlice.actions;
+
+    // Reducer: userDetailsSlice.reducer
+    export default userDetailsSlice.reducer;
     return (
         <View style={style.main}>
             <View

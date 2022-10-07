@@ -9,6 +9,8 @@ import {
     TextInput,
     ScrollView,
     Alert,
+    Modal,
+    Pressable,
 } from 'react-native';
 const {height, width} = Dimensions.get('screen');
 import Toast from 'react-native-toast-message';
@@ -21,6 +23,7 @@ import storage from '@react-native-firebase/storage';
 import {useDispatch, useSelector} from 'react-redux';
 import {PickImageAndUpload} from '../../Reducers/profileSlice';
 import {rootState} from '../../Reducers/store';
+import {profileImage} from '../../Reducers/profileSlice';
 
 interface editValue {
     name: string;
@@ -46,6 +49,8 @@ const EditProfile = () => {
         Image: '',
     });
     const [image, setImage] = useState('');
+    const [modalVisible, setModalVisible] = useState(false);
+    const profile: any = useSelector<any>((state: rootState) => state.profile);
 
     const Route = useRoute();
     let data = Route.params;
@@ -63,8 +68,9 @@ const EditProfile = () => {
         setEditValue(data.data ? data.data : null);
     };
 
-    const pickImageAndUpload = () => {
+    const pickImageAndUploadFromCamera = () => {
         console.log('pick Image And Upload');
+        setModalVisible(!modalVisible);
         launchCamera({quality: 0.5}, fileobj => {
             const uploadTask = storage()
                 .ref()
@@ -87,6 +93,40 @@ const EditProfile = () => {
                         .then(downloadURL => {
                             console.log('DOWNLOADED IMAGE  ?? ', downloadURL);
                             setImage(downloadURL);
+                            dispatch(profileImage(downloadURL));
+                        });
+                },
+            );
+        });
+    };
+
+    const pickImageAndUploadFromGallery = () => {
+        setModalVisible(!modalVisible);
+        console.log('pick Image And Upload');
+        setModalVisible(!modalVisible);
+        launchImageLibrary({quality: 0.5}, fileobj => {
+            const uploadTask = storage()
+                .ref()
+                .child(`/userprofile/${Date.now()}`)
+                .putFile(fileobj.assets[0].uri);
+            uploadTask.on(
+                'state_changed',
+                snapshot => {
+                    var progress =
+                        (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    if (progress == 100)
+                        console.log('Image Uploaded Successfully');
+                },
+                error => {
+                    console.log('error uploading image');
+                },
+                () => {
+                    uploadTask.snapshot?.ref
+                        .getDownloadURL()
+                        .then(downloadURL => {
+                            console.log('DOWNLOADED IMAGE  ?? ', downloadURL);
+                            setImage(downloadURL);
+                            dispatch(profileImage(downloadURL));
                         });
                 },
             );
@@ -126,20 +166,21 @@ const EditProfile = () => {
                 </View>
                 <View style={{}}>
                     <TouchableOpacity
-                        onPress={() =>
-                            // uploadImageToStorage(
-                            //     'data/user/0/com.tsreactnative/cache/rn_image_picker_lib_temp_0a9c0e6f-dcf9-4890-afd7-3c0345c25610.jpg',
-                            //     'abhijit',
-                            // )
-                            pickImageAndUpload()
-                        }
+                        // onPress={() =>
+                        //     // uploadImageToStorage(
+                        //     //     'data/user/0/com.tsreactnative/cache/rn_image_picker_lib_temp_0a9c0e6f-dcf9-4890-afd7-3c0345c25610.jpg',
+                        //     //     'abhijit',
+                        //     // )
+                        //     pickImageAndUpload()
+                        // }
+                        onPress={() => setModalVisible(true)}
                         style={
                             {
                                 //flex: 1,
                                 //flexDirection: 'row',
                             }
                         }>
-                        {image != '' ? (
+                        {profile?.Image ? (
                             <>
                                 <Image
                                     style={{
@@ -151,7 +192,7 @@ const EditProfile = () => {
                                         //marginTop: 40,
                                     }}
                                     source={{
-                                        uri: image,
+                                        uri: profile?.Image,
                                     }}
                                 />
                             </>
@@ -208,6 +249,7 @@ const EditProfile = () => {
                             setEditValue({...editValue, phoneNo: e})
                         }
                     /> */}
+
                     <TouchableOpacity style={style.button} onPress={onPress}>
                         <Text style={style.buttonText}>Submit</Text>
                     </TouchableOpacity>
@@ -216,6 +258,46 @@ const EditProfile = () => {
                         <Toast />
                     </View>
                 </View>
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={modalVisible}
+                    onRequestClose={() => {
+                        Alert.alert('Modal has been closed.');
+                        setModalVisible(!modalVisible);
+                    }}>
+                    <View style={style.centeredView}>
+                        <View style={style.modalView}>
+                            <Text style={style.modalText}>Choose From</Text>
+                            <View
+                                style={{
+                                    flexDirection: 'row',
+                                    justifyContent: 'space-evenly',
+                                    alignItems: 'center',
+                                }}>
+                                <Pressable
+                                    style={[style.button2, style.buttonClose]}
+                                    onPress={() =>
+                                        pickImageAndUploadFromCamera()
+                                    }>
+                                    <Text style={style.textStyle}>Camera</Text>
+                                </Pressable>
+                                <Pressable
+                                    style={[style.button2, style.buttonClose]}
+                                    onPress={() =>
+                                        pickImageAndUploadFromGallery()
+                                    }>
+                                    <Text style={style.textStyle}>Gallery</Text>
+                                </Pressable>
+                            </View>
+                        </View>
+                    </View>
+                </Modal>
+                {/* <Pressable
+                    style={[style.button2, style.buttonOpen]}
+                    onPress={() => setModalVisible(true)}>
+                    <Text style={style.textStyle}>Show Modal</Text>
+                </Pressable> */}
             </ScrollView>
         </View>
     );
@@ -260,6 +342,50 @@ const style = StyleSheet.create({
         borderRadius: 10,
     },
     image: {width: 200, height: 200, marginTop: 40, alignSelf: 'center'},
+    centeredView: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 22,
+    },
+    modalView: {
+        margin: 10,
+        backgroundColor: 'white',
+        borderRadius: 20,
+        padding: 55,
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+    },
+    button2: {
+        borderRadius: 20,
+        padding: 10,
+        elevation: 2,
+        marginHorizontal: 3,
+    },
+    buttonOpen: {
+        backgroundColor: '#F194FF',
+    },
+    buttonClose: {
+        backgroundColor: '#95d6f0',
+    },
+    textStyle: {
+        color: '#0a3749',
+        fontWeight: 'bold',
+        textAlign: 'center',
+    },
+    modalText: {
+        marginBottom: 25,
+        textAlign: 'center',
+        fontWeight: 'bold',
+        fontSize: 20,
+    },
 });
 
 export default EditProfile;

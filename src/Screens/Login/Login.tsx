@@ -16,6 +16,7 @@ import {useDispatch} from 'react-redux';
 import {signInUser, signUpUser} from '../../Reducers/authSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useNavigation} from '@react-navigation/native';
+import {toggleSpinner} from '../../Reducers/toggleSpinnerSlice';
 
 interface textFields {
     email: string;
@@ -83,8 +84,15 @@ const Login = () => {
         }
     };
 
-    const Authenticate = () => {
+    const Authenticate22 = () => {
+        console.log('Authenticate22 >>>>>>>>');
+        dispatch(toggleSpinner(true));
         dispatch(signInUser(data));
+    };
+    const Authenticate = () => {
+        //dispatch(toggleSpinner(true));
+        //dispatch(signInUser(data));
+        Authenticate22();
     };
 
     return (

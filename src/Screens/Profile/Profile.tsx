@@ -16,6 +16,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {verify} from '../../Reducers/verificationSlice';
 import {useNavigation} from '@react-navigation/native';
 import {signOut} from '../../Reducers/authSlice';
+import {rootState} from '../../Reducers/store';
 
 const Profile = () => {
     const navigation = useNavigation();
@@ -24,6 +25,12 @@ const Profile = () => {
     const [posts, setPosts] = useState<any>([]);
     const [userData, setUserData] = useState<any>({});
     const user = useSelector<any>(state => state.user);
+    const profile: any = useSelector<any>((state: rootState) => state.profile);
+    const SPINNER: any = useSelector<any>(
+        (state: rootState) => state.toggleSpinner,
+    );
+    console.log(' < SPINNER > ', SPINNER.show);
+
     useEffect(() => {
         //getProfileData();
         sample();
@@ -104,16 +111,35 @@ const Profile = () => {
                     </Text>
                 </View>
                 <View>
-                    <Image
-                        style={{
-                            width: 150,
-                            height: 150,
-                            backgroundColor: '#eafafc',
-                            alignSelf: 'center',
-                            borderRadius: 90,
-                        }}
-                        source={require('../../Assets/avatar2.png')}
-                    />
+                    {profile?.Image ? (
+                        <>
+                            <Image
+                                style={{
+                                    width: 150,
+                                    height: 150,
+                                    backgroundColor: '#eafafc',
+                                    alignSelf: 'center',
+                                    borderRadius: 90,
+                                }}
+                                source={{
+                                    uri: profile?.Image,
+                                }}
+                            />
+                        </>
+                    ) : (
+                        <>
+                            <Image
+                                style={{
+                                    width: 150,
+                                    height: 150,
+                                    backgroundColor: '#eafafc',
+                                    alignSelf: 'center',
+                                    borderRadius: 90,
+                                }}
+                                source={require('../../Assets/avatar2.png')}
+                            />
+                        </>
+                    )}
                 </View>
                 <View>
                     <Toast />
