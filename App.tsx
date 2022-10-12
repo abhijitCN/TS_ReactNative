@@ -37,27 +37,31 @@ const Section: React.FC<
 
 const App = () => {
     const verify: any = useSelector((state: rootState) => state.user);
+
     const [isUser, setIsUser] = useState('');
     useEffect(() => {
-        console.log('Is Authenticate', verify.isLoading);
+        //console.log('useEffect  Authenticate', verify.isLoading);
         displayData();
     }, []);
 
     const displayData = async () => {
         try {
-            let user: any = await AsyncStorage.getItem('userToken');
+            let user: any = await AsyncStorage.getItem('Token');
             let parsed = JSON.parse(user);
             console.log('parsed ?? ', parsed);
             setIsUser(parsed);
-            console.log('IS USER >> ', isUser);
+            //console.log('IS USER >> ', !isUser);
         } catch (error) {
             console.log('ERROR', error);
         }
     };
-
-    const isAuthenticate = verify.isLoading && isUser;
-    console.log('isAuthenticate', isAuthenticate);
-
+    const A = verify.isLoading;
+    console.log('verify.isLoading ??', verify.isLoading);
+    const B = isUser;
+    console.log('isuser', isUser);
+    const isAuthenticate = isUser || verify.isLoading;
+    console.log('isAuthenticate ??', isAuthenticate);
+    console.log('-------TRUE-------', isUser);
     return (
         <>{verify.isLoading ? <MainStackNavigation /> : <AuthNavigator />}</>
     );

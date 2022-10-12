@@ -10,25 +10,58 @@ import {
 } from 'react-native';
 import React from 'react';
 import {useNavigation} from '@react-navigation/native';
-
+import MapView from 'react-native-maps';
+import {Marker} from 'react-native-maps';
 const Map = () => {
     const navigation = useNavigation();
 
     return (
-        <View style={styles.main}>
-            <ScrollView>
-                <View style={{alignSelf: 'center'}}>
-                    <Text
-                        style={{
-                            fontWeight: 'bold',
-                            fontSize: 25,
-                            paddingTop: 20,
-                        }}>
-                        Map
-                    </Text>
-                </View>
-            </ScrollView>
+        // <View style={styles.main}>
+        //     <ScrollView>
+        //         <View style={{alignSelf: 'center'}}>
+        //             <Text
+        //                 style={{
+        //                     fontWeight: 'bold',
+        //                     fontSize: 25,
+        //                     paddingTop: 20,
+        //                 }}>
+        //                 Map
+        //             </Text>
+        //         </View>
+        <View style={styles.MainContainer}>
+            <View style={{alignSelf: 'center'}}>
+                <Text
+                    style={{
+                        fontWeight: 'bold',
+                        fontSize: 25,
+                        paddingTop: 20,
+                    }}>
+                    Map
+                </Text>
+            </View>
+            <MapView
+                style={styles.mapStyle}
+                showsUserLocation={false}
+                zoomEnabled={true}
+                zoomControlEnabled={true}
+                initialRegion={{
+                    latitude: 28.57966,
+                    longitude: 77.32111,
+                    latitudeDelta: 0.0922,
+                    longitudeDelta: 0.0421,
+                }}>
+                <Marker
+                    coordinate={{
+                        latitude: 28.57966,
+                        longitude: 77.32111,
+                    }}
+                    title={'JavaPoint'}
+                    description={'Java Training Institute'}
+                />
+            </MapView>
         </View>
+        //     </ScrollView>
+        // </View>
     );
 };
 
@@ -71,6 +104,22 @@ const styles = StyleSheet.create({
         borderRadius: 10,
     },
     image: {width: 200, height: 200, marginTop: 40, alignSelf: 'center'},
+    MainContainer: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        alignItems: 'center',
+        justifyContent: 'flex-end',
+    },
+    mapStyle: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+    },
 });
 
 export default Map;

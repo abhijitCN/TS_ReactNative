@@ -19,7 +19,14 @@ import {useDispatch, useSelector} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
 import {rootState} from '../../Reducers/store';
 import {toggleSpinner} from '../../Reducers/toggleSpinnerSlice';
-import {getStorage, ref, uploadBytes, getMetadata} from 'firebase/storage';
+import {
+    getStorage,
+    ref,
+    uploadBytes,
+    getMetadata,
+    getDownloadURL,
+} from 'firebase/storage';
+import storage from '@react-native-firebase/storage';
 
 function Home() {
     const navigation = useNavigation();
@@ -28,21 +35,21 @@ function Home() {
     const user: any = useSelector<any>((state: rootState) => state.user);
     const profile: any = useSelector<any>((state: rootState) => state.profile);
     console.log(' < profile > ', profile);
-    const SPINNER: any = useSelector<any>(
-        (state: rootState) => state.toggleSpinner,
-    );
-    console.log(' < SPINNER > ', SPINNER);
-    console.log('YOU USER', user);
-    console.log(' < globalLoading > ', user.globalLoading);
-    useEffect(() => {
-        setTimeout(() => {
-            //setAnimate(false);
-            dispatch(toggleSpinner(false));
-        }, 500);
-    }, [SPINNER.show]);
+    // const SPINNER: any = useSelector<any>(
+    //     (state: rootState) => state.toggleSpinner,
+    // );
+    // console.log(' < SPINNER > ', SPINNER);
+    // //console.log('YOU USER', user);
+    // //console.log(' < globalLoading > ', user.globalLoading);
     // useEffect(() => {
-    //     callImageFromStorage();
-    // }, []);
+    //     setTimeout(() => {
+    //         //setAnimate(false);
+    //         dispatch(toggleSpinner(false));
+    //     }, 2000);
+    // }, [SPINNER.show]);
+    useEffect(() => {
+        //getProfileImage();
+    }, []);
     // const callImageFromStorage = () => {
     //     const storage = getStorage();
     //     const forestRef = ref(storage, `/userprofile/`);
@@ -53,38 +60,19 @@ function Home() {
     //         .catch(error => {
     //         });
     // };
+    const getProfileImage = async () => {
+        const storage = getStorage();
+        getDownloadURL(ref(storage, 'userprofile/1665474451208.jpeg'))
+            .then(url => {
+                console.log('HOM URL', url);
+            })
+            .catch(error => {
+                // Handle any errors
+            });
+    };
     return (
-        <View style={style.main}>
-            <View style={style.container}>
-                <Text style={style.header}>Home</Text>
-                <TouchableOpacity
-                    onPress={() => navigation.navigate('Profile')}
-                    style={{
-                        position: 'absolute',
-                        top: 10,
-                        right: 0,
-                        padding: 5,
-                    }}>
-                    {profile?.Image ? (
-                        <>
-                            <Image
-                                style={style.image}
-                                source={{
-                                    uri: profile?.Image,
-                                }}
-                            />
-                        </>
-                    ) : (
-                        <>
-                            <Image
-                                style={style.image}
-                                source={require('../../Assets/avatar2.png')}
-                            />
-                        </>
-                    )}
-                </TouchableOpacity>
-            </View>
-            {SPINNER.show === true ? (
+        <>
+            {/* {SPINNER.show === false ? (
                 <>
                     <View
                         style={{
@@ -96,6 +84,37 @@ function Home() {
                     </View>
                 </>
             ) : (
+                <> */}
+            <View style={style.main}>
+                <View style={style.container}>
+                    <Text style={style.header}>Home</Text>
+                    <TouchableOpacity
+                        onPress={() => navigation.navigate('Profile')}
+                        style={{
+                            position: 'absolute',
+                            top: 10,
+                            right: 0,
+                            padding: 5,
+                        }}>
+                        {profile?.Image ? (
+                            <>
+                                <Image
+                                    style={style.image}
+                                    source={{
+                                        uri: profile?.Image,
+                                    }}
+                                />
+                            </>
+                        ) : (
+                            <>
+                                <Image
+                                    style={style.image}
+                                    source={require('../../Assets/avatar2.png')}
+                                />
+                            </>
+                        )}
+                    </TouchableOpacity>
+                </View>
                 <View
                     style={{
                         alignItems: 'center',
@@ -104,8 +123,10 @@ function Home() {
                     }}>
                     <Text style={style.helloText}>Hello,{user?.email}</Text>
                 </View>
-            )}
-        </View>
+            </View>
+            {/* </>
+            )} */}
+        </>
     );
 }
 const style = StyleSheet.create({

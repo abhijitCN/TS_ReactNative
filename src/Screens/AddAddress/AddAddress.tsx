@@ -11,6 +11,8 @@ import {
 import React from 'react';
 import {useNavigation} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
+///import {apiKey} from './config'; // your google cloud api key
 const AddAddress = () => {
     const navigation = useNavigation();
 
@@ -28,20 +30,53 @@ const AddAddress = () => {
                     </Text>
                 </View>
                 <View style={{marginTop: 20}}>
-                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Your Address"
-                            autoCapitalize="none"
-                            secureTextEntry={true}
-                        />
-                        <TouchableOpacity
+                    <View style={{}}>
+                        <View>
+                            <GooglePlacesAutocomplete
+                                placeholder="Type a place"
+                                onPress={(data, details = null) =>
+                                    console.log(
+                                        'Selected Place Is',
+                                        data,
+                                        details,
+                                    )
+                                }
+                                query={{
+                                    key: 'AIzaSyDWiQo9spq2PLzl5i4OR2oBEXRoaMcgwYQ',
+                                }}
+                                fetchDetails={true}
+                                onFail={error => console.log(error)}
+                                onNotFound={() => console.log('no results')}
+                                listEmptyComponent={() => (
+                                    <View style={{}}>
+                                        <Text>No results were found</Text>
+                                    </View>
+                                )}
+                                styles={{
+                                    container: {
+                                        marginHorizontal: 12,
+
+                                        width: '95%',
+                                    },
+                                    description: {
+                                        color: '#000',
+                                        fontSize: 16,
+                                    },
+                                    predefinedPlacesDescription: {
+                                        color: '#3caf50',
+                                    },
+                                }}
+                            />
+                        </View>
+                        {/* <TouchableOpacity
                             onPress={() => navigation.navigate('Map')}
                             style={{
                                 backgroundColor: '#95d6f0',
-                                height: '70%',
+                                height: '90%',
                                 width: '10%',
                                 borderRadius: 10,
+                                marginRight: 12,
+                                marginLeft: 5,
                             }}>
                             <View
                                 style={{
@@ -55,10 +90,28 @@ const AddAddress = () => {
                                     size={30}
                                 />
                             </View>
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
                     </View>
                     <TouchableOpacity style={styles.button}>
                         <Text style={styles.buttonText}>Add</Text>
+                    </TouchableOpacity>
+                    <View>
+                        <Text
+                            style={{
+                                fontSize: 25,
+                                fontWeight: '500',
+                                color: '#0a3749',
+                                textAlign: 'center',
+                                margin: 10,
+                                marginTop: 40,
+                            }}>
+                            Or
+                        </Text>
+                    </View>
+                    <TouchableOpacity
+                        style={styles.button}
+                        onPress={() => navigation.navigate('Map')}>
+                        <Text style={styles.buttonText}>Choose From Map</Text>
                     </TouchableOpacity>
                 </View>
             </ScrollView>

@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react';
+import React, {useState, useContext, useEffect} from 'react';
 import {
     View,
     StyleSheet,
@@ -7,16 +7,18 @@ import {
     TextInput,
     ScrollView,
     Alert,
+    ActivityIndicator,
 } from 'react-native';
 import Toast from 'react-native-toast-message';
 import {UserContext} from '../../Context/AuthContext';
 import {firebase} from '@react-native-firebase/auth';
 import {verify} from '../../Reducers/verificationSlice';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {signInUser, signUpUser} from '../../Reducers/authSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useNavigation} from '@react-navigation/native';
 import {toggleSpinner} from '../../Reducers/toggleSpinnerSlice';
+import {rootState} from '../../Reducers/store';
 
 interface textFields {
     email: string;
@@ -30,7 +32,17 @@ const Login = () => {
     const [validate, SetValiadate] = useState<boolean>(false);
     const dispatch = useDispatch();
     const navigation = useNavigation();
-
+    const SPINNER: any = useSelector<any>(
+        (state: rootState) => state.toggleSpinner,
+    );
+    //console.log(' <INITIAL SPINNER > ', SPINNER);
+    const globalSpinner: any = useSelector<any>(
+        (state: rootState) => state.user.globalLoading,
+    );
+    console.log(' ?? globalLoading ?? ', globalSpinner);
+    useEffect(() => {
+        //console.log(' <useEffect SPINNER > ', SPINNER);
+    }, [SPINNER.show]);
     const onPress = () => {
         if (
             credential.email === data.email &&
@@ -70,7 +82,7 @@ const Login = () => {
                     );
                     console.log('Login Successfully');
                     //dispatch(verify(true));
-                    dispatch(signUpUser({isLoading: true}));
+                    //dispatch(signUpUser({isLoading: true}));
                     // AsyncStorage.setItem(
                     //     'userToken',
                     //     JSON.stringify(dispatch(verify(true))),
@@ -84,88 +96,105 @@ const Login = () => {
         }
     };
 
-    const Authenticate22 = () => {
-        console.log('Authenticate22 >>>>>>>>');
-        dispatch(toggleSpinner(true));
-        dispatch(signInUser(data));
-    };
     const Authenticate = () => {
-        //dispatch(toggleSpinner(true));
-        //dispatch(signInUser(data));
-        Authenticate22();
+        dispatch(signInUser(data));
     };
 
     return (
-        <View style={style.main}>
-            <Text style={style.loginText}>Log In</Text>
-            <Text style={style.sentence}>Enter your email and password</Text>
-            <View style={{}}>
-                <Text style={style.textInputHeading}>Email</Text>
-                <TextInput
-                    style={[
-                        style.input,
-                        {
-                            borderColor:
-                                validate && data.email === ''
-                                    ? 'red'
-                                    : '#1b94c4',
-                        },
-                    ]}
-                    onChangeText={e => setData({...data, email: e})}
-                    value={data.email}
-                    placeholderTextColor="#1b94c4"
-                    keyboardType="email-address"
-                    //keyboardAppearance="light"
-                    placeholder="Email"
-                />
-                {validate && data.email === '' && (
-                    <Text style={{marginLeft: 12, color: 'red'}}>
-                        Email required
-                    </Text>
-                )}
-                <Text style={style.textInputHeading}>Password</Text>
-                <TextInput
-                    style={[
-                        style.input,
-                        {
-                            borderColor:
-                                validate && data.password === ''
-                                    ? 'red'
-                                    : '#1b94c4',
-                        },
-                    ]}
-                    onChangeText={e => setData({...data, password: e})}
-                    value={data.password}
-                    //value={'123'}
-                    placeholderTextColor="#1b94c4"
-                    secureTextEntry={true}
-                    placeholder="Password"
-                />
-                {validate && data.password === '' && (
-                    <Text style={{marginLeft: 12, color: 'red'}}>
-                        Password required
-                    </Text>
-                )}
-                <View>
-                    <Toast />
-                </View>
-                <TouchableOpacity style={style.button} onPress={Authenticate}>
-                    <Text style={style.buttonText}>Submit</Text>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
-                    <Text
-                        style={[
-                            style.buttonText,
-                            {alignSelf: 'center', marginTop: 12},
-                        ]}>
-                        Don't Have Account ? Sign Up
-                    </Text>
-                </TouchableOpacity>
-            </View>
-            <View>
-                <Toast />
-            </View>
-        </View>
+        <>
+            {globalSpinner ? (
+                <>
+                    <View
+                        style={{
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            flex: 1,
+                        }}>
+                        <ActivityIndicator color="red" size="large" />
+                    </View>
+                </>
+            ) : (
+                <>
+                    <View style={style.main}>
+                        <Text style={style.loginText}>Log In</Text>
+                        <Text style={style.sentence}>
+                            Enter your email and password
+                        </Text>
+                        <View style={{}}>
+                            <Text style={style.textInputHeading}>Email</Text>
+                            <TextInput
+                                style={[
+                                    style.input,
+                                    {
+                                        borderColor:
+                                            validate && data.email === ''
+                                                ? 'red'
+                                                : '#1b94c4',
+                                    },
+                                ]}
+                                onChangeText={e => setData({...data, email: e})}
+                                value={data.email}
+                                placeholderTextColor="#1b94c4"
+                                keyboardType="email-address"
+                                //keyboardAppearance="light"
+                                placeholder="Email"
+                            />
+                            {validate && data.email === '' && (
+                                <Text style={{marginLeft: 12, color: 'red'}}>
+                                    Email required
+                                </Text>
+                            )}
+                            <Text style={style.textInputHeading}>Password</Text>
+                            <TextInput
+                                style={[
+                                    style.input,
+                                    {
+                                        borderColor:
+                                            validate && data.password === ''
+                                                ? 'red'
+                                                : '#1b94c4',
+                                    },
+                                ]}
+                                onChangeText={e =>
+                                    setData({...data, password: e})
+                                }
+                                value={data.password}
+                                //value={'123'}
+                                placeholderTextColor="#1b94c4"
+                                secureTextEntry={true}
+                                placeholder="Password"
+                            />
+                            {validate && data.password === '' && (
+                                <Text style={{marginLeft: 12, color: 'red'}}>
+                                    Password required
+                                </Text>
+                            )}
+                            <View>
+                                <Toast />
+                            </View>
+                            <TouchableOpacity
+                                style={style.button}
+                                onPress={Authenticate}>
+                                <Text style={style.buttonText}>Submit</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                onPress={() => navigation.navigate('SignUp')}>
+                                <Text
+                                    style={[
+                                        style.buttonText,
+                                        {alignSelf: 'center', marginTop: 12},
+                                    ]}>
+                                    Don't Have Account ? Sign Up
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
+                        <View>
+                            <Toast />
+                        </View>
+                    </View>
+                </>
+            )}
+        </>
     );
 };
 

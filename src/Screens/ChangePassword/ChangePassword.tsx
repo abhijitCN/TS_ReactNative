@@ -8,16 +8,29 @@ import {
     Alert,
     Button,
     TouchableOpacity,
+    ActivityIndicator,
 } from 'react-native';
 import {firebase} from '@react-native-firebase/auth';
 import {useNavigation} from '@react-navigation/native';
 import {passwordChange} from '../../Reducers/profileSlice';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
+import {rootState} from '../../Reducers/store';
+import {toggleSpinner} from '../../Reducers/toggleSpinnerSlice';
 
 const ChangePassword = () => {
     const navigation = useNavigation();
     const dispatch = useDispatch();
-
+    const SPINNER: any = useSelector<any>(
+        (state: rootState) => state.toggleSpinner,
+    );
+    console.log(' <INITIAL SPINNER > ', SPINNER);
+    useEffect(() => {
+        // setTimeout(() => {
+        //     //setAnimate(false);
+        //     dispatch(toggleSpinner(false));
+        // }, 2000);
+        console.log(' <useEffect SPINNER > ', SPINNER);
+    }, [SPINNER.show]);
     interface editValue {
         currentPassword: string;
         newPassword: string;
@@ -39,12 +52,14 @@ const ChangePassword = () => {
     };
 
     const onChangePasswordPress = () => {
+        dispatch(toggleSpinner(true));
         reauthenticate()
             .then(() => {
                 var user: any = firebase.auth().currentUser;
                 user.updatePassword(editValue.newPassword)
                     .then(() => {
-                        Alert.alert('Password was changed');
+                        dispatch(toggleSpinner(false));
+                        Alert.alert('Password change Successfully');
                         navigation.navigate('Home');
                     })
                     .catch((error: any) => {
@@ -62,43 +77,64 @@ const ChangePassword = () => {
 
     return (
         <View style={styles.main}>
-            <ScrollView>
-                <View style={{alignSelf: 'center'}}>
-                    <Text
+            {SPINNER?.show === true ? (
+                <>
+                    <View
                         style={{
-                            fontWeight: 'bold',
-                            fontSize: 25,
-                            paddingTop: 20,
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            flex: 1,
                         }}>
-                        Change Password
-                    </Text>
-                </View>
-                <View style={{marginTop: 50}}>
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Current Password"
-                        autoCapitalize="none"
-                        secureTextEntry={true}
-                        onChangeText={text => {
-                            setEditValue({...editValue, currentPassword: text});
-                        }}
-                    />
-                    <TextInput
-                        style={styles.input}
-                        placeholder="New Password"
-                        autoCapitalize="none"
-                        secureTextEntry={true}
-                        onChangeText={text => {
-                            setEditValue({...editValue, newPassword: text});
-                        }}
-                    />
-                    <TouchableOpacity
-                        style={styles.button}
-                        onPress={onChangePasswordPress}>
-                        <Text style={styles.buttonText}>Submit</Text>
-                    </TouchableOpacity>
-                </View>
-            </ScrollView>
+                        <ActivityIndicator color="red" size="large" />
+                    </View>
+                </>
+            ) : (
+                <>
+                    <ScrollView>
+                        <View style={{alignSelf: 'center'}}>
+                            <Text
+                                style={{
+                                    fontWeight: 'bold',
+                                    fontSize: 25,
+                                    paddingTop: 20,
+                                }}>
+                                Change Password
+                            </Text>
+                        </View>
+                        <View style={{marginTop: 50}}>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Current Password"
+                                autoCapitalize="none"
+                                secureTextEntry={true}
+                                onChangeText={text => {
+                                    setEditValue({
+                                        ...editValue,
+                                        currentPassword: text,
+                                    });
+                                }}
+                            />
+                            <TextInput
+                                style={styles.input}
+                                placeholder="New Password"
+                                autoCapitalize="none"
+                                secureTextEntry={true}
+                                onChangeText={text => {
+                                    setEditValue({
+                                        ...editValue,
+                                        newPassword: text,
+                                    });
+                                }}
+                            />
+                            <TouchableOpacity
+                                style={styles.button}
+                                onPress={onChangePasswordPress}>
+                                <Text style={styles.buttonText}>Submit</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </ScrollView>
+                </>
+            )}
         </View>
     );
 };

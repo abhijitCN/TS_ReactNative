@@ -8,8 +8,8 @@ export const toggleSpinnerSlice = createSlice({
     reducers: {
         toggleSpinner(state, action) {
             state.show = action.payload;
-            console.log('action.payload', action.payload);
-            return state;
+            //console.log('action.payload', action.payload);
+            //return state;
         },
     },
 });

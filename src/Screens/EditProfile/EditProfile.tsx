@@ -11,6 +11,7 @@ import {
     Alert,
     Modal,
     Pressable,
+    ActivityIndicator,
 } from 'react-native';
 const {height, width} = Dimensions.get('screen');
 import Toast from 'react-native-toast-message';
@@ -24,6 +25,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {PickImageAndUpload} from '../../Reducers/profileSlice';
 import {rootState} from '../../Reducers/store';
 import {profileImage} from '../../Reducers/profileSlice';
+import {toggleSpinner} from '../../Reducers/toggleSpinnerSlice';
 
 interface editValue {
     name: string;
@@ -42,6 +44,17 @@ const EditProfile = () => {
         (state: rootState) => state.profile,
     );
     console.log('userProfilePicture <<<>>>  ', userProfilePicture);
+    const SPINNER: any = useSelector<any>(
+        (state: rootState) => state.toggleSpinner,
+    );
+    console.log(' <INITIAL SPINNER > ', SPINNER);
+    useEffect(() => {
+        // setTimeout(() => {
+        //     //setAnimate(false);
+        //     dispatch(toggleSpinner(false));
+        // }, 2000);
+        console.log(' <useEffect SPINNER > ', SPINNER);
+    }, [SPINNER.show]);
     const [editValue, setEditValue] = useState<editValue | any>({
         name: '',
         phoneNo: '',
@@ -53,17 +66,17 @@ const EditProfile = () => {
     const profile: any = useSelector<any>((state: rootState) => state.profile);
 
     const Route = useRoute();
-    let data = Route.params;
-    let Phone = data.data.phoneNo;
+    let data: any = Route.params;
+    let Phone: any = data.data.phoneNo;
     console.log('Global Route data', Phone);
 
     useEffect(() => {
-        getUserData();
+        getUserData(data);
         console.log('userProfilePicture <<<>>>  ', userProfilePicture);
     }, []);
 
     const getUserData = (fn: DescribableFunction) => {
-        let data = Route.params;
+        let data: any = Route.params;
         console.log('This page data', data.data);
         setEditValue(data.data ? data.data : null);
     };
@@ -71,7 +84,7 @@ const EditProfile = () => {
     const pickImageAndUploadFromCamera = () => {
         console.log('pick Image And Upload');
         setModalVisible(!modalVisible);
-        launchCamera({quality: 0.5}, fileobj => {
+        launchCamera({quality: 0.5}, (fileobj: any) => {
             const uploadTask = storage()
                 .ref()
                 .child(`/userprofile/${Date.now()}`)
@@ -104,7 +117,7 @@ const EditProfile = () => {
         setModalVisible(!modalVisible);
         console.log('pick Image And Upload');
         setModalVisible(!modalVisible);
-        launchImageLibrary({quality: 0.5}, fileobj => {
+        launchImageLibrary({quality: 0.5}, (fileobj: any) => {
             const uploadTask = storage()
                 .ref()
                 .child(`/userprofile/${Date.now()}`)
@@ -138,6 +151,7 @@ const EditProfile = () => {
     };
 
     const onPress = async () => {
+        dispatch(toggleSpinner(true));
         await firestore()
             .collection('People')
             .doc(Phone)
@@ -145,100 +159,119 @@ const EditProfile = () => {
                 name: editValue.name ? editValue.name : null,
                 phoneNo: editValue.phoneNo ? editValue.phoneNo : null,
             })
+
             .then(() => {
+                dispatch(toggleSpinner(false));
                 navigation.navigate('Home');
-                console.log('User updated!');
+                Alert.alert('Update Successfully.');
             });
     };
 
     return (
         <View style={style.main}>
-            <ScrollView>
-                <View style={{alignSelf: 'center'}}>
-                    <Text
+            {SPINNER?.show === true ? (
+                <>
+                    <View
                         style={{
-                            fontWeight: 'bold',
-                            fontSize: 25,
-                            paddingVertical: 20,
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            flex: 1,
                         }}>
-                        Edit Profile
-                    </Text>
-                </View>
-                <View style={{}}>
-                    <TouchableOpacity
-                        // onPress={() =>
-                        //     // uploadImageToStorage(
-                        //     //     'data/user/0/com.tsreactnative/cache/rn_image_picker_lib_temp_0a9c0e6f-dcf9-4890-afd7-3c0345c25610.jpg',
-                        //     //     'abhijit',
-                        //     // )
-                        //     pickImageAndUpload()
-                        // }
-                        onPress={() => setModalVisible(true)}
-                        style={
-                            {
-                                //flex: 1,
-                                //flexDirection: 'row',
-                            }
-                        }>
-                        {profile?.Image ? (
-                            <>
-                                <Image
-                                    style={{
-                                        width: 150,
-                                        height: 150,
-                                        backgroundColor: '#eafafc',
-                                        alignSelf: 'center',
-                                        borderRadius: 90,
-                                        //marginTop: 40,
-                                    }}
-                                    source={{
-                                        uri: profile?.Image,
-                                    }}
-                                />
-                            </>
-                        ) : (
-                            <>
-                                <Image
-                                    style={{
-                                        width: 150,
-                                        height: 150,
-                                        backgroundColor: '#eafafc',
-                                        alignSelf: 'center',
-                                        borderRadius: 90,
-                                        //marginTop: 40,
-                                    }}
-                                    source={require('../../Assets/avatar2.png')}
-                                />
-                            </>
-                        )}
-                        <View
-                            style={{
-                                flex: 1,
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                position: 'absolute',
-                                left: 245,
-                                backgroundColor: '#95d6f0',
-                                borderRadius: 100,
-                                padding: 5,
-                                width: 40,
-                                height: 40,
-                            }}>
-                            <Icon name="pencil" color={'#0a3749'} size={25} />
+                        <ActivityIndicator color="red" size="large" />
+                    </View>
+                </>
+            ) : (
+                <>
+                    <ScrollView>
+                        <View style={{alignSelf: 'center'}}>
+                            <Text
+                                style={{
+                                    fontWeight: 'bold',
+                                    fontSize: 25,
+                                    paddingVertical: 20,
+                                }}>
+                                Edit Profile
+                            </Text>
                         </View>
-                    </TouchableOpacity>
-                    <Text style={style.textInputHeading}>Name</Text>
-                    <TextInput
-                        style={style.input}
-                        placeholderTextColor="#1b94c4"
-                        keyboardType="email-address"
-                        placeholder="Name"
-                        value={editValue.name ? editValue.name : null}
-                        onChangeText={e =>
-                            setEditValue({...editValue, name: e})
-                        }
-                    />
-                    {/* <Text style={style.textInputHeading}>Phone No</Text>
+                        <View style={{}}>
+                            <TouchableOpacity
+                                // onPress={() =>
+                                //     // uploadImageToStorage(
+                                //     //     'data/user/0/com.tsreactnative/cache/rn_image_picker_lib_temp_0a9c0e6f-dcf9-4890-afd7-3c0345c25610.jpg',
+                                //     //     'abhijit',
+                                //     // )
+                                //     pickImageAndUpload()
+                                // }
+                                onPress={() => setModalVisible(true)}
+                                style={
+                                    {
+                                        //flex: 1,
+                                        //flexDirection: 'row',
+                                    }
+                                }>
+                                {profile?.Image ? (
+                                    <>
+                                        <Image
+                                            style={{
+                                                width: 150,
+                                                height: 150,
+                                                backgroundColor: '#eafafc',
+                                                alignSelf: 'center',
+                                                borderRadius: 90,
+                                                //marginTop: 40,
+                                            }}
+                                            source={{
+                                                uri: profile?.Image,
+                                            }}
+                                        />
+                                    </>
+                                ) : (
+                                    <>
+                                        <Image
+                                            style={{
+                                                width: 150,
+                                                height: 150,
+                                                backgroundColor: '#eafafc',
+                                                alignSelf: 'center',
+                                                borderRadius: 90,
+                                                //marginTop: 40,
+                                            }}
+                                            source={require('../../Assets/avatar2.png')}
+                                        />
+                                    </>
+                                )}
+                                <View
+                                    style={{
+                                        flex: 1,
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        position: 'absolute',
+                                        left: 245,
+                                        backgroundColor: '#95d6f0',
+                                        borderRadius: 100,
+                                        padding: 5,
+                                        width: 40,
+                                        height: 40,
+                                    }}>
+                                    <Icon
+                                        name="pencil"
+                                        color={'#0a3749'}
+                                        size={25}
+                                    />
+                                </View>
+                            </TouchableOpacity>
+                            <Text style={style.textInputHeading}>Name</Text>
+                            <TextInput
+                                style={style.input}
+                                placeholderTextColor="#1b94c4"
+                                keyboardType="email-address"
+                                placeholder="Name"
+                                value={editValue.name ? editValue.name : null}
+                                onChangeText={e =>
+                                    setEditValue({...editValue, name: e})
+                                }
+                            />
+                            {/* <Text style={style.textInputHeading}>Phone No</Text>
                     <TextInput
                         style={style.input}
                         placeholderTextColor="#1b94c4"
@@ -250,55 +283,71 @@ const EditProfile = () => {
                         }
                     /> */}
 
-                    <TouchableOpacity style={style.button} onPress={onPress}>
-                        <Text style={style.buttonText}>Submit</Text>
-                    </TouchableOpacity>
+                            <TouchableOpacity
+                                style={style.button}
+                                onPress={onPress}>
+                                <Text style={style.buttonText}>Submit</Text>
+                            </TouchableOpacity>
 
-                    <View>
-                        <Toast />
-                    </View>
-                </View>
-                <Modal
-                    animationType="slide"
-                    transparent={true}
-                    visible={modalVisible}
-                    onRequestClose={() => {
-                        Alert.alert('Modal has been closed.');
-                        setModalVisible(!modalVisible);
-                    }}>
-                    <View style={style.centeredView}>
-                        <View style={style.modalView}>
-                            <Text style={style.modalText}>Choose From</Text>
-                            <View
-                                style={{
-                                    flexDirection: 'row',
-                                    justifyContent: 'space-evenly',
-                                    alignItems: 'center',
-                                }}>
-                                <Pressable
-                                    style={[style.button2, style.buttonClose]}
-                                    onPress={() =>
-                                        pickImageAndUploadFromCamera()
-                                    }>
-                                    <Text style={style.textStyle}>Camera</Text>
-                                </Pressable>
-                                <Pressable
-                                    style={[style.button2, style.buttonClose]}
-                                    onPress={() =>
-                                        pickImageAndUploadFromGallery()
-                                    }>
-                                    <Text style={style.textStyle}>Gallery</Text>
-                                </Pressable>
+                            <View>
+                                <Toast />
                             </View>
                         </View>
-                    </View>
-                </Modal>
-                {/* <Pressable
+                        <Modal
+                            animationType="slide"
+                            transparent={true}
+                            visible={modalVisible}
+                            onRequestClose={() => {
+                                Alert.alert('Modal closed');
+                                setModalVisible(!modalVisible);
+                            }}>
+                            <View style={style.centeredView}>
+                                <View style={style.modalView}>
+                                    <Text style={style.modalText}>
+                                        Choose From
+                                    </Text>
+                                    <View
+                                        style={{
+                                            flexDirection: 'row',
+                                            justifyContent: 'space-evenly',
+                                            alignItems: 'center',
+                                        }}>
+                                        <Pressable
+                                            style={[
+                                                style.button2,
+                                                style.buttonClose,
+                                            ]}
+                                            onPress={() =>
+                                                pickImageAndUploadFromCamera()
+                                            }>
+                                            <Text style={style.textStyle}>
+                                                Camera
+                                            </Text>
+                                        </Pressable>
+                                        <Pressable
+                                            style={[
+                                                style.button2,
+                                                style.buttonClose,
+                                            ]}
+                                            onPress={() =>
+                                                pickImageAndUploadFromGallery()
+                                            }>
+                                            <Text style={style.textStyle}>
+                                                Gallery
+                                            </Text>
+                                        </Pressable>
+                                    </View>
+                                </View>
+                            </View>
+                        </Modal>
+                        {/* <Pressable
                     style={[style.button2, style.buttonOpen]}
                     onPress={() => setModalVisible(true)}>
                     <Text style={style.textStyle}>Show Modal</Text>
                 </Pressable> */}
-            </ScrollView>
+                    </ScrollView>
+                </>
+            )}
         </View>
     );
 };

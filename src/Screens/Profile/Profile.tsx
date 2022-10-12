@@ -24,12 +24,12 @@ const Profile = () => {
     const dispatch = useDispatch();
     const [posts, setPosts] = useState<any>([]);
     const [userData, setUserData] = useState<any>({});
-    const user = useSelector<any>(state => state.user);
+    const user: any = useSelector<any>(state => state.user);
     const profile: any = useSelector<any>((state: rootState) => state.profile);
     const SPINNER: any = useSelector<any>(
         (state: rootState) => state.toggleSpinner,
     );
-    console.log(' < SPINNER > ', SPINNER.show);
+    // console.log(' < SPINNER > ', SPINNER.show);
 
     useEffect(() => {
         //getProfileData();
@@ -61,14 +61,14 @@ const Profile = () => {
         await firestore()
             .collection('users')
             .get()
-            .then(querySnapshot => {
+            .then((querySnapshot: any) => {
                 console.log(
                     'Total DATA: ',
                     querySnapshot.docs[0]._data
                         ? querySnapshot.docs[0]._data
                         : null,
                 );
-                let data = querySnapshot.docs.filter(r => {
+                let data = querySnapshot.docs.filter((r: any) => {
                     return r._data.email === user.email;
                 });
                 setUserData(data);

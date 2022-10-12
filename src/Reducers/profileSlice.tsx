@@ -14,13 +14,13 @@ import storage from '@react-native-firebase/storage';
 
 interface Initial {
     Email: string;
-    IsLoading: boolean;
+    //IsLoading: boolean;
     Image: string;
 }
 
 const initialState: Initial = {
     Email: '',
-    IsLoading: false,
+    //IsLoading: false,
     Image: '',
 };
 
@@ -29,7 +29,7 @@ export const PickImageAndUpload: any = createAsyncThunk(
     async () => {
         //const [image, setImage] = useState('');
         console.log('pick Image And Upload');
-        launchImageLibrary({quality: 0.5}, fileobj => {
+        launchImageLibrary({quality: 0.5}, (fileobj: any) => {
             const uploadTask = storage()
                 .ref()
                 .child(`/userprofile/${Date.now()}`)
