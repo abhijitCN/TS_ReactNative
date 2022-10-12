@@ -42,7 +42,7 @@ const AddAddress = () => {
                                     )
                                 }
                                 query={{
-                                    key: 'AIzaSyDWiQo9spq2PLzl5i4OR2oBEXRoaMcgwYQ',
+                                    key: '',
                                 }}
                                 fetchDetails={true}
                                 onFail={error => console.log(error)}
