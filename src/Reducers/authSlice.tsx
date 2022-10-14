@@ -28,16 +28,26 @@ export const signInUser: any = createAsyncThunk(
     'SignInUser',
     async (body: any) => {
         console.log(' ?? ', body.email, body.password);
-        try {
-            const user: any = await firebase
-                .auth()
-                .signInWithEmailAndPassword(body.email, body.password);
-            if (user?.user?._auth?._authResult) {
-                console.log('USER LOGIN >> ', user?.user?._auth?._authResult);
-                return user?.user?._user?.email;
+        if (body.email === '' && body.password === '') {
+            Alert.alert('Fill All Fields');
+        } else if (body.email === '' || body.password === '') {
+            Alert.alert('Fill All Fields');
+        } else {
+            try {
+                const user: any = await firebase
+                    .auth()
+                    .signInWithEmailAndPassword(body.email, body.password);
+                if (user?.user) {
+                    console.log(
+                        'USER LOGIN >> ',
+                        user?.user?._auth?._authResult,
+                    );
+                    return user?.user?._user?.email;
+                }
+            } catch (error) {
+                console.log('error', error);
+                Alert.alert('Enter Valid Credential');
             }
-        } catch (error) {
-            console.log('error', error);
         }
     },
 );

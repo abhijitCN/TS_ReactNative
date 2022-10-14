@@ -1,5 +1,5 @@
 import React, {type PropsWithChildren, useState, useEffect} from 'react';
-import {StyleSheet, Text, useColorScheme, View} from 'react-native';
+import {Alert, StyleSheet, Text, useColorScheme, View} from 'react-native';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import {useSelector} from 'react-redux';
 import {AuthNavigator, MainStackNavigation} from './src/Navigator/index';
@@ -38,33 +38,35 @@ const Section: React.FC<
 const App = () => {
     const verify: any = useSelector((state: rootState) => state.user);
 
-    const [isUser, setIsUser] = useState('');
+    const [isUser, setIsUser] = useState(false);
     useEffect(() => {
         //console.log('useEffect  Authenticate', verify.isLoading);
         displayData();
-    }, []);
+    }, [verify.isLoading, verify.email]);
 
     const displayData = async () => {
         try {
             let user: any = await AsyncStorage.getItem('Token');
             let parsed = JSON.parse(user);
-            console.log('parsed ?? ', parsed);
+            console.log('parsed token ******** ', parsed);
             setIsUser(parsed);
             //console.log('IS USER >> ', !isUser);
         } catch (error) {
-            console.log('ERROR', error);
+            //console.log('ERROR', error);
+            Alert.alert('Enter Valid Credential');
         }
     };
-    const A = verify.isLoading;
-    console.log('verify.isLoading ??', verify.isLoading);
-    const B = isUser;
-    console.log('isuser', isUser);
-    const isAuthenticate = isUser || verify.isLoading;
+    // const A = verify.isLoading;
+    // console.log('verify.isLoading ??', verify.isLoading);
+    // const B = isUser;
+    // console.log('is user ?? ', isUser);
+    const isAuthenticate = verify.isLoading && verify.email;
+    console.log('verify.isLoading ******', verify.isLoading);
+    console.log('verify.email *******', verify.email);
     console.log('isAuthenticate ??', isAuthenticate);
-    console.log('-------TRUE-------', isUser);
-    return (
-        <>{verify.isLoading ? <MainStackNavigation /> : <AuthNavigator />}</>
-    );
+    //console.log('-------TRUE-------', isUser);
+
+    return <>{isAuthenticate ? <MainStackNavigation /> : <AuthNavigator />}</>;
 };
 
 const styles = StyleSheet.create({

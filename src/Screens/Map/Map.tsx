@@ -9,37 +9,49 @@ import {
     TouchableOpacity,
 } from 'react-native';
 import React from 'react';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import MapView from 'react-native-maps';
 import {Marker} from 'react-native-maps';
 const Map = () => {
     const navigation = useNavigation();
-
+    const Route = useRoute();
+    const geometryData = Route.params;
+    const lat: any = geometryData;
+    //console.log('geometryData ** ', lat.geometryData.lat);
     return (
-        // <View style={styles.main}>
-        //     <ScrollView>
-        //         <View style={{alignSelf: 'center'}}>
-        //             <Text
-        //                 style={{
-        //                     fontWeight: 'bold',
-        //                     fontSize: 25,
-        //                     paddingTop: 20,
-        //                 }}>
-        //                 Map
-        //             </Text>
-        //         </View>
-        <View style={styles.MainContainer}>
-            <View style={{alignSelf: 'center'}}>
+        <View
+        //style={styles.MainContainer}
+        >
+            <View style={{}}>
+                <Text
+                    style={{
+                        fontWeight: 'bold',
+                        fontSize: 25,
+                        paddingTop: 20,
+                        alignSelf: 'center',
+                    }}>
+                    Map
+                </Text>
                 <Text
                     style={{
                         fontWeight: 'bold',
                         fontSize: 25,
                         paddingTop: 20,
                     }}>
-                    Map
+                    Your Lat -{' '}
+                    {lat?.geometryData?.lat ? lat?.geometryData?.lat : null}
+                </Text>
+                <Text
+                    style={{
+                        fontWeight: 'bold',
+                        fontSize: 25,
+                        paddingTop: 20,
+                    }}>
+                    Your long -{' '}
+                    {lat?.geometryData?.lng ? lat?.geometryData?.lng : null}
                 </Text>
             </View>
-            <MapView
+            {/* <MapView
                 style={styles.mapStyle}
                 showsUserLocation={false}
                 zoomEnabled={true}
@@ -58,7 +70,7 @@ const Map = () => {
                     title={'JavaPoint'}
                     description={'Java Training Institute'}
                 />
-            </MapView>
+            </MapView> */}
         </View>
         //     </ScrollView>
         // </View>

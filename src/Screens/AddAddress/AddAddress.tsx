@@ -8,111 +8,90 @@ import {
     Button,
     TouchableOpacity,
 } from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
-///import {apiKey} from './config'; // your google cloud api key
+
 const AddAddress = () => {
     const navigation = useNavigation();
-
+    const [geometry, setGeometry] = useState<any>({});
     return (
         <View style={styles.main}>
-            <ScrollView>
-                <View style={{alignSelf: 'center'}}>
-                    <Text
-                        style={{
-                            fontWeight: 'bold',
-                            fontSize: 25,
-                            paddingTop: 20,
-                        }}>
-                        Add Address
-                    </Text>
-                </View>
+            <Text
+                style={{
+                    fontWeight: 'bold',
+                    fontSize: 25,
+                    paddingTop: 20,
+                    alignSelf: 'center',
+                }}>
+                Add Address
+            </Text>
+            <ScrollView keyboardShouldPersistTaps="handled">
                 <View style={{marginTop: 20}}>
-                    <View style={{}}>
-                        <View>
-                            <GooglePlacesAutocomplete
-                                placeholder="Type a place"
-                                onPress={(data, details = null) =>
-                                    console.log(
-                                        'Selected Place Is',
-                                        data,
-                                        details,
-                                    )
-                                }
-                                query={{
-                                    key: '',
-                                }}
-                                fetchDetails={true}
-                                onFail={error => console.log(error)}
-                                onNotFound={() => console.log('no results')}
-                                listEmptyComponent={() => (
-                                    <View style={{}}>
-                                        <Text>No results were found</Text>
-                                    </View>
-                                )}
-                                styles={{
-                                    container: {
-                                        marginHorizontal: 12,
-
-                                        width: '95%',
-                                    },
-                                    description: {
-                                        color: '#000',
-                                        fontSize: 16,
-                                    },
-                                    predefinedPlacesDescription: {
-                                        color: '#3caf50',
-                                    },
-                                }}
-                            />
-                        </View>
-                        {/* <TouchableOpacity
-                            onPress={() => navigation.navigate('Map')}
-                            style={{
-                                backgroundColor: '#95d6f0',
-                                height: '90%',
-                                width: '10%',
-                                borderRadius: 10,
-                                marginRight: 12,
-                                marginLeft: 5,
-                            }}>
-                            <View
-                                style={{
-                                    flex: 1,
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                }}>
-                                <Icon
-                                    name="map-marker"
-                                    color={'#0a3749'}
-                                    size={30}
-                                />
+                    <GooglePlacesAutocomplete
+                        placeholder="Type a place"
+                        onPress={(data, details = null) =>
+                            //console.log('Selected Place Is', details?.geometry?.location)
+                            setGeometry(details?.geometry?.location)
+                        }
+                        query={{
+                            key: 'AIzaSyDWiQo9spq2PLzl5i4OR2oBEXRoaMcgwYQ',
+                        }}
+                        fetchDetails={true}
+                        onFail={error => console.log(error)}
+                        onNotFound={() => console.log('no results')}
+                        listEmptyComponent={() => (
+                            <View style={{}}>
+                                <Text>No results were found</Text>
                             </View>
-                        </TouchableOpacity> */}
+                        )}
+                        styles={{
+                            container: {
+                                marginHorizontal: 12,
+
+                                width: '95%',
+                            },
+                            description: {
+                                color: '#000',
+                                fontSize: 16,
+                            },
+                            predefinedPlacesDescription: {
+                                color: '#3caf50',
+                            },
+                        }}
+                    />
+                    <View style={{marginTop: 80}}>
+                        <TouchableOpacity
+                            style={styles.button}
+                            onPress={(data, details = null) =>
+                                navigation.navigate('Map', {
+                                    geometryData: geometry,
+                                })
+                            }>
+                            <Text style={styles.buttonText}>Add</Text>
+                        </TouchableOpacity>
+                        <View>
+                            <Text
+                                style={{
+                                    fontSize: 25,
+                                    fontWeight: '500',
+                                    color: '#0a3749',
+                                    textAlign: 'center',
+                                    margin: 10,
+                                    marginTop: 10,
+                                }}>
+                                - Or -
+                            </Text>
+                        </View>
+                        <TouchableOpacity
+                            style={styles.button}
+                            onPress={() => navigation.navigate('Map')}>
+                            <Text style={styles.buttonText}>
+                                Choose From Map
+                            </Text>
+                        </TouchableOpacity>
                     </View>
-                    <TouchableOpacity style={styles.button}>
-                        <Text style={styles.buttonText}>Add</Text>
-                    </TouchableOpacity>
-                    <View>
-                        <Text
-                            style={{
-                                fontSize: 25,
-                                fontWeight: '500',
-                                color: '#0a3749',
-                                textAlign: 'center',
-                                margin: 10,
-                                marginTop: 40,
-                            }}>
-                            Or
-                        </Text>
-                    </View>
-                    <TouchableOpacity
-                        style={styles.button}
-                        onPress={() => navigation.navigate('Map')}>
-                        <Text style={styles.buttonText}>Choose From Map</Text>
-                    </TouchableOpacity>
                 </View>
             </ScrollView>
         </View>
@@ -128,7 +107,7 @@ const styles = StyleSheet.create({
         padding: 10,
         marginHorizontal: 10,
         borderRadius: 25,
-        marginTop: 30,
+        marginTop: 0,
     },
     buttonText: {
         fontSize: 17,

@@ -48,23 +48,20 @@ function Home() {
     //     }, 2000);
     // }, [SPINNER.show]);
     useEffect(() => {
-        //getProfileImage();
+        callImageFromStorage();
     }, []);
-    // const callImageFromStorage = () => {
-    //     const storage = getStorage();
-    //     const forestRef = ref(storage, `/userprofile/`);
-    //     getMetadata(forestRef)
-    //         .then(metadata => {
-    //             console.log('metadata ?? ', metadata);
-    //         })
-    //         .catch(error => {
-    //         });
-    // };
-    const getProfileImage = async () => {
+    const callImageFromStorage = async () => {
+        // const pathReference = await storage()
+        //     .ref(
+        //         'gs://ts-reactnative-fec8b.appspot.com/userprofile/1665567833748',
+        //     )
+        //     .getDownloadURL();
+        // console.log('pathReference', pathReference);
         const storage = getStorage();
-        getDownloadURL(ref(storage, 'userprofile/1665474451208.jpeg'))
+        getDownloadURL(ref(storage, 'images/stars.jpg'))
             .then(url => {
-                console.log('HOM URL', url);
+                // `url` is the download URL for 'images/stars.jpg'
+                console.log('pathReference', url);
             })
             .catch(error => {
                 // Handle any errors

@@ -4,6 +4,7 @@ import authReducer from '../Reducers/authSlice'
 import profileSlice from './profileSlice';
 import verificationSlice from './verificationSlice';
 import toggleSpinnerSlice from './toggleSpinnerSlice';
+const createDebugger = require('redux-flipper').default; // <-- ADD THIS
 
 const store = configureStore({
     reducer: {
@@ -12,7 +13,10 @@ const store = configureStore({
       profile:profileSlice,
       toggleSpinner : toggleSpinnerSlice,
 
-    }
+    },
+    middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware()
+        .concat(createDebugger()), // <-- ADD THIS
   })
 
   export type rootState=ReturnType<typeof store.getState>

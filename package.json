@@ -22,6 +22,7 @@
     "lottie-react-native": "^5.1.4",
     "react": "18.1.0",
     "react-native": "0.70.0",
+    "react-native-flipper": "^0.164.0",
     "react-native-gesture-handler": "2.6.0",
     "react-native-google-places-autocomplete": "^2.4.1",
     "react-native-image-picker": "^4.10.0",
@@ -32,6 +33,7 @@
     "react-native-toast-message": "2.1.5",
     "react-native-vector-icons": "^9.2.0",
     "react-redux": "^8.0.2",
+    "redux-flipper": "^2.0.2",
     "uuid": "^9.0.0"
   },
   "devDependencies": {
