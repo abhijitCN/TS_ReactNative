@@ -1,46 +1,14 @@
 import React, {type PropsWithChildren, useState, useEffect} from 'react';
-import {Alert, StyleSheet, Text, useColorScheme, View} from 'react-native';
-import {Colors} from 'react-native/Libraries/NewAppScreen';
+import {Alert, StyleSheet} from 'react-native';
 import {useSelector} from 'react-redux';
 import {AuthNavigator, MainStackNavigation} from './src/Navigator/index';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {rootState} from './src/Reducers/store';
-const Section: React.FC<
-    PropsWithChildren<{
-        title: string;
-    }>
-> = ({children, title}) => {
-    const isDarkMode = useColorScheme() === 'dark';
-    return (
-        <View style={styles.sectionContainer}>
-            <Text
-                style={[
-                    styles.sectionTitle,
-                    {
-                        color: isDarkMode ? Colors.white : Colors.black,
-                    },
-                ]}>
-                {title}
-            </Text>
-            <Text
-                style={[
-                    styles.sectionDescription,
-                    {
-                        color: isDarkMode ? Colors.light : Colors.dark,
-                    },
-                ]}>
-                {children}
-            </Text>
-        </View>
-    );
-};
 
 const App = () => {
     const verify: any = useSelector((state: rootState) => state.user);
-
     const [isUser, setIsUser] = useState(false);
     useEffect(() => {
-        //console.log('useEffect  Authenticate', verify.isLoading);
         displayData();
     }, [verify.isLoading, verify.email]);
 
@@ -50,21 +18,13 @@ const App = () => {
             let parsed = JSON.parse(user);
             console.log('parsed token ******** ', parsed);
             setIsUser(parsed);
-            //console.log('IS USER >> ', !isUser);
         } catch (error) {
-            //console.log('ERROR', error);
             Alert.alert('Enter Valid Credential');
         }
     };
-    // const A = verify.isLoading;
-    // console.log('verify.isLoading ??', verify.isLoading);
-    // const B = isUser;
-    // console.log('is user ?? ', isUser);
+
     const isAuthenticate = verify.isLoading && verify.email;
-    console.log('verify.isLoading ******', verify.isLoading);
-    console.log('verify.email *******', verify.email);
     console.log('isAuthenticate ??', isAuthenticate);
-    //console.log('-------TRUE-------', isUser);
 
     return <>{isAuthenticate ? <MainStackNavigation /> : <AuthNavigator />}</>;
 };

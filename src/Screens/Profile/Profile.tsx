@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
     View,
     Dimensions,
@@ -6,76 +6,33 @@ import {
     StyleSheet,
     Image,
     TouchableOpacity,
-    Alert,
 } from 'react-native';
 const {height, width} = Dimensions.get('screen');
 import Toast from 'react-native-toast-message';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import firestore from '@react-native-firebase/firestore';
 import {useDispatch, useSelector} from 'react-redux';
-import {verify} from '../../Reducers/verificationSlice';
 import {useNavigation} from '@react-navigation/native';
 import {signOut} from '../../Reducers/authSlice';
 import {rootState} from '../../Reducers/store';
 
 const Profile = () => {
     const navigation = useNavigation();
-    //const {user, signOut} = useContext<any>(UserContext);
     const dispatch = useDispatch();
-    const [posts, setPosts] = useState<any>([]);
     const [userData, setUserData] = useState<any>({});
     const user: any = useSelector<any>(state => state.user);
     const profile: any = useSelector<any>((state: rootState) => state.profile);
-    const SPINNER: any = useSelector<any>(
-        (state: rootState) => state.toggleSpinner,
-    );
-    // console.log(' < SPINNER > ', SPINNER.show);
 
     useEffect(() => {
-        //getProfileData();
         sample();
     }, []);
 
-    const logOut = async () => {
-        try {
-            await AsyncStorage.removeItem('userToken');
-            dispatch(verify(false));
-            Toast.show({
-                type: 'success',
-                text1: 'Logout Successfully',
-                position: 'top',
-            });
-            console.log('Logout');
-        } catch (error) {
-            console.log('Logout error');
-        }
-    };
-
-    const logOut2 = () => {
+    const logOut = () => {
         dispatch(signOut());
-    };
-
-    const getProfileData = async () => {
-        const productList: any[] = [];
-        console.log('called');
-        await firestore()
-            .collection('users')
-            .get()
-            .then((querySnapshot: any) => {
-                console.log(
-                    'Total DATA: ',
-                    querySnapshot.docs[0]._data
-                        ? querySnapshot.docs[0]._data
-                        : null,
-                );
-                let data = querySnapshot.docs.filter((r: any) => {
-                    return r._data.email === user.email;
-                });
-                setUserData(data);
-                console.log(data);
-            });
-        setPosts(productList);
-        console.log('GetValue', posts);
+        Toast.show({
+            type: 'success',
+            text1: 'Logout Successfully',
+            position: 'top',
+        });
     };
 
     const sample = async () => {
@@ -147,8 +104,6 @@ const Profile = () => {
             </View>
             <View
                 style={{
-                    //flexDirection: 'row',
-                    //width: '100%',
                     alignItems: 'center',
                 }}>
                 <TouchableOpacity
@@ -170,7 +125,7 @@ const Profile = () => {
                     onPress={() => navigation.navigate('ChangePassword')}>
                     <Text style={style.buttonText}>Change Password</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={style.button} onPress={logOut2}>
+                <TouchableOpacity style={style.button} onPress={logOut}>
                     <Text style={style.buttonText}>Log Out</Text>
                 </TouchableOpacity>
             </View>

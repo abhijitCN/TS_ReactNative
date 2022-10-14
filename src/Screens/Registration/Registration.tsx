@@ -49,126 +49,48 @@ function Registration() {
     console.log('globalLoading ?? ', user);
     const [validate, SetValiadate] = useState<boolean>(false);
 
-    const onPress = async () => {
-        // Alert.alert('All ok');
-        if (data.password && data.email && data.name && data.phoneNo) {
-            console.log(
-                '??',
-                data.email,
-                data.password,
-                data.name,
-                data.phoneNo,
-            );
-            try {
-                const {user} = await firebase
-                    .auth()
-                    .createUserWithEmailAndPassword(data.email, data.password);
-                if (user) {
-                    //console.log('>>>>>', JSON.stringify(user.email));
-                    firestore()
-                        .collection('users')
-                        .add({
-                            name: data.name,
-                            email: data.email,
-                            phoneNo: data.phoneNo,
-                        })
-                        .then(() => {
-                            //Alert.alert('Register Successfully');
-                            Toast.show({
-                                type: 'success',
-                                text1: 'Register Successfully',
-                                position: 'top',
-                            });
-                            navigation.navigate('Login');
-                        });
-                }
-            } catch (error) {
-                console.log('error', error);
-            }
+    const Authenticate = () => {
+        if (
+            data.password &&
+            data.email &&
+            data.name &&
+            data.phoneNo &&
+            data.imageUrl
+        ) {
+            dispatch(signUpUser(data));
         } else {
             SetValiadate(true);
-        }
-    };
-
-    const Authenticate = async () => {
-        const myDoc = doc(db, 'User', 'UserData');
-
-        const docData = {
-            name: data.name,
-            phoneNo: data.phoneNo,
-        };
-
-        if (data.password && data.email && data.name && data.phoneNo) {
-            console.log(
-                '??',
-                data.email,
-                data.password,
-                data.name,
-                data.phoneNo,
-            );
-            try {
-                const {user} = await firebase
-                    .auth()
-                    .createUserWithEmailAndPassword(data.email, data.password);
-                console.log('DATA', user.uid);
-                if (user.uid) {
-                    console.log('user.ID>>>>>');
-                    firestore()
-                        .collection('People')
-                        .doc(data.phoneNo)
-                        .set({
-                            name: data.name,
-                            email: data.email,
-                            phoneNo: data.phoneNo,
-                        })
-                        .then(() => {
-                            Alert.alert('Register Successfully');
-                            navigation.navigate('Login');
-                        });
-                }
-            } catch (error) {
-                console.log('error', error);
-            }
-        } else {
-            SetValiadate(true);
-        }
-    };
-
-    const Authenticate2 = () => {
-        dispatch(signUpUser(data));
-    };
-
-    const signIn = async () => {
-        if (data.name && data.email && data.password) {
-            try {
-                const user = await firebase
-                    .auth()
-                    .createUserWithEmailAndPassword(data.email, data.password);
-                if (user) {
-                    Alert.alert(JSON.stringify(user));
-                }
-            } catch (error) {
-                console.log(error);
-            }
         }
     };
 
     const pickImageAndUploadFromCamera = () => {
         console.log('pick Image');
         setModalVisible(!modalVisible);
-        launchCamera({quality: 0.5}, fileobj => {
-            setData({...data, imageUrl: fileobj.assets[0].uri});
-            console.log('fileobj.assets[0].uri', data.imageUrl);
-        });
+        launchCamera(
+            {
+                quality: 0.5,
+                mediaType: 'video',
+            },
+            (fileobj: any) => {
+                setData({...data, imageUrl: fileobj.assets[0].uri});
+                console.log('fileobj.assets[0].uri', data.imageUrl);
+            },
+        );
     };
 
     const pickImageAndUploadFromGallery = () => {
         console.log('pick Image');
         setModalVisible(!modalVisible);
-        launchImageLibrary({quality: 0.5}, (fileobj: any) => {
-            setData({...data, imageUrl: fileobj.assets[0].uri});
-            console.log('fileobj.assets[0].uri', data.imageUrl);
-        });
+        launchImageLibrary(
+            {
+                quality: 0.5,
+                mediaType: 'video',
+            },
+            (fileobj: any) => {
+                setData({...data, imageUrl: fileobj.assets[0].uri});
+                console.log('fileobj.assets[0].uri', data.imageUrl);
+            },
+        );
     };
 
     return (
@@ -203,13 +125,30 @@ function Registration() {
                                     {data?.imageUrl ? (
                                         <>
                                             <Image
-                                                style={{
-                                                    width: 90,
-                                                    height: 90,
-                                                    backgroundColor: '#eafafc',
-                                                    alignSelf: 'center',
-                                                    borderRadius: 90,
-                                                }}
+                                                style={[
+                                                    {
+                                                        width: 90,
+                                                        height: 90,
+                                                        backgroundColor:
+                                                            '#eafafc',
+                                                        alignSelf: 'center',
+                                                        borderRadius: 90,
+                                                    },
+                                                    {
+                                                        borderColor:
+                                                            validate &&
+                                                            data.imageUrl === ''
+                                                                ? 'red'
+                                                                : '#1b94c4',
+                                                    },
+                                                    {
+                                                        borderWidth:
+                                                            validate &&
+                                                            data.imageUrl === ''
+                                                                ? 1
+                                                                : 0,
+                                                    },
+                                                ]}
                                                 source={{
                                                     uri: data?.imageUrl,
                                                 }}
@@ -218,13 +157,30 @@ function Registration() {
                                     ) : (
                                         <>
                                             <Image
-                                                style={{
-                                                    width: 90,
-                                                    height: 90,
-                                                    backgroundColor: '#eafafc',
-                                                    alignSelf: 'center',
-                                                    borderRadius: 90,
-                                                }}
+                                                style={[
+                                                    {
+                                                        width: 90,
+                                                        height: 90,
+                                                        backgroundColor:
+                                                            '#eafafc',
+                                                        alignSelf: 'center',
+                                                        borderRadius: 90,
+                                                    },
+                                                    {
+                                                        borderColor:
+                                                            validate &&
+                                                            data.imageUrl === ''
+                                                                ? 'red'
+                                                                : '#1b94c4',
+                                                    },
+                                                    {
+                                                        borderWidth:
+                                                            validate &&
+                                                            data.imageUrl === ''
+                                                                ? 1
+                                                                : 0,
+                                                    },
+                                                ]}
                                                 source={require('../../Assets/avatar2.png')}
                                             />
                                         </>
@@ -250,6 +206,17 @@ function Registration() {
                                         />
                                     </View>
                                 </TouchableOpacity>
+                                {validate && data.imageUrl === '' && (
+                                    <Text
+                                        style={{
+                                            marginLeft: 12,
+                                            color: 'red',
+                                            alignSelf: 'center',
+                                            marginTop: 5,
+                                        }}>
+                                        Image required
+                                    </Text>
+                                )}
                                 <Text style={style.textInputHeading}>Name</Text>
                                 <TextInput
                                     style={[
@@ -354,7 +321,11 @@ function Registration() {
                                 />
                                 {validate && data.password === '' && (
                                     <Text
-                                        style={{marginLeft: 12, color: 'red'}}>
+                                        style={{
+                                            marginLeft: 12,
+                                            color: 'red',
+                                            marginBottom: 5,
+                                        }}>
                                         Password required
                                     </Text>
                                 )}
@@ -363,7 +334,7 @@ function Registration() {
                                 </View>
                                 <TouchableOpacity
                                     style={style.button}
-                                    onPress={Authenticate2}>
+                                    onPress={Authenticate}>
                                     <Text style={style.buttonText}>Submit</Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity

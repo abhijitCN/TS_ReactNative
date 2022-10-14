@@ -32,7 +32,6 @@ const AddAddress = () => {
                     <GooglePlacesAutocomplete
                         placeholder="Type a place"
                         onPress={(data, details = null) =>
-                            //console.log('Selected Place Is', details?.geometry?.location)
                             setGeometry(details?.geometry?.location)
                         }
                         query={{

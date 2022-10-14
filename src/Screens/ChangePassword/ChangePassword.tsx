@@ -17,61 +17,67 @@ import {useDispatch, useSelector} from 'react-redux';
 import {rootState} from '../../Reducers/store';
 import {toggleSpinner} from '../../Reducers/toggleSpinnerSlice';
 
+interface editValue {
+    currentPassword: string;
+    newPassword: string;
+}
+
 const ChangePassword = () => {
     const navigation = useNavigation();
     const dispatch = useDispatch();
     const SPINNER: any = useSelector<any>(
         (state: rootState) => state.toggleSpinner,
     );
-    console.log(' <INITIAL SPINNER > ', SPINNER);
-    useEffect(() => {
-        // setTimeout(() => {
-        //     //setAnimate(false);
-        //     dispatch(toggleSpinner(false));
-        // }, 2000);
-        console.log(' <useEffect SPINNER > ', SPINNER);
-    }, [SPINNER.show]);
-    interface editValue {
-        currentPassword: string;
-        newPassword: string;
-    }
     const [editValue, setEditValue] = useState<editValue | any>({
         currentPassword: '',
         newPassword: '',
     });
+    const [validate, SetValiadate] = useState<boolean>(false);
+
+    useEffect(() => {
+        console.log(' <useEffect SPINNER > ', SPINNER);
+    }, [SPINNER.show]);
 
     const reauthenticate = () => {
-        var user: any = firebase.auth().currentUser;
-        console.log('reauthenticate function call', user?.email);
-        var cred = firebase.auth.EmailAuthProvider.credential(
-            user.email,
-            editValue.currentPassword,
-        );
-        console.log('cred ?? ', cred);
-        return user.reauthenticateWithCredential(cred);
+        if (editValue.currentPassword) {
+            var user: any = firebase.auth().currentUser;
+            console.log('reauthenticate function call', user?.email);
+            var cred = firebase.auth.EmailAuthProvider.credential(
+                user.email,
+                editValue.currentPassword,
+            );
+            console.log('cred ?? ', cred);
+            return user.reauthenticateWithCredential(cred);
+        } else {
+            SetValiadate(true);
+        }
     };
 
     const onChangePasswordPress = () => {
-        dispatch(toggleSpinner(true));
-        reauthenticate()
-            .then(() => {
-                var user: any = firebase.auth().currentUser;
-                user.updatePassword(editValue.newPassword)
-                    .then(() => {
-                        dispatch(toggleSpinner(false));
-                        Alert.alert('Password change Successfully');
-                        navigation.navigate('Home');
-                    })
-                    .catch((error: any) => {
-                        console.log(error.message);
-                    });
-            })
-            .catch((error: any) => {
-                console.log(error.message);
-            });
+        if (editValue.newPassword) {
+            dispatch(toggleSpinner(true));
+            reauthenticate()
+                .then(() => {
+                    var user: any = firebase.auth().currentUser;
+                    user.updatePassword(editValue.newPassword)
+                        .then(() => {
+                            dispatch(toggleSpinner(false));
+                            Alert.alert('Password change Successfully');
+                            navigation.navigate('Home');
+                        })
+                        .catch((error: any) => {
+                            console.log(error.message);
+                        });
+                })
+                .catch((error: any) => {
+                    console.log(error.message);
+                });
+        } else {
+            SetValiadate(true);
+        }
     };
 
-    const ChangePassword2 = () => {
+    const ChangePasswordAsync = () => {
         dispatch(passwordChange(editValue));
     };
 
@@ -103,7 +109,16 @@ const ChangePassword = () => {
                         </View>
                         <View style={{marginTop: 50}}>
                             <TextInput
-                                style={styles.input}
+                                style={[
+                                    styles.input,
+                                    {
+                                        borderColor:
+                                            validate &&
+                                            editValue.currentPassword === ''
+                                                ? 'red'
+                                                : '#1b94c4',
+                                    },
+                                ]}
                                 placeholder="Current Password"
                                 autoCapitalize="none"
                                 secureTextEntry={true}
@@ -114,8 +129,22 @@ const ChangePassword = () => {
                                     });
                                 }}
                             />
+                            {validate && editValue.currentPassword === '' && (
+                                <Text style={{marginLeft: 12, color: 'red'}}>
+                                    Name required
+                                </Text>
+                            )}
                             <TextInput
-                                style={styles.input}
+                                style={[
+                                    styles.input,
+                                    {
+                                        borderColor:
+                                            validate &&
+                                            editValue.newPassword === ''
+                                                ? 'red'
+                                                : '#1b94c4',
+                                    },
+                                ]}
                                 placeholder="New Password"
                                 autoCapitalize="none"
                                 secureTextEntry={true}
@@ -126,6 +155,15 @@ const ChangePassword = () => {
                                     });
                                 }}
                             />
+                            {validate && editValue.newPassword === '' && (
+                                <Text
+                                    style={{
+                                        marginLeft: 12,
+                                        color: 'red',
+                                    }}>
+                                    Name required
+                                </Text>
+                            )}
                             <TouchableOpacity
                                 style={styles.button}
                                 onPress={onChangePasswordPress}>

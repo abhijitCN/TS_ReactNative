@@ -5,19 +5,13 @@ import {
     TouchableOpacity,
     Text,
     TextInput,
-    ScrollView,
-    Alert,
     ActivityIndicator,
 } from 'react-native';
 import Toast from 'react-native-toast-message';
 import {UserContext} from '../../Context/AuthContext';
-import {firebase} from '@react-native-firebase/auth';
-import {verify} from '../../Reducers/verificationSlice';
 import {useDispatch, useSelector} from 'react-redux';
-import {signInUser, signUpUser} from '../../Reducers/authSlice';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import {signInUser} from '../../Reducers/authSlice';
 import {useNavigation} from '@react-navigation/native';
-import {toggleSpinner} from '../../Reducers/toggleSpinnerSlice';
 import {rootState} from '../../Reducers/store';
 
 interface textFields {
@@ -26,8 +20,6 @@ interface textFields {
 }
 
 const Login = () => {
-    const {signIn} = useContext<any>(UserContext);
-    const credential = {email: '123', password: '123'};
     const [data, setData] = useState<textFields>({email: '', password: ''});
     const [validate, SetValiadate] = useState<boolean>(false);
     const dispatch = useDispatch();
@@ -35,66 +27,10 @@ const Login = () => {
     const SPINNER: any = useSelector<any>(
         (state: rootState) => state.toggleSpinner,
     );
-    //console.log(' <INITIAL SPINNER > ', SPINNER);
     const globalSpinner: any = useSelector<any>(
         (state: rootState) => state.user.globalLoading,
     );
-    console.log(' ?? globalLoading ?? ', globalSpinner);
-    useEffect(() => {
-        //console.log(' <useEffect SPINNER > ', SPINNER);
-    }, [SPINNER.show]);
-    const onPress = () => {
-        if (
-            credential.email === data.email &&
-            credential.password === data.password
-        ) {
-            Toast.show({
-                type: 'success',
-                text1: 'Logout Successfully',
-                position: 'top',
-            });
-            signIn(data);
-        } else {
-            if (!data.email || !data.password) {
-                console.log('Required All Felds');
-            } else if (credential.email !== data.email) {
-                console.log('Wrong Email');
-            } else if (credential.password !== data.password) {
-                console.log('Wrong Password');
-            }
-        }
-    };
-
-    const FBLogin = async () => {
-        if (data.password && data.email) {
-            console.log('??', data.email, data.password);
-            try {
-                const user = await firebase
-                    .auth()
-                    .signInWithEmailAndPassword(data.email, data.password);
-                if (user.user.providerData[0].email) {
-                    dispatch(
-                        signUpUser({email: user.user.providerData[0].email}),
-                    );
-                    console.log(
-                        'log USER EMAIL',
-                        user.user.providerData[0].email,
-                    );
-                    console.log('Login Successfully');
-                    //dispatch(verify(true));
-                    //dispatch(signUpUser({isLoading: true}));
-                    // AsyncStorage.setItem(
-                    //     'userToken',
-                    //     JSON.stringify(dispatch(verify(true))),
-                    // );
-                }
-            } catch (error) {
-                console.log('error', error);
-            }
-        } else {
-            SetValiadate(true);
-        }
-    };
+    useEffect(() => {}, [SPINNER.show]);
 
     const Authenticate = () => {
         dispatch(signInUser(data));
@@ -203,7 +139,6 @@ const style = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         backgroundColor: '#ffffff',
-        // alignItems: 'center',
     },
     input: {
         height: 60,
@@ -220,7 +155,6 @@ const style = StyleSheet.create({
         padding: 10,
         marginHorizontal: 10,
         borderRadius: 25,
-        //width: '90%',
     },
     buttonText: {
         fontSize: 17,

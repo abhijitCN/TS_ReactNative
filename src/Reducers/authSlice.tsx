@@ -1,25 +1,22 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {firebase} from '@react-native-firebase/auth';
-import {Alert, ActivityIndicator} from 'react-native';
+import {Alert} from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import {deleteDoc, doc, getDoc, setDoc} from 'firebase/firestore';
 import {db} from '../Constant/Firebase';
 import Toast from 'react-native-toast-message';
 import storage from '@react-native-firebase/storage';
 import {useState} from 'react';
-import {useNavigation} from '@react-navigation/native';
 
 interface Initial {
     email: string;
-    // pic: any;
     isLoading: boolean;
     globalLoading: boolean;
 }
 
 const initialState: Initial = {
     email: '',
-    // pic: '',
     isLoading: false,
     globalLoading: false,
 };
@@ -38,10 +35,11 @@ export const signInUser: any = createAsyncThunk(
                     .auth()
                     .signInWithEmailAndPassword(body.email, body.password);
                 if (user?.user) {
-                    console.log(
-                        'USER LOGIN >> ',
-                        user?.user?._auth?._authResult,
-                    );
+                    Toast.show({
+                        type: 'success',
+                        text1: 'Logout Successfully',
+                        position: 'top',
+                    });
                     return user?.user?._user?.email;
                 }
             } catch (error) {
@@ -55,7 +53,6 @@ export const signInUser: any = createAsyncThunk(
 export const signUpUser: any = createAsyncThunk(
     'SignUpUser',
     async (body: any) => {
-        //const navigation = useNavigation();
         //const [image, setImage] = useState('');
         const myDoc = doc(db, 'User', 'UserData');
         console.log('BODY >> ', body);
