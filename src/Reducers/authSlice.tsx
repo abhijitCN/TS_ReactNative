@@ -92,6 +92,7 @@ export const signUpUser: any = createAsyncThunk(
                     .createUserWithEmailAndPassword(body.email, body.password);
                 console.log('DATA', user.uid);
                 if (user?.uid) {
+                    // const docId = firestore().doc('People').id;
                     firestore()
                         .collection('People')
                         .doc(body.phoneNo)
@@ -100,6 +101,7 @@ export const signUpUser: any = createAsyncThunk(
                             email: body.email,
                             phoneNo: body.phoneNo,
                             ImageUrl: body.imageUrl,
+                            // docId: docId
                         })
                         .then(() => {
                             //navigation.navigate('Profile');
