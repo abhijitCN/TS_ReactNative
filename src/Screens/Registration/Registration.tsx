@@ -69,7 +69,7 @@ function Registration() {
         launchCamera(
             {
                 quality: 0.5,
-                mediaType: 'video',
+                mediaType: 'photo',
             },
             (fileobj: any) => {
                 setData({...data, imageUrl: fileobj.assets[0].uri});
@@ -84,7 +84,7 @@ function Registration() {
         launchImageLibrary(
             {
                 quality: 0.5,
-                mediaType: 'video',
+                mediaType: 'photo',
             },
             (fileobj: any) => {
                 setData({...data, imageUrl: fileobj.assets[0].uri});

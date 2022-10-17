@@ -82,7 +82,7 @@ const EditProfile = () => {
         launchCamera(
             {
                 quality: 0.5,
-                mediaType: 'video',
+                mediaType: 'photo',
             },
             (fileobj: any) => {
                 const uploadTask = storage()
@@ -125,7 +125,7 @@ const EditProfile = () => {
         launchImageLibrary(
             {
                 quality: 0.5,
-                mediaType: 'video',
+                mediaType: 'photo',
             },
             (fileobj: any) => {
                 const uploadTask = storage()
