@@ -60,21 +60,24 @@ export const PickImageAndUpload: any = createAsyncThunk(
     },
 );
 
-const reauthenticate: any = createAsyncThunk('ReAuthenticate', async body => {
-    console.log('ReAuthenticate', body);
-    var user: any = firebase.auth().currentUser;
-    console.log('reauthenticate function call', user?.email);
-    var cred = firebase.auth.EmailAuthProvider.credential(
-        user.email,
-        body.currentPassword,
-    );
-    console.log('cred ?? ', cred);
-    return user.reauthenticateWithCredential(cred);
-});
+const reauthenticate: any = createAsyncThunk(
+    'ReAuthenticate',
+    async (body: any) => {
+        console.log('ReAuthenticate', body);
+        var user: any = firebase.auth().currentUser;
+        console.log('reauthenticate function call', user?.email);
+        var cred = firebase.auth.EmailAuthProvider.credential(
+            user.email,
+            body.currentPassword,
+        );
+        console.log('cred ?? ', cred);
+        return user.reauthenticateWithCredential(cred);
+    },
+);
 
 export const passwordChange: any = createAsyncThunk(
     'PasswordChange',
-    async body => {
+    async (body: any) => {
         console.log('PasswordChange', body);
         reauthenticate()
             .then(() => {

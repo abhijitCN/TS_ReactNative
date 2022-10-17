@@ -78,7 +78,9 @@ const ChangePassword = () => {
     };
 
     const ChangePasswordAsync = () => {
-        dispatch(passwordChange(editValue));
+        dispatch(
+            passwordChange(editValue.currentPassword, editValue.newPassword),
+        );
     };
 
     return (

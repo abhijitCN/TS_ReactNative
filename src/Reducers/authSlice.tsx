@@ -148,6 +148,10 @@ const authSlice = createSlice({
                 JSON.stringify((state.isLoading = true)),
             );
         },
+        [signInUser.rejected]: (state, action) => {
+            state.isLoading = false;
+            state.globalLoading = false;
+        },
         //signUp
         [signUpUser.pending]: (state, action) => {
             state.globalLoading = true;

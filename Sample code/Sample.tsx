@@ -407,3 +407,74 @@ const style = StyleSheet.create({
     },
 });
 export default Sample;
+//Password change
+const reauthenticate = () => {
+    if (editValue.currentPassword) {
+        var user: any = firebase.auth().currentUser;
+        console.log('reauthenticate function call', user?.email);
+        var cred = firebase.auth.EmailAuthProvider.credential(
+            user.email,
+            editValue.currentPassword,
+        );
+        console.log('cred ?? ', cred);
+        return user.reauthenticateWithCredential(cred);
+    } else {
+        SetValiadate(true);
+    }
+};
+
+const onChangePasswordPress = () => {
+    if (editValue.newPassword) {
+        dispatch(toggleSpinner(true));
+        reauthenticate()
+            .then(() => {
+                var user: any = firebase.auth().currentUser;
+                user.updatePassword(editValue.newPassword)
+                    .then(() => {
+                        dispatch(toggleSpinner(false));
+                        Alert.alert('Password change Successfully');
+                        navigation.navigate('Home');
+                    })
+                    .catch((error: any) => {
+                        console.log(error.message);
+                    });
+            })
+            .catch((error: any) => {
+                console.log(error.message);
+            });
+    } else {
+        SetValiadate(true);
+    }
+};
+//destination
+<GooglePlacesAutocomplete
+    placeholder="Enter Destination Location"
+    onPress={(data, details = null) =>
+        setGeometry2(details?.geometry?.location)
+    }
+    query={{
+        key: 'AIzaSyDWiQo9spq2PLzl5i4OR2oBEXRoaMcgwYQ',
+    }}
+    fetchDetails={true}
+    onFail={error => console.log(error)}
+    onNotFound={() => console.log('no results')}
+    listEmptyComponent={() => (
+        <View style={{}}>
+            <Text>No results were found</Text>
+        </View>
+    )}
+    styles={{
+        container: {
+            marginHorizontal: 12,
+
+            width: '95%',
+        },
+        description: {
+            color: '#000',
+            fontSize: 16,
+        },
+        predefinedPlacesDescription: {
+            color: '#3caf50',
+        },
+    }}
+/>;
