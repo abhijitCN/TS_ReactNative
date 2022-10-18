@@ -1,6 +1,6 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {firebase} from '@react-native-firebase/auth';
+import {firebase, FirebaseAuthTypes} from '@react-native-firebase/auth';
 import {Alert, ActivityIndicator} from 'react-native';
 import {useDispatch} from 'react-redux';
 import {verify} from './verificationSlice';
@@ -62,16 +62,22 @@ export const PickImageAndUpload: any = createAsyncThunk(
 
 const reauthenticate: any = createAsyncThunk(
     'ReAuthenticate',
-    async (body: any) => {
-        console.log('ReAuthenticate', body);
-        var user: any = firebase.auth().currentUser;
-        console.log('reauthenticate function call', user?.email);
-        var cred = firebase.auth.EmailAuthProvider.credential(
-            user.email,
-            body.currentPassword,
-        );
-        console.log('cred ?? ', cred);
-        return user.reauthenticateWithCredential(cred);
+    async (body: any, thunkAPI) => {
+        try {
+            console.log('ReAuthenticate', body);
+            var user: FirebaseAuthTypes.User = firebase.auth()
+                .currentUser as FirebaseAuthTypes.User;
+
+            var cred = firebase.auth.EmailAuthProvider.credential(
+                user.email as string,
+                body.currentPassword,
+            );
+            console.log('cred ?? ', cred);
+            await user.reauthenticateWithCredential(cred);
+            return thunkAPI.dispatch(passwordChange({}));
+        } catch (error) {
+            throw Error('error on reauthentication');
+        }
     },
 );
 
