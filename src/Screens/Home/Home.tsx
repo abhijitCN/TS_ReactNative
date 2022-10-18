@@ -47,9 +47,11 @@ function Home() {
     //         dispatch(toggleSpinner(false));
     //     }, 2000);
     // }, [SPINNER.show]);
+
     useEffect(() => {
         callImageFromStorage();
     }, []);
+
     const callImageFromStorage = async () => {
         // const pathReference = await storage()
         //     .ref(
@@ -67,6 +69,11 @@ function Home() {
                 // Handle any errors
             });
     };
+
+    const clickHandler = () => {
+        navigation.navigate('AddProduct');
+    };
+
     return (
         <>
             {/* {SPINNER.show === false ? (
@@ -120,6 +127,17 @@ function Home() {
                     }}>
                     <Text style={style.helloText}>Hello,{user?.email}</Text>
                 </View>
+                <TouchableOpacity
+                    activeOpacity={0.7}
+                    onPress={clickHandler}
+                    style={style.touchableOpacityStyle}>
+                    <Image
+                        source={{
+                            uri: 'https://raw.githubusercontent.com/AboutReact/sampleresource/master/plus_icon.png',
+                        }}
+                        style={style.floatingButtonStyle}
+                    />
+                </TouchableOpacity>
             </View>
             {/* </>
             )} */}
@@ -159,6 +177,21 @@ const style = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
+    },
+    touchableOpacityStyle: {
+        position: 'absolute',
+        width: 60,
+        height: 60,
+        alignItems: 'center',
+        justifyContent: 'center',
+        right: 30,
+        bottom: 30,
+    },
+    floatingButtonStyle: {
+        resizeMode: 'contain',
+        width: 50,
+        height: 50,
+        //backgroundColor:'black'
     },
 });
 export default Home;

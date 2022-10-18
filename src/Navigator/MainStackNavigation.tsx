@@ -8,6 +8,7 @@ import {MainRootStackParamList} from './types';
 import ChangePasswordScreen from '../Screens/ChangePassword/ChangePassword';
 import AddAddressScreen from '../Screens/AddAddress/AddAddress';
 import MapScreen from '../Screens/Map/Map';
+import AddProductScreen from '../Screens/AddProduct/AddProductScreen';
 
 const MainStack = createStackNavigator<MainRootStackParamList>();
 
@@ -20,6 +21,7 @@ const MainStackScreens = () => (
         <MainStack.Screen name="EditProfile" component={EditProfileScreen} />
         <MainStack.Screen name="AddAddress" component={AddAddressScreen} />
         <MainStack.Screen name="Map" component={MapScreen} />
+        <MainStack.Screen name="AddProduct" component={AddProductScreen} />
 
         <MainStack.Screen
             name="ChangePassword"

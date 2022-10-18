@@ -10,4 +10,13 @@ export type MainRootStackParamList = {
     ChangePassword:any;
     AddAddress:any;
     Map:any
+    AddProduct:any
+};
+export type MainDrawerParamList = {
+    Home: {showMsg: boolean};
+    Profile: any;
+    EditProfile:any;
+    ChangePassword:any;
+    AddAddress:any;
+    Map:any
 };
