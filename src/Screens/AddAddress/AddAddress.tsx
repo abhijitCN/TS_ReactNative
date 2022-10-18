@@ -37,7 +37,7 @@ const AddAddress = () => {
                         setGeometry1(details?.geometry?.location)
                     }
                     query={{
-                        key: '',
+                        key: 'AIzaSyDWiQo9spq2PLzl5i4OR2oBEXRoaMcgwYQ',
                     }}
                     fetchDetails={true}
                     onFail={error => console.log(error)}

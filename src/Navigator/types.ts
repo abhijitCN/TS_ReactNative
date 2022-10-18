@@ -1,4 +1,5 @@
 export type AuthRootStackParamList = {
+    Splash:any;
     Login: {showMsg: boolean};
     SignUp: any;
 };

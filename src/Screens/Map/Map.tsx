@@ -18,8 +18,6 @@ const Map = () => {
     const geometryData = Route.params;
     const lat: any = geometryData;
     console.log('2 geometryData ** ', lat);
-    const Point1 = lat.geometry2;
-    const Point2 = lat.geometryData;
     const [currentLocButton, setCurrentLocButton] = useState(1);
     //console.log('geometryData ** ', lat.geometryData.lat);
     return (
@@ -54,15 +52,6 @@ const Map = () => {
                         coordinate={{
                             latitude: lat?.geometryData?.lat,
                             longitude: lat?.geometryData?.lng,
-                        }}
-                        title={'Pointer'}
-                        description={'Pointer'}
-                        pinColor="#0a3749"
-                    />
-                    <Marker
-                        coordinate={{
-                            latitude: lat?.geometry2?.lat,
-                            longitude: lat?.geometry2?.lng,
                         }}
                         title={'Pointer'}
                         description={'Pointer'}

@@ -4,13 +4,15 @@ import {NavigationContainer} from '@react-navigation/native';
 import LoginScreen from '../Screens/Login/Login';
 import RegistrationScreen from '../Screens/Registration/Registration';
 import {AuthRootStackParamList} from './types';
+import SplashScreen from '../Screens/Splash/SplashScreen';
 
 const AuthStack = createStackNavigator<AuthRootStackParamList>();
 
 const StackScreens = () => (
     <AuthStack.Navigator
         screenOptions={{headerShown: false}}
-        initialRouteName="Login">
+        initialRouteName="Splash">
+        <AuthStack.Screen name="Splash" component={SplashScreen} />
         <AuthStack.Screen name="Login" component={LoginScreen} />
         <AuthStack.Screen name="SignUp" component={RegistrationScreen} />
     </AuthStack.Navigator>

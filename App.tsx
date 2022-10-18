@@ -7,10 +7,11 @@ import {rootState} from './src/Reducers/store';
 
 const App = () => {
     const verify: any = useSelector((state: rootState) => state.user);
-    const [isUser, setIsUser] = useState(false);
+    console.log('inside verify', verify);
+    const [isUser, setIsUser] = useState(null);
     useEffect(() => {
         displayData();
-    }, [verify.isLoading, verify.email]);
+    }, [isUser]);
 
     const displayData = async () => {
         try {
@@ -18,13 +19,14 @@ const App = () => {
             let parsed = JSON.parse(user);
             console.log('parsed token ******** ', parsed);
             setIsUser(parsed);
+            console.log('**** set Parsed value in setState ****', isUser);
         } catch (error) {
             Alert.alert('Enter Valid Credential');
         }
     };
 
     const isAuthenticate = verify.isLoading && verify.email;
-    console.log('isAuthenticate ??', isAuthenticate);
+    //console.log('isAuthenticate ??', isAuthenticate);
 
     return <>{isAuthenticate ? <MainStackNavigation /> : <AuthNavigator />}</>;
 };
