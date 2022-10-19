@@ -1,5 +1,5 @@
 import React from 'react';
-import {TouchableOpacity, ScrollView} from 'react-native';
+import {TouchableOpacity, ScrollView, ActivityIndicator} from 'react-native';
 import {StyleSheet} from 'react-native';
 import {Text} from 'react-native';
 import {View} from 'react-native';
@@ -15,6 +15,7 @@ import {Modal} from 'react-native';
 import Dropdown from '../../Components/Dropdown';
 import {useDispatch, useSelector} from 'react-redux';
 import {addProduct} from '../../Reducers/ProductSlice';
+import {rootState} from '../../Reducers/store';
 
 interface textFields {
     name: string;
@@ -27,6 +28,9 @@ interface textFields {
 const AddProduct: React.FC = () => {
     const navigation = useNavigation();
     const dispatch = useDispatch();
+    const globalSpinner: any = useSelector<any>(
+        (state: rootState) => state.product.isLoading,
+    );
     const [modalVisible, setModalVisible] = useState(false);
     const [data, setData] = useState<textFields>({
         name: '',
@@ -35,8 +39,13 @@ const AddProduct: React.FC = () => {
         category: '',
         imageUrl: '',
     });
+    const Categorys = [
+        {id: 1, name: 'fruits'},
+        ,
+        {id: 2, name: 'vegetables'},
+        {id: 3, name: 'animal'},
+    ];
     const [validate, SetValiadate] = useState<boolean>(false);
-
     const pickImageAndUploadFromCamera = () => {
         console.log('pick Image');
         setModalVisible(!modalVisible);
@@ -66,15 +75,30 @@ const AddProduct: React.FC = () => {
             },
         );
     };
-
+    const [selectItem, setSelectItem] = useState(null);
+    const onSelect = (item: any) => {
+        setSelectItem(item);
+    };
+    //console.log('category value which have to send ?? ', selectItem.name);
     const productSubmit = () => {
+        const categoryName = selectItem?.name;
+        console.log(
+            'All data before submit ?? ',
+            data.name,
+            data.price,
+            data.quantity,
+            selectItem.name,
+            data.imageUrl,
+        );
+        console.log('Main value', selectItem.name);
         if (
-            //data.category &&
-            data.price &&
             data.name &&
-            data.quantity
-            //data.imageUrl
+            data.price &&
+            data.quantity &&
+            selectItem.name &&
+            data.imageUrl
         ) {
+            setData({...data, categoryName});
             dispatch(addProduct(data));
         } else {
             SetValiadate(true);
@@ -82,169 +106,215 @@ const AddProduct: React.FC = () => {
     };
 
     return (
-        <View style={style.main}>
-            <ScrollView style={{marginVertical: 10}}>
-                <View style={style.container}>
-                    <Text style={style.header}>Add Product</Text>
-                </View>
-                <View style={{}}>
-                    <TouchableOpacity onPress={() => setModalVisible(true)}>
-                        {data?.imageUrl ? (
-                            <>
-                                <Image
-                                    style={[
-                                        {
-                                            width: 90,
-                                            height: 90,
-                                            backgroundColor: '#eafafc',
+        <>
+            {globalSpinner ? (
+                <>
+                    <View
+                        style={{
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            flex: 1,
+                        }}>
+                        <ActivityIndicator color="red" size="large" />
+                    </View>
+                </>
+            ) : (
+                <>
+                    <View style={style.main}>
+                        <ScrollView style={{marginVertical: 10}}>
+                            <View style={style.container}>
+                                <Text style={style.header}>Add Product</Text>
+                            </View>
+                            <View style={{}}>
+                                <TouchableOpacity
+                                    onPress={() => setModalVisible(true)}>
+                                    {data?.imageUrl ? (
+                                        <>
+                                            <Image
+                                                style={[
+                                                    {
+                                                        width: 90,
+                                                        height: 90,
+                                                        backgroundColor:
+                                                            '#eafafc',
+                                                        alignSelf: 'center',
+                                                        //borderRadius: 90,
+                                                        marginTop: 10,
+                                                    },
+                                                    {
+                                                        borderColor:
+                                                            validate &&
+                                                            data.imageUrl === ''
+                                                                ? 'red'
+                                                                : '#1b94c4',
+                                                    },
+                                                    {
+                                                        borderWidth:
+                                                            validate &&
+                                                            data.imageUrl === ''
+                                                                ? 1
+                                                                : 0,
+                                                    },
+                                                ]}
+                                                source={{
+                                                    uri: data?.imageUrl,
+                                                }}
+                                            />
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Image
+                                                style={[
+                                                    {
+                                                        width: 90,
+                                                        height: 90,
+                                                        backgroundColor:
+                                                            '#eafafc',
+                                                        alignSelf: 'center',
+                                                        //borderRadius: 90,
+                                                        marginTop: 10,
+                                                    },
+                                                    {
+                                                        borderColor:
+                                                            validate &&
+                                                            data.imageUrl === ''
+                                                                ? 'red'
+                                                                : '#1b94c4',
+                                                    },
+                                                    {
+                                                        borderWidth:
+                                                            validate &&
+                                                            data.imageUrl === ''
+                                                                ? 1
+                                                                : 0,
+                                                    },
+                                                ]}
+                                                source={require('../../Assets/avatar2.png')}
+                                            />
+                                        </>
+                                    )}
+
+                                    <View
+                                        style={{
+                                            flex: 1,
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            position: 'absolute',
+                                            left: 225,
+                                            backgroundColor: '#95d6f0',
+                                            borderRadius: 100,
+                                            padding: 5,
+                                            width: 30,
+                                            height: 30,
+                                        }}>
+                                        <Icon
+                                            name="pencil"
+                                            color={'#0a3749'}
+                                            size={17}
+                                        />
+                                    </View>
+                                </TouchableOpacity>
+                                {validate && data.imageUrl === '' && (
+                                    <Text
+                                        style={{
+                                            marginLeft: 12,
+                                            color: 'red',
                                             alignSelf: 'center',
-                                            //borderRadius: 90,
-                                            marginTop: 10,
-                                        },
+                                            marginTop: 5,
+                                        }}>
+                                        Product Image Required
+                                    </Text>
+                                )}
+                                <Text style={style.textInputHeading}>
+                                    Product Name
+                                </Text>
+                                <TextInput
+                                    style={[
+                                        style.input,
                                         {
                                             borderColor:
-                                                validate && data.imageUrl === ''
+                                                validate && data.name === ''
                                                     ? 'red'
                                                     : '#1b94c4',
                                         },
-                                        {
-                                            borderWidth:
-                                                validate && data.imageUrl === ''
-                                                    ? 1
-                                                    : 0,
-                                        },
                                     ]}
-                                    source={{
-                                        uri: data?.imageUrl,
-                                    }}
+                                    placeholderTextColor="#1b94c4"
+                                    onChangeText={e =>
+                                        setData({...data, name: e})
+                                    }
+                                    placeholder="Product Name"
+                                    value={data.name}
                                 />
-                            </>
-                        ) : (
-                            <>
-                                <Image
+                                {validate && data.name === '' && (
+                                    <Text
+                                        style={{marginLeft: 12, color: 'red'}}>
+                                        Product Name required
+                                    </Text>
+                                )}
+                                <Text style={style.textInputHeading}>
+                                    Product price
+                                </Text>
+
+                                <TextInput
                                     style={[
-                                        {
-                                            width: 90,
-                                            height: 90,
-                                            backgroundColor: '#eafafc',
-                                            alignSelf: 'center',
-                                            //borderRadius: 90,
-                                            marginTop: 10,
-                                        },
+                                        style.input,
                                         {
                                             borderColor:
-                                                validate && data.imageUrl === ''
+                                                validate && data.price === ''
                                                     ? 'red'
                                                     : '#1b94c4',
                                         },
+                                    ]}
+                                    placeholderTextColor="#1b94c4"
+                                    placeholder="Product price"
+                                    onChangeText={e =>
+                                        setData({...data, price: e})
+                                    }
+                                />
+                                {validate && data.price === '' && (
+                                    <Text
+                                        style={{marginLeft: 12, color: 'red'}}>
+                                        product price required
+                                    </Text>
+                                )}
+
+                                <Text style={style.textInputHeading}>
+                                    Product Quantity
+                                </Text>
+
+                                <TextInput
+                                    style={[
+                                        style.input,
                                         {
-                                            borderWidth:
-                                                validate && data.imageUrl === ''
-                                                    ? 1
-                                                    : 0,
+                                            borderColor:
+                                                validate && data.quantity === ''
+                                                    ? 'red'
+                                                    : '#1b94c4',
                                         },
                                     ]}
-                                    source={require('../../Assets/avatar2.png')}
+                                    placeholderTextColor="#1b94c4"
+                                    keyboardType="phone-pad"
+                                    placeholder="Product Quantity"
+                                    onChangeText={e =>
+                                        setData({...data, quantity: e})
+                                    }
                                 />
-                            </>
-                        )}
+                                {validate && data.quantity === '' && (
+                                    <Text
+                                        style={{marginLeft: 12, color: 'red'}}>
+                                        Product Quantity required
+                                    </Text>
+                                )}
 
-                        <View
-                            style={{
-                                flex: 1,
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                position: 'absolute',
-                                left: 225,
-                                backgroundColor: '#95d6f0',
-                                borderRadius: 100,
-                                padding: 5,
-                                width: 30,
-                                height: 30,
-                            }}>
-                            <Icon name="pencil" color={'#0a3749'} size={17} />
-                        </View>
-                    </TouchableOpacity>
-                    {validate && data.imageUrl === '' && (
-                        <Text
-                            style={{
-                                marginLeft: 12,
-                                color: 'red',
-                                alignSelf: 'center',
-                                marginTop: 5,
-                            }}>
-                            Product Image Required
-                        </Text>
-                    )}
-                    <Text style={style.textInputHeading}>Product Name</Text>
-                    <TextInput
-                        style={[
-                            style.input,
-                            {
-                                borderColor:
-                                    validate && data.name === ''
-                                        ? 'red'
-                                        : '#1b94c4',
-                            },
-                        ]}
-                        placeholderTextColor="#1b94c4"
-                        onChangeText={e => setData({...data, name: e})}
-                        placeholder="Product Name"
-                        value={data.name}
-                    />
-                    {validate && data.name === '' && (
-                        <Text style={{marginLeft: 12, color: 'red'}}>
-                            Product Name required
-                        </Text>
-                    )}
-                    <Text style={style.textInputHeading}>Product price</Text>
-
-                    <TextInput
-                        style={[
-                            style.input,
-                            {
-                                borderColor:
-                                    validate && data.price === ''
-                                        ? 'red'
-                                        : '#1b94c4',
-                            },
-                        ]}
-                        placeholderTextColor="#1b94c4"
-                        placeholder="Product price"
-                        onChangeText={e => setData({...data, price: e})}
-                    />
-                    {validate && data.price === '' && (
-                        <Text style={{marginLeft: 12, color: 'red'}}>
-                            product price required
-                        </Text>
-                    )}
-
-                    <Text style={style.textInputHeading}>Product Quantity</Text>
-
-                    <TextInput
-                        style={[
-                            style.input,
-                            {
-                                borderColor:
-                                    validate && data.quantity === ''
-                                        ? 'red'
-                                        : '#1b94c4',
-                            },
-                        ]}
-                        placeholderTextColor="#1b94c4"
-                        keyboardType="phone-pad"
-                        placeholder="Product Quantity"
-                        onChangeText={e => setData({...data, quantity: e})}
-                    />
-                    {validate && data.quantity === '' && (
-                        <Text style={{marginLeft: 12, color: 'red'}}>
-                            Product Quantity required
-                        </Text>
-                    )}
-
-                    <Text style={style.textInputHeading}>Product Category</Text>
-                    <Dropdown />
-                    {validate && data.category === '' && (
+                                <Text style={style.textInputHeading}>
+                                    Product Category
+                                </Text>
+                                <Dropdown
+                                    value={selectItem}
+                                    data={Categorys}
+                                    onSelect={onSelect}
+                                />
+                                {/* {validate && data.category === '' && (
                         <Text
                             style={{
                                 marginLeft: 12,
@@ -253,54 +323,68 @@ const AddProduct: React.FC = () => {
                             }}>
                             Product Category required
                         </Text>
-                    )}
-                    <View></View>
-                    <TouchableOpacity
-                        style={style.button}
-                        onPress={productSubmit}>
-                        <Text style={style.buttonText}>Submit</Text>
-                    </TouchableOpacity>
-                </View>
-                <Modal
-                    animationType="slide"
-                    transparent={true}
-                    visible={modalVisible}
-                    onRequestClose={() => {
-                        Alert.alert('Modal has been closed.');
-                        setModalVisible(!modalVisible);
-                    }}>
-                    <View style={style.centeredView}>
-                        <View style={style.modalView}>
-                            <Text style={style.modalText}>Choose From</Text>
-                            <View
-                                style={{
-                                    flexDirection: 'row',
-                                    justifyContent: 'space-evenly',
-                                    alignItems: 'center',
-                                }}>
-                                <Pressable
-                                    style={[style.button2, style.buttonClose]}
-                                    onPress={() =>
-                                        pickImageAndUploadFromCamera()
-                                    }>
-                                    <Text style={style.textStyle}>Camera</Text>
-                                </Pressable>
-                                <Pressable
-                                    style={[style.button2, style.buttonClose]}
-                                    onPress={() =>
-                                        pickImageAndUploadFromGallery()
-                                    }>
-                                    <Text style={style.textStyle}>Gallery</Text>
-                                </Pressable>
+                    )} */}
+                                <View></View>
+                                <TouchableOpacity
+                                    style={style.button}
+                                    onPress={productSubmit}>
+                                    <Text style={style.buttonText}>Submit</Text>
+                                </TouchableOpacity>
                             </View>
-                        </View>
+                            <Modal
+                                animationType="slide"
+                                transparent={true}
+                                visible={modalVisible}
+                                onRequestClose={() => {
+                                    Alert.alert('Modal has been closed.');
+                                    setModalVisible(!modalVisible);
+                                }}>
+                                <View style={style.centeredView}>
+                                    <View style={style.modalView}>
+                                        <Text style={style.modalText}>
+                                            Choose From
+                                        </Text>
+                                        <View
+                                            style={{
+                                                flexDirection: 'row',
+                                                justifyContent: 'space-evenly',
+                                                alignItems: 'center',
+                                            }}>
+                                            <Pressable
+                                                style={[
+                                                    style.button2,
+                                                    style.buttonClose,
+                                                ]}
+                                                onPress={() =>
+                                                    pickImageAndUploadFromCamera()
+                                                }>
+                                                <Text style={style.textStyle}>
+                                                    Camera
+                                                </Text>
+                                            </Pressable>
+                                            <Pressable
+                                                style={[
+                                                    style.button2,
+                                                    style.buttonClose,
+                                                ]}
+                                                onPress={() =>
+                                                    pickImageAndUploadFromGallery()
+                                                }>
+                                                <Text style={style.textStyle}>
+                                                    Gallery
+                                                </Text>
+                                            </Pressable>
+                                        </View>
+                                    </View>
+                                </View>
+                            </Modal>
+                        </ScrollView>
                     </View>
-                </Modal>
-            </ScrollView>
-        </View>
+                </>
+            )}
+        </>
     );
 };
-
 const style = StyleSheet.create({
     main: {
         flex: 1,

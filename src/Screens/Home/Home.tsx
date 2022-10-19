@@ -9,6 +9,10 @@ import {
     Alert,
     Button,
     TextInput,
+    FlatList,
+    ScrollView,
+    SafeAreaView,
+    StatusBar,
 } from 'react-native';
 //import AsyncStorage from '@react-native-async-storage/async-storage';
 //import Toast from 'react-native-toast-message';
@@ -27,11 +31,17 @@ import {
     getDownloadURL,
 } from 'firebase/storage';
 import storage from '@react-native-firebase/storage';
+import firestore from '@react-native-firebase/firestore';
+
+interface textFields {
+    email: string;
+    password: string;
+}
 
 function Home() {
     const navigation = useNavigation();
     const dispatch = useDispatch();
-    //const [animate, setAnimate] = useState<boolean>(true);
+    const [data, setData] = useState([]);
     const user: any = useSelector<any>((state: rootState) => state.user);
     const profile: any = useSelector<any>((state: rootState) => state.profile);
     console.log(' < profile > ', profile);
@@ -48,9 +58,20 @@ function Home() {
     //     }, 2000);
     // }, [SPINNER.show]);
 
-    useEffect(() => {
-        callImageFromStorage();
-    }, []);
+    const DATA = [
+        {
+            id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
+            title: 'First Item',
+        },
+        {
+            id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
+            title: 'Second Item',
+        },
+        {
+            id: '58694a0f-3da1-471f-bd96-145571e29d72',
+            title: 'Third Item',
+        },
+    ];
 
     const callImageFromStorage = async () => {
         // const pathReference = await storage()
@@ -73,6 +94,35 @@ function Home() {
     const clickHandler = () => {
         navigation.navigate('AddProduct');
     };
+
+    const getAllProducts = async () => {
+        const Product: any = [];
+        await firestore()
+            .collection('AllProducts')
+            .get()
+            .then(querySnapshot => {
+                console.log('Total Products: ', querySnapshot.size);
+                querySnapshot.forEach(documentSnapshot => {
+                    console.log('Total data =>> ', documentSnapshot.data());
+                    const {name, price, docId, quantity, category, ImageUrl} =
+                        documentSnapshot.data();
+                    Product.push({
+                        name: name,
+                        price: price,
+                        docId: docId,
+                        quantity: quantity,
+                        category: category,
+                        ImageUrl: ImageUrl,
+                    });
+                });
+            });
+        setData(Product);
+    };
+
+    useEffect(() => {
+        getAllProducts();
+        console.log('**HOLE DATA**', data);
+    }, []);
 
     return (
         <>
@@ -122,10 +172,75 @@ function Home() {
                 <View
                     style={{
                         alignItems: 'center',
-                        flex: 1,
-                        justifyContent: 'center',
+                        //flex: 1,
+                        //justifyContent: 'center',
                     }}>
                     <Text style={style.helloText}>Hello,{user?.email}</Text>
+                </View>
+                <View style={{flex: 1}}>
+                    <FlatList
+                        data={data}
+                        renderItem={({item}) => {
+                            return (
+                                <>
+                                    <View
+                                        style={{
+                                            flex: 1,
+                                            padding: 12,
+                                            margin: 12,
+                                            borderColor: 'gray',
+                                            borderWidth: 0.7,
+                                            borderRadius: 10,
+                                            marginTop: 10,
+                                            //backgroundColor: '#2d2d',
+                                            // borderWidth: 0.7,
+                                            // borderRadius: 10,
+                                            // borderColor: '#ddd',
+                                            // borderBottomWidth: 0,
+                                            // shadowColor: '#000',
+                                            // shadowOffset: {width: 0, height: 2},
+                                            // shadowOpacity: 0.8,
+                                            // shadowRadius: 2,
+                                            // elevation: 1,
+                                            // justifyContent: 'center',
+                                            // alignItems: 'center',
+                                        }}>
+                                        <Image
+                                            style={{
+                                                height: 150,
+                                                width: '100%',
+                                                borderRadius: 10,
+                                            }}
+                                            source={{
+                                                uri: 'https://reactnative.dev/img/tiny_logo.png',
+                                            }}
+                                        />
+                                        <View
+                                            style={{
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                            }}>
+                                            <Text style={style.productText}>
+                                                Name - {item.name}
+                                            </Text>
+                                            <Text style={style.productText}>
+                                                Price - {item.price}
+                                            </Text>
+                                            <Text style={style.productText}>
+                                                Quantity - {item.quantity}
+                                            </Text>
+                                            <Text style={style.productText}>
+                                                Category - {item.category}
+                                            </Text>
+                                        </View>
+                                    </View>
+                                </>
+                            );
+                        }}
+                        showsVerticalScrollIndicator={false}
+                        horizontal={false}
+                        numColumns={2}
+                    />
                 </View>
                 <TouchableOpacity
                     activeOpacity={0.7}
@@ -170,6 +285,10 @@ const style = StyleSheet.create({
         fontWeight: '600',
         marginHorizontal: 10,
     },
+    productText: {
+        fontSize: 16,
+        fontWeight: '600',
+    },
     header: {marginTop: 20, fontWeight: 'bold', fontSize: 25},
     helloText: {fontSize: 20, fontWeight: 'bold'},
     image: {width: 50, height: 50, borderRadius: 25},
@@ -189,9 +308,15 @@ const style = StyleSheet.create({
     },
     floatingButtonStyle: {
         resizeMode: 'contain',
-        width: 50,
-        height: 50,
+        width: 60,
+        height: 60,
         //backgroundColor:'black'
+    },
+    card_template: {
+        overflow: 'hidden',
+        shadowColor: '#2d2d',
+        shadowRadius: 10,
+        shadowOpacity: 1,
     },
 });
 export default Home;

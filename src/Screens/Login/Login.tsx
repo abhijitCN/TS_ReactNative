@@ -164,13 +164,15 @@ const style = StyleSheet.create({
     loginText: {
         marginLeft: 12,
         fontSize: 40,
-        fontWeight: '500',
+        //fontWeight: '500',
         color: '#1b94c4',
+        fontFamily: 'FuzzyBubbles-Bold',
     },
     sentence: {
         marginLeft: 12,
         fontSize: 20,
         color: '#1b94c4',
+        fontFamily: 'Fasthand-Regular',
     },
     textInputHeading: {
         marginHorizontal: 10,
