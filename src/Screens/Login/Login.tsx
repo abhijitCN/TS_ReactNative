@@ -57,7 +57,7 @@ const Login = () => {
                                 alignItems: 'center',
                                 justifyContent: 'center',
                             }}>
-                            <Text style={style.loginText}>Please Log In</Text>
+                            <Text style={style.loginText}>Please Log-In</Text>
                             <Text style={style.sentence}>
                                 Enter your email and password
                             </Text>

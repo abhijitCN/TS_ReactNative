@@ -42,7 +42,9 @@ const EditProfile = () => {
     const Route = useRoute();
     let data: any = Route.params;
     let Phone: any = data.data.phoneNo;
-    console.log('Global Route data', Phone);
+    let AvaterUrl: any = data.data.ImageUrl;
+    console.log('Global Route data phone', Phone);
+    console.log('Global Route data phone', AvaterUrl);
     const userProfilePicture: any = useSelector<any>(
         (state: rootState) => state.profile,
     );
@@ -171,6 +173,7 @@ const EditProfile = () => {
             .collection('People')
             .doc(Phone)
             .update({
+                ImageUrl: image ? image : null,
                 name: editValue.name ? editValue.name : null,
                 phoneNo: editValue.phoneNo ? editValue.phoneNo : null,
             })
@@ -236,7 +239,7 @@ const EditProfile = () => {
                                                 alignSelf: 'center',
                                                 borderRadius: 90,
                                             }}
-                                            source={require('../../Assets/avatar2.png')}
+                                            source={{uri: AvaterUrl}}
                                         />
                                     </>
                                 )}
@@ -286,7 +289,7 @@ const EditProfile = () => {
                             transparent={true}
                             visible={modalVisible}
                             onRequestClose={() => {
-                                Alert.alert('Modal closed');
+                                // Alert.alert('Modal closed');
                                 setModalVisible(!modalVisible);
                             }}>
                             <View style={style.centeredView}>

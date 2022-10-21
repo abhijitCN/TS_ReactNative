@@ -34,6 +34,7 @@ import {
 } from 'firebase/storage';
 import storage from '@react-native-firebase/storage';
 import firestore from '@react-native-firebase/firestore';
+import Bars from 'react-native-vector-icons/FontAwesome5';
 
 interface textFields {
     email: string;
@@ -52,7 +53,7 @@ function Home() {
     const [refreshing, setRefreshing] = React.useState(false);
     const user: any = useSelector<any>((state: rootState) => state.user);
     const profile: any = useSelector<any>((state: rootState) => state.profile);
-    console.log(' < user > ', user);
+    console.log(' < user > ', profile);
     // const SPINNER: any = useSelector<any>(
     //     (state: rootState) => state.toggleSpinner,
     // );
@@ -129,7 +130,7 @@ function Home() {
 
     useEffect(() => {
         getUserAvatar();
-        //console.log('** avatar DATA **', avatar[0].avatarUrl);
+        console.log('** avatar image now >> **', avatar);
     }, []);
 
     const getAllProducts = async () => {
@@ -178,11 +179,23 @@ function Home() {
                 <> */}
             <View style={style.main}>
                 <View style={style.container}>
+                    <TouchableOpacity
+                        onPress={() => navigation.openDrawer()}
+                        style={{
+                            position: 'absolute',
+                            top: 23,
+                            right: 0,
+                            left: 15,
+                            padding: 5,
+                            paddingRight: 12,
+                        }}>
+                        <Bars name="bars" size={22} color={'#000000'} />
+                    </TouchableOpacity>
                     <Text style={style.header}>Home</Text>
                     <TouchableOpacity
                         onPress={
                             () => navigation.navigate('Profile')
-                            //navigation.openDrawer()
+                            //() => navigation.openDrawer()
                         }
                         style={{
                             position: 'absolute',
@@ -193,17 +206,28 @@ function Home() {
                         }}>
                         {
                             //profile?.Image ?
+                            //    condition1
+                            //   ? result1
+                            //   : condition2 ? result3 : result4
                             avatar ? (
                                 <>
                                     <Image
                                         style={style.image}
                                         source={{
-                                            //uri: profile?.Image,
+                                            //uri: profile[0]?.Image,
                                             uri: avatar[0]?.avatarUrl,
                                         }}
                                     />
                                 </>
                             ) : (
+                                // : profile?.Image === '' ? (
+                                //     <>
+                                //         <Image
+                                //             style={style.image}
+                                //             source={require('../../Assets/avatar2.png')}
+                                //         />
+                                //     </>
+                                // )
                                 <>
                                     <Image
                                         style={style.image}
@@ -242,21 +266,19 @@ function Home() {
                                                 padding: 12,
                                                 margin: 12,
                                                 borderColor: 'gray',
-                                                borderWidth: 0.7,
-                                                borderRadius: 10,
+                                                //borderWidth: 0.7,
+                                                borderRadius: 3,
                                                 marginTop: 10,
-                                                //backgroundColor: '#2d2d',
-                                                // borderWidth: 0.7,
-                                                // borderRadius: 10,
-                                                // borderColor: '#ddd',
-                                                // borderBottomWidth: 0,
-                                                // shadowColor: '#000',
-                                                // shadowOffset: {width: 0, height: 2},
-                                                // shadowOpacity: 0.8,
-                                                // shadowRadius: 2,
-                                                // elevation: 1,
-                                                // justifyContent: 'center',
-                                                // alignItems: 'center',
+                                                shadowColor: '#000',
+                                                shadowOffset: {
+                                                    width: 0,
+                                                    height: 2,
+                                                },
+                                                shadowOpacity: 0.25,
+                                                shadowRadius: 4,
+                                                elevation: 5,
+                                                minHeight: 285,
+                                                minWidth: 160,
                                             }}>
                                             {item.ImageUrl ? (
                                                 <>
@@ -265,6 +287,7 @@ function Home() {
                                                             height: 150,
                                                             width: '100%',
                                                             borderRadius: 10,
+                                                            marginVertical: 5,
                                                         }}
                                                         source={{
                                                             uri: item.ImageUrl,
@@ -381,10 +404,13 @@ const style = StyleSheet.create({
         backgroundColor: '#0a3749',
         borderRadius: 50,
         shadowColor: '#000',
-        shadowOffset: {width: 0, height: 4},
-        shadowOpacity: 0.8,
-        shadowRadius: 5,
-        elevation: 1,
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
     },
     floatingButtonStyle: {
         resizeMode: 'contain',

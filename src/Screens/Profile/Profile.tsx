@@ -21,6 +21,7 @@ const Profile = () => {
     const [userData, setUserData] = useState<any>({});
     const user: any = useSelector<any>(state => state.user);
     const profile: any = useSelector<any>((state: rootState) => state.profile);
+    const [avatar, setAvatar] = useState([]);
 
     useEffect(() => {
         sample();
@@ -35,16 +36,39 @@ const Profile = () => {
         });
     };
 
+    const getUserAvatar = async () => {
+        const userAvatar: any = [];
+        await firestore()
+            .collection('People')
+            .get()
+            .then(querySnapshot => {
+                console.log('Total users data: ', querySnapshot.size);
+                querySnapshot.forEach(documentSnapshot => {
+                    console.log('Total data =>> ', documentSnapshot.data());
+                    const {ImageUrl} = documentSnapshot.data();
+                    userAvatar.push({
+                        avatarUrl: ImageUrl,
+                    });
+                });
+            });
+        setAvatar(userAvatar);
+    };
+
+    useEffect(() => {
+        getUserAvatar();
+        console.log('** avatar image now **', avatar[0]?.avatarUrl);
+    }, []);
+
     const sample = async () => {
         console.log('called sample');
         await firestore()
             .collection('People')
             .get()
             .then(querySnapshot => {
-                console.log('Total querySnapshot: ', querySnapshot.size);
+                // console.log('Total querySnapshot: ', querySnapshot.size);
                 querySnapshot.forEach(documentSnapshot => {
                     var key = Object(documentSnapshot.data());
-                    console.log('KEYS ?? ', key.email);
+                    console.log('KEYS && ?? ', key);
                     //console.log('User Email ?? ', user.email);
                     if (key.email === user.email) {
                         console.log('FIND', key);
@@ -68,7 +92,8 @@ const Profile = () => {
                     </Text>
                 </View>
                 <View>
-                    {profile?.Image ? (
+                    {avatar ? (
+                        //profile?.Image ?
                         <>
                             <Image
                                 style={{
@@ -79,7 +104,8 @@ const Profile = () => {
                                     borderRadius: 90,
                                 }}
                                 source={{
-                                    uri: profile?.Image,
+                                    //uri: profile?.Image,
+                                    uri: avatar[0]?.avatarUrl,
                                 }}
                             />
                         </>

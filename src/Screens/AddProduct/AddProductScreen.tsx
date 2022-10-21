@@ -89,9 +89,19 @@ const AddProduct: React.FC = () => {
         let reqData = {...data, categoryName: categoryName};
         console.log('All data before submit ?? ', reqData);
         //console.log('Main value', selectItem.name);
-        dispatch(addProduct(reqData));
-        Alert.alert('Product Added Successfully');
-        navigation.navigate('Home');
+        if (
+            data.name === '' &&
+            data.price === '' &&
+            data.quantity === '' &&
+            categoryName === '' &&
+            data.imageUrl === ''
+        ) {
+            dispatch(addProduct(reqData));
+            Alert.alert('Product Added Successfully');
+            navigation.navigate('Home');
+        } else {
+            Alert.alert('Please Fill All Fields');
+        }
     };
 
     return (
@@ -325,7 +335,7 @@ const AddProduct: React.FC = () => {
                                 transparent={true}
                                 visible={modalVisible}
                                 onRequestClose={() => {
-                                    Alert.alert('Modal has been closed.');
+                                    //Alert.alert('Modal has been closed.');
                                     setModalVisible(!modalVisible);
                                 }}>
                                 <View style={style.centeredView}>
