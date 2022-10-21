@@ -13,7 +13,9 @@ import {
     ScrollView,
     SafeAreaView,
     StatusBar,
+    RefreshControl,
 } from 'react-native';
+import Icon from 'react-native-vector-icons/Entypo';
 //import AsyncStorage from '@react-native-async-storage/async-storage';
 //import Toast from 'react-native-toast-message';
 import {useDispatch, useSelector} from 'react-redux';
@@ -38,13 +40,19 @@ interface textFields {
     password: string;
 }
 
+const wait = (timeout: any) => {
+    return new Promise(resolve => setTimeout(resolve, timeout));
+};
+
 function Home() {
     const navigation = useNavigation();
     const dispatch = useDispatch();
     const [data, setData] = useState([]);
+    const [avatar, setAvatar] = useState([]);
+    const [refreshing, setRefreshing] = React.useState(false);
     const user: any = useSelector<any>((state: rootState) => state.user);
     const profile: any = useSelector<any>((state: rootState) => state.profile);
-    console.log(' < profile > ', profile);
+    console.log(' < user > ', user);
     // const SPINNER: any = useSelector<any>(
     //     (state: rootState) => state.toggleSpinner,
     // );
@@ -91,9 +99,38 @@ function Home() {
             });
     };
 
+    const onRefresh = React.useCallback(() => {
+        setRefreshing(true);
+        getAllProducts();
+        wait(2000).then(() => setRefreshing(false));
+    }, []);
+
     const clickHandler = () => {
         navigation.navigate('AddProduct');
     };
+
+    const getUserAvatar = async () => {
+        const userAvatar: any = [];
+        await firestore()
+            .collection('People')
+            .get()
+            .then(querySnapshot => {
+                console.log('Total users data: ', querySnapshot.size);
+                querySnapshot.forEach(documentSnapshot => {
+                    console.log('Total data =>> ', documentSnapshot.data());
+                    const {ImageUrl} = documentSnapshot.data();
+                    userAvatar.push({
+                        avatarUrl: ImageUrl,
+                    });
+                });
+            });
+        setAvatar(userAvatar);
+    };
+
+    useEffect(() => {
+        getUserAvatar();
+        //console.log('** avatar DATA **', avatar[0].avatarUrl);
+    }, []);
 
     const getAllProducts = async () => {
         const Product: any = [];
@@ -101,9 +138,9 @@ function Home() {
             .collection('AllProducts')
             .get()
             .then(querySnapshot => {
-                console.log('Total Products: ', querySnapshot.size);
+                //console.log('Total Products: ', querySnapshot.size);
                 querySnapshot.forEach(documentSnapshot => {
-                    console.log('Total data =>> ', documentSnapshot.data());
+                    //console.log('Total data =>> ', documentSnapshot.data());
                     const {name, price, docId, quantity, category, ImageUrl} =
                         documentSnapshot.data();
                     Product.push({
@@ -121,7 +158,7 @@ function Home() {
 
     useEffect(() => {
         getAllProducts();
-        console.log('**HOLE DATA**', data);
+        //console.log('**HOLE DATA**', data);
     }, []);
 
     return (
@@ -143,30 +180,38 @@ function Home() {
                 <View style={style.container}>
                     <Text style={style.header}>Home</Text>
                     <TouchableOpacity
-                        onPress={() => navigation.navigate('Profile')}
+                        onPress={
+                            () => navigation.navigate('Profile')
+                            //navigation.openDrawer()
+                        }
                         style={{
                             position: 'absolute',
                             top: 10,
                             right: 0,
                             padding: 5,
+                            paddingRight: 12,
                         }}>
-                        {profile?.Image ? (
-                            <>
-                                <Image
-                                    style={style.image}
-                                    source={{
-                                        uri: profile?.Image,
-                                    }}
-                                />
-                            </>
-                        ) : (
-                            <>
-                                <Image
-                                    style={style.image}
-                                    source={require('../../Assets/avatar2.png')}
-                                />
-                            </>
-                        )}
+                        {
+                            //profile?.Image ?
+                            avatar ? (
+                                <>
+                                    <Image
+                                        style={style.image}
+                                        source={{
+                                            //uri: profile?.Image,
+                                            uri: avatar[0]?.avatarUrl,
+                                        }}
+                                    />
+                                </>
+                            ) : (
+                                <>
+                                    <Image
+                                        style={style.image}
+                                        source={require('../../Assets/avatar2.png')}
+                                    />
+                                </>
+                            )
+                        }
                     </TouchableOpacity>
                 </View>
                 <View
@@ -177,81 +222,109 @@ function Home() {
                     }}>
                     <Text style={style.helloText}>Hello,{user?.email}</Text>
                 </View>
-                <View style={{flex: 1}}>
-                    <FlatList
-                        data={data}
-                        renderItem={({item}) => {
-                            return (
-                                <>
-                                    <View
-                                        style={{
-                                            flex: 1,
-                                            padding: 12,
-                                            margin: 12,
-                                            borderColor: 'gray',
-                                            borderWidth: 0.7,
-                                            borderRadius: 10,
-                                            marginTop: 10,
-                                            //backgroundColor: '#2d2d',
-                                            // borderWidth: 0.7,
-                                            // borderRadius: 10,
-                                            // borderColor: '#ddd',
-                                            // borderBottomWidth: 0,
-                                            // shadowColor: '#000',
-                                            // shadowOffset: {width: 0, height: 2},
-                                            // shadowOpacity: 0.8,
-                                            // shadowRadius: 2,
-                                            // elevation: 1,
-                                            // justifyContent: 'center',
-                                            // alignItems: 'center',
-                                        }}>
-                                        <Image
-                                            style={{
-                                                height: 150,
-                                                width: '100%',
-                                                borderRadius: 10,
-                                            }}
-                                            source={{
-                                                uri: 'https://reactnative.dev/img/tiny_logo.png',
-                                            }}
-                                        />
+                <ScrollView
+                    contentContainerStyle={style.scrollView}
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={refreshing}
+                            onRefresh={onRefresh}
+                        />
+                    }>
+                    <View style={{flex: 1}}>
+                        <FlatList
+                            data={data}
+                            renderItem={({item}) => {
+                                return (
+                                    <>
                                         <View
                                             style={{
-                                                alignItems: 'center',
-                                                justifyContent: 'center',
+                                                flex: 1,
+                                                padding: 12,
+                                                margin: 12,
+                                                borderColor: 'gray',
+                                                borderWidth: 0.7,
+                                                borderRadius: 10,
+                                                marginTop: 10,
+                                                //backgroundColor: '#2d2d',
+                                                // borderWidth: 0.7,
+                                                // borderRadius: 10,
+                                                // borderColor: '#ddd',
+                                                // borderBottomWidth: 0,
+                                                // shadowColor: '#000',
+                                                // shadowOffset: {width: 0, height: 2},
+                                                // shadowOpacity: 0.8,
+                                                // shadowRadius: 2,
+                                                // elevation: 1,
+                                                // justifyContent: 'center',
+                                                // alignItems: 'center',
                                             }}>
-                                            <Text style={style.productText}>
-                                                Name - {item.name}
-                                            </Text>
-                                            <Text style={style.productText}>
-                                                Price - {item.price}
-                                            </Text>
-                                            <Text style={style.productText}>
-                                                Quantity - {item.quantity}
-                                            </Text>
-                                            <Text style={style.productText}>
-                                                Category - {item.category}
-                                            </Text>
+                                            {item.ImageUrl ? (
+                                                <>
+                                                    <Image
+                                                        style={{
+                                                            height: 150,
+                                                            width: '100%',
+                                                            borderRadius: 10,
+                                                        }}
+                                                        source={{
+                                                            uri: item.ImageUrl,
+                                                        }}
+                                                    />
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <Image
+                                                        style={{
+                                                            height: 150,
+                                                            width: '100%',
+                                                            borderRadius: 10,
+                                                        }}
+                                                        source={{
+                                                            uri: 'https://reactnative.dev/img/tiny_logo.png',
+                                                        }}
+                                                    />
+                                                </>
+                                            )}
+                                            <View
+                                                style={{
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    marginTop: 5,
+                                                }}>
+                                                <Text style={style.productText}>
+                                                    Name - {item.name}
+                                                </Text>
+                                                <Text style={style.productText}>
+                                                    Price - {item.price}
+                                                </Text>
+                                                <Text style={style.productText}>
+                                                    Quantity - {item.quantity}
+                                                </Text>
+                                                <Text style={style.productText}>
+                                                    Category - {item.category}
+                                                </Text>
+                                            </View>
                                         </View>
-                                    </View>
-                                </>
-                            );
-                        }}
-                        showsVerticalScrollIndicator={false}
-                        horizontal={false}
-                        numColumns={2}
-                    />
-                </View>
+                                    </>
+                                );
+                            }}
+                            showsVerticalScrollIndicator={false}
+                            horizontal={false}
+                            numColumns={2}
+                        />
+                    </View>
+                </ScrollView>
                 <TouchableOpacity
                     activeOpacity={0.7}
                     onPress={clickHandler}
                     style={style.touchableOpacityStyle}>
-                    <Image
+                    {/* <Image
                         source={{
                             uri: 'https://raw.githubusercontent.com/AboutReact/sampleresource/master/plus_icon.png',
                         }}
                         style={style.floatingButtonStyle}
-                    />
+                    /> */}
+                    <Icon name="plus" color={'#ffffff'} size={40} />
                 </TouchableOpacity>
             </View>
             {/* </>
@@ -305,6 +378,13 @@ const style = StyleSheet.create({
         justifyContent: 'center',
         right: 30,
         bottom: 30,
+        backgroundColor: '#0a3749',
+        borderRadius: 50,
+        shadowColor: '#000',
+        shadowOffset: {width: 0, height: 4},
+        shadowOpacity: 0.8,
+        shadowRadius: 5,
+        elevation: 1,
     },
     floatingButtonStyle: {
         resizeMode: 'contain',
@@ -317,6 +397,9 @@ const style = StyleSheet.create({
         shadowColor: '#2d2d',
         shadowRadius: 10,
         shadowOpacity: 1,
+    },
+    scrollView: {
+        flex: 1,
     },
 });
 export default Home;

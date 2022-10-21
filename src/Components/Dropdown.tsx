@@ -19,7 +19,7 @@ const Dropdown = ({data, value = {}, onSelect = () => {}}) => {
         setShowOption(false);
         onSelect(val);
     };
-    console.log('Selected Value **', value);
+    console.log('>>Selected Value **', value);
 
     return (
         <View style={styles.main}>

@@ -14,8 +14,9 @@ import {Alert} from 'react-native';
 import {Modal} from 'react-native';
 import Dropdown from '../../Components/Dropdown';
 import {useDispatch, useSelector} from 'react-redux';
-import {addProduct} from '../../Reducers/ProductSlice';
+import {addProduct, addProductImage} from '../../Reducers/ProductSlice';
 import {rootState} from '../../Reducers/store';
+import {useFocusEffect} from '@react-navigation/native';
 
 interface textFields {
     name: string;
@@ -46,6 +47,9 @@ const AddProduct: React.FC = () => {
         {id: 3, name: 'animal'},
     ];
     const [validate, SetValiadate] = useState<boolean>(false);
+
+    useFocusEffect(React.useCallback(() => {}, []));
+
     const pickImageAndUploadFromCamera = () => {
         console.log('pick Image');
         setModalVisible(!modalVisible);
@@ -82,27 +86,12 @@ const AddProduct: React.FC = () => {
     //console.log('category value which have to send ?? ', selectItem.name);
     const productSubmit = () => {
         const categoryName = selectItem?.name;
-        console.log(
-            'All data before submit ?? ',
-            data.name,
-            data.price,
-            data.quantity,
-            selectItem.name,
-            data.imageUrl,
-        );
-        console.log('Main value', selectItem.name);
-        if (
-            data.name &&
-            data.price &&
-            data.quantity &&
-            selectItem.name &&
-            data.imageUrl
-        ) {
-            setData({...data, categoryName});
-            dispatch(addProduct(data));
-        } else {
-            SetValiadate(true);
-        }
+        let reqData = {...data, categoryName: categoryName};
+        console.log('All data before submit ?? ', reqData);
+        //console.log('Main value', selectItem.name);
+        dispatch(addProduct(reqData));
+        Alert.alert('Product Added Successfully');
+        navigation.navigate('Home');
     };
 
     return (
@@ -121,7 +110,7 @@ const AddProduct: React.FC = () => {
             ) : (
                 <>
                     <View style={style.main}>
-                        <ScrollView style={{marginVertical: 10}}>
+                        <ScrollView style={{marginVertical: 0}}>
                             <View style={style.container}>
                                 <Text style={style.header}>Add Product</Text>
                             </View>

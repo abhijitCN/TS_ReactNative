@@ -17,12 +17,57 @@ const initialState: Initial = {
     isLoading: false,
 };
 
+export const addProductImage: any = createAsyncThunk(
+    'ProductImage',
+    async (body: any, thunkAPI) => {
+        console.log('BODY addProductImage>> ', body);
+        try {
+            let url = '';
+            console.log('BODY >> ', body);
+            console.log('BODY 2>> ', body.categoryName);
+            const uploadTask = storage()
+                .ref()
+                .child(`/ProductImage/${Date.now()}`)
+                .putFile(body.imageUrl);
+            uploadTask.on(
+                'state_changed',
+                snapshot => {
+                    var progress =
+                        (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    if (progress == 100)
+                        console.log('Image Uploaded Successfully');
+                },
+                error => {
+                    console.log('error uploading image', error);
+                },
+                () => {
+                    uploadTask.snapshot?.ref
+                        .getDownloadURL()
+                        .then(downloadURL => {
+                            console.log(
+                                'Product downloadURL in RES >> ',
+                                downloadURL,
+                            );
+                            url = 'downloadURL';
+                            //const ProdDownUrl = downloadURL;
+                            // return downloadURL;
+                        });
+                },
+            );
+            return thunkAPI.dispatch(addProduct(url));
+        } catch (error) {
+            throw Error('error on addProductImage');
+        }
+    },
+);
+
 export const addProduct: any = createAsyncThunk(
     'AddProduct',
-    async (body: any) => {
+    async (body: any, url) => {
         // //const [image, setImage] = useState('');
-        console.log('BODY >> ', body);
-        console.log('BODY 2>> ', body.categoryName);
+        console.log('BODY addProduct>> ', body);
+        console.log('BODY categoryName>> ', body.categoryName);
+        console.log(' ProdDownUrl >> ', url);
         const uploadTask = storage()
             .ref()
             .child(`/ProductImage/${Date.now()}`)
@@ -38,45 +83,48 @@ export const addProduct: any = createAsyncThunk(
                 console.log('error uploading image');
             },
             () => {
-                uploadTask.snapshot?.ref.getDownloadURL().then(downloadURL => {
-                    //console.log('DOWNLOADED IMAGE  ?? ', downloadURL);
-                    console.log('downloadURL in REG >> ', downloadURL);
-                    //const DUrl = downloadURL
-                    //setImage(downloadURL);
-                });
+                uploadTask.snapshot?.ref
+                    .getDownloadURL()
+                    .then(downloadURL => {
+                        firestore()
+                            .collection('AllProducts')
+                            .doc(body.name)
+                            .set({
+                                name: body.name,
+                                price: body.price,
+                                quantity: body.quantity,
+                                ImageUrl: downloadURL,
+                                category: body.categoryName,
+                                docId: body.name,
+                            });
+                    })
+                    .catch(error => {
+                        console.log('error', error);
+                    });
             },
         );
-        if (
-            //data.category &&
-            body.price &&
-            body.name &&
-            body.quantity &&
-            body.imageUrl
-        ) {
-            try {
-                console.log('call storage');
-                //const docId = firestore().doc('AllProducts').id;
-                //console.log('**Doc Id is- **', docId);
-                firestore()
-                    .collection('AllProducts')
-                    .doc(body.name)
-                    .set({
-                        name: body.name,
-                        price: body.price,
-                        quantity: body.quantity,
-                        ImageUrl: body.imageUrl,
-                        category: body.categoryName,
-                        docId: body.name,
-                    })
-                    .then(() => {
-                        //navigation.navigate('Profile');
-                        Alert.alert('Product Added Successfully');
-                    });
-            } catch (error) {
-                console.log('error', error);
-            }
-        } else {
-        }
+        // if (
+        //     //data.category &&
+        //     body.price &&
+        //     body.name &&
+        //     body.quantity &&
+        //     body.imageUrl
+        // ) {
+        // try {
+        //     console.log('call storage');
+        //     firestore().collection('AllProducts').doc(body.name).set({
+        //         name: body.name,
+        //         price: body.price,
+        //         quantity: body.quantity,
+        //         ImageUrl: body.imageUrl,
+        //         category: body.categoryName,
+        //         docId: body.name,
+        //     });
+        // } catch (error) {
+        //     console.log('error', error);
+        // }
+        // } else {
+        // }
     },
 );
 

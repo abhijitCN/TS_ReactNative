@@ -72,47 +72,64 @@ export const signUpUser: any = createAsyncThunk(
             },
             () => {
                 uploadTask.snapshot?.ref.getDownloadURL().then(downloadURL => {
-                    //console.log('DOWNLOADED IMAGE  ?? ', downloadURL);
-                    console.log('downloadURL in REG >> ', downloadURL);
-                    //const DUrl = downloadURL
-                    //setImage(downloadURL);
+                    firebase
+                        .auth()
+                        .createUserWithEmailAndPassword(
+                            body.email,
+                            body.password,
+                        )
+                        .then(() => {
+                            firestore()
+                                .collection('People')
+                                .doc(body.phoneNo)
+                                .set({
+                                    name: body.name,
+                                    email: body.email,
+                                    phoneNo: body.phoneNo,
+                                    ImageUrl: downloadURL,
+                                    docId: body.phoneNo,
+                                })
+                                .then(() => {
+                                    Alert.alert(
+                                        'Register Successfully Please Login',
+                                    );
+                                });
+                        });
                 });
             },
         );
-        if (
-            body.password &&
-            body.email &&
-            body.name &&
-            body.phoneNo &&
-            body.imageUrl
-        ) {
-            try {
-                const {user} = await firebase
-                    .auth()
-                    .createUserWithEmailAndPassword(body.email, body.password);
-                console.log('DATA', user.uid);
-                if (user?.uid) {
-                    // const docId = firestore().doc('People').id;
-                    firestore()
-                        .collection('People')
-                        .doc(body.phoneNo)
-                        .set({
-                            name: body.name,
-                            email: body.email,
-                            phoneNo: body.phoneNo,
-                            ImageUrl: body.imageUrl,
-                            // docId: docId
-                        })
-                        .then(() => {
-                            //navigation.navigate('Profile');
-                            Alert.alert('Register Successfully Please Login');
-                        });
-                }
-            } catch (error) {
-                console.log('error', error);
-            }
-        } else {
-        }
+        // if (
+        //     body.password &&
+        //     body.email &&
+        //     body.name &&
+        //     body.phoneNo &&
+        //     body.imageUrl
+        // ) {
+        //     try {
+        //         const {user} = await firebase
+        //             .auth()
+        //             .createUserWithEmailAndPassword(body.email, body.password);
+        //         console.log('DATA', user.uid);
+        //         if (user?.uid) {
+        //             firestore()
+        //                 .collection('People')
+        //                 .doc(body.phoneNo)
+        //                 .set({
+        //                     name: body.name,
+        //                     email: body.email,
+        //                     phoneNo: body.phoneNo,
+        //                     ImageUrl: body.imageUrl,
+        //                     docId: body.phoneNo,
+        //                 })
+        //                 .then(() => {
+        //                     Alert.alert('Register Successfully Please Login');
+        //                 });
+        //         }
+        //     } catch (error) {
+        //         console.log('error', error);
+        //     }
+        // } else {
+        // }
     },
 );
 

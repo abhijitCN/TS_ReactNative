@@ -14,13 +14,13 @@ import storage from '@react-native-firebase/storage';
 
 interface Initial {
     Email: string;
-    //IsLoading: boolean;
+    IsLoading: boolean;
     Image: string;
 }
 
 const initialState: Initial = {
     Email: '',
-    //IsLoading: false,
+    IsLoading: false,
     Image: '',
 };
 
@@ -60,7 +60,7 @@ export const PickImageAndUpload: any = createAsyncThunk(
     },
 );
 
-const reauthenticate: any = createAsyncThunk(
+export const reauthenticate: any = createAsyncThunk(
     'ReAuthenticate',
     async (body: any, thunkAPI) => {
         try {
@@ -76,7 +76,7 @@ const reauthenticate: any = createAsyncThunk(
             await user.reauthenticateWithCredential(cred);
             return thunkAPI.dispatch(passwordChange({}));
         } catch (error) {
-            throw Error('error on reauthentication');
+            throw Error('error on re-Authentication');
         }
     },
 );
@@ -85,21 +85,21 @@ export const passwordChange: any = createAsyncThunk(
     'PasswordChange',
     async (body: any) => {
         console.log('PasswordChange', body);
-        reauthenticate()
+        //reauthenticate()
+        //   .then(() => {
+        var user: any = firebase.auth().currentUser;
+        user.updatePassword(body.newPassword)
             .then(() => {
-                var user: any = firebase.auth().currentUser;
-                user.updatePassword(body.newPassword)
-                    .then(() => {
-                        Alert.alert('Password was changed');
-                        //navigation.navigate('Home');
-                    })
-                    .catch((error: any) => {
-                        console.log(error.message);
-                    });
+                Alert.alert('Password was changed');
+                //navigation.navigate('Home');
             })
             .catch((error: any) => {
                 console.log(error.message);
             });
+        //    })
+        //    .catch((error: any) => {
+        //        console.log(error.message);
+        //    });
     },
 );
 
@@ -115,14 +115,12 @@ const profileSlice = createSlice({
     },
     extraReducers: {
         [PickImageAndUpload.pending]: (state, action) => {
-            <ActivityIndicator color="red" size="large" />;
+            state.IsLoading = true;
         },
         [PickImageAndUpload.fulfilled]: (state, action) => {
-            state.Image = action.payload;
+            state.IsLoading = false;
         },
-        [PickImageAndUpload.rejected]: (state, action) => {
-            <ActivityIndicator color="red" size="large" />;
-        },
+        [PickImageAndUpload.rejected]: (state, action) => {},
     },
 });
 export const {profileImage} = profileSlice.actions;

@@ -58,6 +58,7 @@ function Registration() {
             data.imageUrl
         ) {
             dispatch(signUpUser(data));
+            navigation.navigate('Login');
         } else {
             SetValiadate(true);
         }
@@ -113,12 +114,17 @@ function Registration() {
                             style={{
                                 justifyContent: 'center',
                                 flex: 1,
-                                marginVertical: 25,
+                                marginVertical: 5,
                             }}>
-                            <Text style={style.loginText}>Registration</Text>
-                            <Text style={style.sentence}>
-                                Enter your details
-                            </Text>
+                            <View
+                                style={{
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                }}>
+                                <Text style={style.loginText}>
+                                    Please Registration
+                                </Text>
+                            </View>
                             <View style={{}}>
                                 <TouchableOpacity
                                     onPress={() => setModalVisible(true)}>
@@ -434,10 +440,9 @@ const style = StyleSheet.create({
         color: '#0a3749',
     },
     loginText: {
-        marginLeft: 12,
-        fontSize: 40,
-        fontWeight: 'bold',
+        fontSize: 45,
         color: '#1b94c4',
+        fontFamily: 'Fasthand-Regular',
     },
     sentence: {
         marginLeft: 12,

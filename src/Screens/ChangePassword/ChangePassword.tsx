@@ -28,6 +28,10 @@ const ChangePassword = () => {
     const SPINNER: any = useSelector<any>(
         (state: rootState) => state.toggleSpinner,
     );
+    const globalSpinner: any = useSelector<any>(
+        (state: rootState) => state.profile.IsLoading,
+    );
+    console.log('globalSpinner in change password **', globalSpinner);
     const [editValue, setEditValue] = useState<editValue | any>({
         currentPassword: '',
         newPassword: '',
@@ -78,14 +82,14 @@ const ChangePassword = () => {
     };
 
     const ChangePasswordAsync = () => {
-        dispatch(
-            passwordChange(editValue.currentPassword, editValue.newPassword),
-        );
+        console.log('sending Value ** ', editValue);
+        dispatch(passwordChange(editValue));
+        navigation.navigate('Home');
     };
 
     return (
         <View style={styles.main}>
-            {SPINNER?.show === true ? (
+            {globalSpinner == true ? (
                 <>
                     <View
                         style={{
@@ -168,7 +172,7 @@ const ChangePassword = () => {
                             )}
                             <TouchableOpacity
                                 style={styles.button}
-                                onPress={onChangePasswordPress}>
+                                onPress={ChangePasswordAsync}>
                                 <Text style={styles.buttonText}>Submit</Text>
                             </TouchableOpacity>
                         </View>

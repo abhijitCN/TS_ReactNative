@@ -52,10 +52,17 @@ const Login = () => {
             ) : (
                 <>
                     <View style={style.main}>
-                        <Text style={style.loginText}>Log In</Text>
-                        <Text style={style.sentence}>
-                            Enter your email and password
-                        </Text>
+                        <View
+                            style={{
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                            }}>
+                            <Text style={style.loginText}>Please Log In</Text>
+                            <Text style={style.sentence}>
+                                Enter your email and password
+                            </Text>
+                        </View>
+
                         <View style={{}}>
                             <Text style={style.textInputHeading}>Email</Text>
                             <TextInput
@@ -162,17 +169,15 @@ const style = StyleSheet.create({
         color: '#0a3749',
     },
     loginText: {
-        marginLeft: 12,
-        fontSize: 40,
-        //fontWeight: '500',
-        color: '#1b94c4',
-        fontFamily: 'FuzzyBubbles-Bold',
-    },
-    sentence: {
-        marginLeft: 12,
-        fontSize: 20,
+        fontSize: 45,
         color: '#1b94c4',
         fontFamily: 'Fasthand-Regular',
+    },
+    sentence: {
+        marginLeft: 17,
+        fontSize: 20,
+        color: '#1b94c4',
+        fontFamily: 'Poppins-Bold',
     },
     textInputHeading: {
         marginHorizontal: 10,
