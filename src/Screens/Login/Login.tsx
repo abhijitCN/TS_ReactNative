@@ -13,6 +13,8 @@ import {useDispatch, useSelector} from 'react-redux';
 import {signInUser} from '../../Reducers/authSlice';
 import {useNavigation} from '@react-navigation/native';
 import {rootState} from '../../Reducers/store';
+import FbIcon from 'react-native-vector-icons/SimpleLineIcons';
+import AppleIcon from 'react-native-vector-icons/AntDesign';
 
 interface textFields {
     email: string;
@@ -112,13 +114,81 @@ const Login = () => {
                                     Password required
                                 </Text>
                             )}
-                            <View>
+                            {/* <View>
                                 <Toast />
-                            </View>
+                            </View> */}
                             <TouchableOpacity
                                 style={style.button}
                                 onPress={Authenticate}>
                                 <Text style={style.buttonText}>Submit</Text>
+                            </TouchableOpacity>
+                            <View
+                                style={{
+                                    //flex: 1,
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    flexDirection: 'row',
+                                }}>
+                                <View
+                                    style={{
+                                        height: 1,
+                                        backgroundColor: '#000000',
+                                        width: '30%',
+                                        marginRight: 10,
+                                        marginVertical: 20,
+                                    }}></View>
+                                <Text>Or</Text>
+                                <View
+                                    style={{
+                                        height: 1,
+                                        backgroundColor: '#000000',
+                                        width: '30%',
+                                        marginLeft: 10,
+                                    }}></View>
+                            </View>
+                            <TouchableOpacity
+                                style={style.button}
+                                onPress={Authenticate}>
+                                <FbIcon
+                                    name="social-facebook"
+                                    size={22}
+                                    color={'#0a3749'}
+                                />
+                                <Text style={style.buttonText}>
+                                    Facebook Login
+                                </Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={style.button}
+                                onPress={Authenticate}>
+                                <FbIcon
+                                    name="social-google"
+                                    size={20}
+                                    color={'#0a3749'}
+                                />
+                                <Text
+                                    style={[
+                                        style.buttonText,
+                                        {paddingLeft: 5},
+                                    ]}>
+                                    Google Login
+                                </Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={style.button}
+                                onPress={Authenticate}>
+                                <AppleIcon
+                                    name="apple-o"
+                                    size={22}
+                                    color={'#0a3749'}
+                                />
+                                <Text
+                                    style={[
+                                        style.buttonText,
+                                        {paddingLeft: 5},
+                                    ]}>
+                                    Apple Login
+                                </Text>
                             </TouchableOpacity>
                             <TouchableOpacity
                                 onPress={() => navigation.navigate('SignUp')}>
@@ -162,6 +232,9 @@ const style = StyleSheet.create({
         padding: 10,
         marginHorizontal: 10,
         borderRadius: 25,
+        marginVertical: 3,
+        flexDirection: 'row',
+        justifyContent: 'center',
     },
     buttonText: {
         fontSize: 17,

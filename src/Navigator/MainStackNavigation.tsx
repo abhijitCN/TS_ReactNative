@@ -137,7 +137,7 @@ const MainStackScreens = () => (
         initialRouteName="Home"
         screenOptions={{
             headerShown: false,
-            drawerActiveBackgroundColor: '#aa18ea',
+            drawerActiveBackgroundColor: '#0a3749',
             drawerActiveTintColor: '#fff',
             drawerInactiveTintColor: '#333',
             drawerLabelStyle: {

@@ -23,6 +23,8 @@ import Toast from 'react-native-toast-message';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
 import {rootState} from '../../Reducers/store';
+import FbIcon from 'react-native-vector-icons/SimpleLineIcons';
+import AppleIcon from 'react-native-vector-icons/AntDesign';
 
 interface textFields {
     name: string;
@@ -59,6 +61,7 @@ function Registration() {
         ) {
             dispatch(signUpUser(data));
             navigation.navigate('Login');
+            Alert.alert('Register Successfully Please Login');
         } else {
             SetValiadate(true);
         }
@@ -343,6 +346,74 @@ function Registration() {
                                     onPress={Authenticate}>
                                     <Text style={style.buttonText}>Submit</Text>
                                 </TouchableOpacity>
+                                <View
+                                    style={{
+                                        //flex: 1,
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        flexDirection: 'row',
+                                    }}>
+                                    <View
+                                        style={{
+                                            height: 1,
+                                            backgroundColor: '#000000',
+                                            width: '30%',
+                                            marginRight: 10,
+                                            marginVertical: 20,
+                                        }}></View>
+                                    <Text>Or</Text>
+                                    <View
+                                        style={{
+                                            height: 1,
+                                            backgroundColor: '#000000',
+                                            width: '30%',
+                                            marginLeft: 10,
+                                        }}></View>
+                                </View>
+                                <TouchableOpacity
+                                    style={style.button}
+                                    onPress={Authenticate}>
+                                    <FbIcon
+                                        name="social-facebook"
+                                        size={22}
+                                        color={'#0a3749'}
+                                    />
+                                    <Text style={style.buttonText}>
+                                        Facebook Sign-up
+                                    </Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    style={style.button}
+                                    onPress={Authenticate}>
+                                    <FbIcon
+                                        name="social-google"
+                                        size={20}
+                                        color={'#0a3749'}
+                                    />
+                                    <Text
+                                        style={[
+                                            style.buttonText,
+                                            {paddingLeft: 5},
+                                        ]}>
+                                        Google Sign-up
+                                    </Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    style={style.button}
+                                    onPress={Authenticate}>
+                                    <AppleIcon
+                                        name="apple-o"
+                                        size={22}
+                                        color={'#0a3749'}
+                                    />
+                                    <Text
+                                        style={[
+                                            style.buttonText,
+                                            {paddingLeft: 5},
+                                        ]}>
+                                        Apple Sign-up
+                                    </Text>
+                                </TouchableOpacity>
                                 <TouchableOpacity
                                     onPress={() =>
                                         navigation.navigate('Login')
@@ -353,6 +424,7 @@ function Registration() {
                                             {
                                                 alignSelf: 'center',
                                                 marginTop: 12,
+                                                marginBottom: 40,
                                             },
                                         ]}>
                                         Already Have Account? Sign Up
@@ -365,7 +437,7 @@ function Registration() {
                             transparent={true}
                             visible={modalVisible}
                             onRequestClose={() => {
-                                Alert.alert('Modal has been closed.');
+                                //Alert.alert('Modal has been closed.');
                                 setModalVisible(!modalVisible);
                             }}>
                             <View style={style.centeredView}>
@@ -433,6 +505,9 @@ const style = StyleSheet.create({
         padding: 10,
         marginHorizontal: 10,
         borderRadius: 25,
+        marginVertical: 3,
+        flexDirection: 'row',
+        justifyContent: 'center',
     },
     buttonText: {
         fontSize: 17,
