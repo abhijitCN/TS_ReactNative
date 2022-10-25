@@ -49,10 +49,12 @@ function Home() {
     const navigation = useNavigation();
     const dispatch = useDispatch();
     const [data, setData] = useState([]);
-    const [avatar, setAvatar] = useState([]);
+    const [avatar, setAvatar] = useState();
     const [refreshing, setRefreshing] = React.useState(false);
     const user: any = useSelector<any>((state: rootState) => state.user);
     const profile: any = useSelector<any>((state: rootState) => state.profile);
+    const [userData, setUserData] = useState<any>({});
+
     console.log(' < user > ', profile);
     // const SPINNER: any = useSelector<any>(
     //     (state: rootState) => state.toggleSpinner,
@@ -66,7 +68,30 @@ function Home() {
     //         dispatch(toggleSpinner(false));
     //     }, 2000);
     // }, [SPINNER.show]);
-
+    useEffect(() => {
+        sample();
+    }, []);
+    const sample = async () => {
+        //console.log('called sample');
+        await firestore()
+            .collection('People')
+            .get()
+            .then(querySnapshot => {
+                // console.log('Total querySnapshot: ', querySnapshot.size);
+                querySnapshot.forEach(documentSnapshot => {
+                    var key = Object(documentSnapshot.data());
+                    console.log('KEYS && ?? ', key.email);
+                    //console.log('user.email **', user.email);
+                    console.log('User Email ?? ', key.email === user.email);
+                    if (key.email === user.email) {
+                        //console.log('FIND', key);
+                        setUserData(key);
+                        setAvatar(key.ImageUrl);
+                        //console.log('Unickly FIND **', avatar);
+                    }
+                });
+            });
+    };
     const DATA = [
         {
             id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
@@ -125,7 +150,7 @@ function Home() {
                     });
                 });
             });
-        setAvatar(userAvatar);
+        //setAvatar(userAvatar);
     };
 
     useEffect(() => {
@@ -214,8 +239,9 @@ function Home() {
                                     <Image
                                         style={style.image}
                                         source={{
+                                            uri: avatar,
                                             //uri: profile[0]?.Image,
-                                            uri: avatar[0]?.avatarUrl,
+                                            //uri: avatar[0]?.avatarUrl,
                                         }}
                                     />
                                 </>
@@ -263,69 +289,91 @@ function Home() {
                                         <View
                                             style={{
                                                 flex: 1,
-                                                padding: 12,
-                                                margin: 12,
-                                                borderColor: 'gray',
-                                                //borderWidth: 0.7,
-                                                borderRadius: 3,
-                                                marginTop: 10,
-                                                shadowColor: '#000',
-                                                shadowOffset: {
-                                                    width: 0,
-                                                    height: 2,
-                                                },
-                                                shadowOpacity: 0.25,
-                                                shadowRadius: 4,
-                                                elevation: 5,
-                                                minHeight: 285,
-                                                minWidth: 160,
+
+                                                //backgroundColor: 'green',
                                             }}>
-                                            {item.ImageUrl ? (
-                                                <>
-                                                    <Image
-                                                        style={{
-                                                            height: 150,
-                                                            width: '100%',
-                                                            borderRadius: 10,
-                                                            marginVertical: 5,
-                                                        }}
-                                                        source={{
-                                                            uri: item.ImageUrl,
-                                                        }}
-                                                    />
-                                                </>
-                                            ) : (
-                                                <>
-                                                    <Image
-                                                        style={{
-                                                            height: 150,
-                                                            width: '100%',
-                                                            borderRadius: 10,
-                                                        }}
-                                                        source={{
-                                                            uri: 'https://reactnative.dev/img/tiny_logo.png',
-                                                        }}
-                                                    />
-                                                </>
-                                            )}
                                             <View
                                                 style={{
-                                                    alignItems: 'center',
-                                                    justifyContent: 'center',
-                                                    marginTop: 5,
+                                                    //padding: 12,
+                                                    margin: 12,
+                                                    borderColor: 'gray',
+                                                    //borderWidth: 0.7,
+                                                    borderRadius: 10,
+                                                    marginTop: 10,
+                                                    backgroundColor: '#bff0f7',
+                                                    shadowColor: '#000',
+                                                    shadowOffset: {
+                                                        width: 0,
+                                                        height: 2,
+                                                    },
+                                                    shadowOpacity: 0.25,
+                                                    shadowRadius: 4,
+                                                    elevation: 5,
+                                                    minHeight: 253,
                                                 }}>
-                                                <Text style={style.productText}>
-                                                    Name - {item.name}
-                                                </Text>
-                                                <Text style={style.productText}>
-                                                    Price - {item.price}
-                                                </Text>
-                                                <Text style={style.productText}>
-                                                    Quantity - {item.quantity}
-                                                </Text>
-                                                <Text style={style.productText}>
-                                                    Category - {item.category}
-                                                </Text>
+                                                {item.ImageUrl ? (
+                                                    <>
+                                                        <Image
+                                                            style={{
+                                                                height: 150,
+                                                                width: '100%',
+                                                                borderTopLeftRadius: 10,
+                                                                borderTopRightRadius: 10,
+                                                                marginVertical: 0,
+                                                            }}
+                                                            source={{
+                                                                uri: item.ImageUrl,
+                                                            }}
+                                                        />
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <Image
+                                                            style={{
+                                                                height: 150,
+                                                                width: '100%',
+                                                                borderRadius: 10,
+                                                            }}
+                                                            source={{
+                                                                uri: 'https://reactnative.dev/img/tiny_logo.png',
+                                                            }}
+                                                        />
+                                                    </>
+                                                )}
+                                                <View
+                                                    style={{
+                                                        alignItems: 'center',
+                                                        justifyContent:
+                                                            'center',
+                                                        marginTop: 5,
+                                                    }}>
+                                                    <Text
+                                                        style={
+                                                            style.productText
+                                                        }>
+                                                        Name - {item.name}
+                                                    </Text>
+                                                    <Text
+                                                        style={
+                                                            style.productText
+                                                        }>
+                                                        Price - {item.price}
+                                                    </Text>
+                                                    <Text
+                                                        style={
+                                                            style.productText
+                                                        }>
+                                                        Quantity -{' '}
+                                                        {item.quantity}
+                                                    </Text>
+                                                    <Text
+                                                        style={
+                                                            style.productText
+                                                        }>
+                                                        Category -{' '}
+                                                        {item.category}
+                                                    </Text>
+                                                </View>
                                             </View>
                                         </View>
                                     </>
@@ -385,7 +433,7 @@ const style = StyleSheet.create({
         fontSize: 16,
         fontWeight: '600',
     },
-    header: {marginTop: 20, fontWeight: 'bold', fontSize: 25},
+    header: {marginTop: 10, fontWeight: 'bold', fontSize: 25},
     helloText: {fontSize: 20, fontWeight: 'bold'},
     image: {width: 50, height: 50, borderRadius: 25},
     container: {

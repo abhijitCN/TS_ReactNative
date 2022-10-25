@@ -22,7 +22,7 @@ interface textFields {
     name: string;
     price: string;
     quantity: string;
-    category: string;
+    //category: string;
     imageUrl: any;
 }
 
@@ -37,7 +37,7 @@ const AddProduct: React.FC = () => {
         name: '',
         price: '',
         quantity: '',
-        category: '',
+        //category: '',
         imageUrl: '',
     });
     const Categorys = [
@@ -90,11 +90,11 @@ const AddProduct: React.FC = () => {
         console.log('All data before submit ?? ', reqData);
         //console.log('Main value', selectItem.name);
         if (
-            data.name === '' &&
-            data.price === '' &&
-            data.quantity === '' &&
-            categoryName === '' &&
-            data.imageUrl === ''
+            data.name != '' &&
+            data.price != '' &&
+            data.quantity != '' &&
+            categoryName != '' &&
+            data.imageUrl != ''
         ) {
             dispatch(addProduct(reqData));
             Alert.alert('Product Added Successfully');

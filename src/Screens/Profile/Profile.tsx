@@ -21,8 +21,9 @@ const Profile = () => {
     const [userData, setUserData] = useState<any>({});
     const user: any = useSelector<any>(state => state.user);
     const profile: any = useSelector<any>((state: rootState) => state.profile);
-    const [avatar, setAvatar] = useState([]);
-
+    const [avatar, setAvatar] = useState();
+    const verify2: any = useSelector((state: rootState) => state.user);
+    console.log('inside verify', verify2);
     useEffect(() => {
         sample();
     }, []);
@@ -42,25 +43,25 @@ const Profile = () => {
             .collection('People')
             .get()
             .then(querySnapshot => {
-                console.log('Total users data: ', querySnapshot.size);
+                //console.log('Total users data: ', querySnapshot.size);
                 querySnapshot.forEach(documentSnapshot => {
-                    console.log('Total data =>> ', documentSnapshot.data());
+                    //console.log('Total data =>> ', documentSnapshot.data());
                     const {ImageUrl} = documentSnapshot.data();
                     userAvatar.push({
                         avatarUrl: ImageUrl,
                     });
                 });
             });
-        setAvatar(userAvatar);
+        //setAvatar(userAvatar);
     };
 
     useEffect(() => {
         getUserAvatar();
-        console.log('** avatar image now **', avatar[0]?.avatarUrl);
+        //console.log('** avatar image now **', avatar[0]?.avatarUrl);
     }, []);
 
     const sample = async () => {
-        console.log('called sample');
+        //console.log('called sample');
         await firestore()
             .collection('People')
             .get()
@@ -68,11 +69,14 @@ const Profile = () => {
                 // console.log('Total querySnapshot: ', querySnapshot.size);
                 querySnapshot.forEach(documentSnapshot => {
                     var key = Object(documentSnapshot.data());
-                    console.log('KEYS && ?? ', key);
-                    //console.log('User Email ?? ', user.email);
+                    console.log('KEYS && ?? ', key.email);
+                    //console.log('user.email **', user.email);
+                    console.log('User Email ?? ', key.email === user.email);
                     if (key.email === user.email) {
-                        console.log('FIND', key);
+                        //console.log('FIND', key);
                         setUserData(key);
+                        setAvatar(key.ImageUrl);
+                        //console.log('Unickly FIND **', avatar);
                     }
                 });
             });
@@ -105,7 +109,7 @@ const Profile = () => {
                                 }}
                                 source={{
                                     //uri: profile?.Image,
-                                    uri: avatar[0]?.avatarUrl,
+                                    uri: avatar,
                                 }}
                             />
                         </>
