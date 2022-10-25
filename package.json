@@ -10,12 +10,14 @@
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "dependencies": {
+    "@invertase/react-native-apple-authentication": "^2.2.2",
     "@react-native-async-storage/async-storage": "1.17.10",
     "@react-native-community/masked-view": "^0.1.11",
     "@react-native-firebase/app": "10.3.0",
     "@react-native-firebase/auth": "10.3.1",
     "@react-native-firebase/firestore": "10.3.1",
     "@react-native-firebase/storage": "10.3.1",
+    "@react-native-google-signin/google-signin": "^8.0.1",
     "@react-navigation/drawer": "^6.5.0",
     "@react-navigation/native": "^6.0.13",
     "@react-navigation/native-stack": "^6.9.1",
@@ -27,6 +29,7 @@
     "pubnub-react": "^3.0.1",
     "react": "18.1.0",
     "react-native": "0.70.0",
+    "react-native-agora": "^4.0.0",
     "react-native-device-info": "^10.3.0",
     "react-native-flipper": "^0.164.0",
     "react-native-gesture-handler": "^2.7.1",

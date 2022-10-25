@@ -13,7 +13,7 @@ import {createDrawerNavigator} from '@react-navigation/drawer';
 import {useNavigation} from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Product from 'react-native-vector-icons/FontAwesome5';
-
+import CustomerService from 'react-native-vector-icons/AntDesign';
 import CustomDrawer from './CustomDrawer';
 
 import {
@@ -32,6 +32,9 @@ import {
     StatusBar,
     RefreshControl,
 } from 'react-native';
+import ChatHome from '../Screens/ChatHome/ChatHome';
+import VideoCall from '../Screens/Support/VideoCall';
+import VoiceCall from '../Screens/Support/VoiceCall';
 
 const MainStack = createNativeStackNavigator<MainRootStackParamList>();
 const Drawer = createDrawerNavigator();
@@ -117,6 +120,35 @@ const profileDrawerStack = () => {
     );
 };
 
+const chatHomeDrawerStack = () => {
+    return (
+        <MainStack.Navigator>
+            <MainStack.Screen
+                name="ChatHome"
+                component={ChatHome}
+                options={{headerShown: false}}
+            />
+        </MainStack.Navigator>
+    );
+};
+
+const supportDrawerStack = () => {
+    return (
+        <MainStack.Navigator>
+            <MainStack.Screen
+                name="supportVideoCall"
+                component={VideoCall}
+                options={{headerShown: false}}
+            />
+            <MainStack.Screen
+                name="supportVoiceCall"
+                component={VoiceCall}
+                options={{headerShown: false}}
+            />
+        </MainStack.Navigator>
+    );
+};
+
 const MainStackScreens = () => (
     // <MainStack.Navigator
     //     screenOptions={{headerShown: false}}
@@ -170,6 +202,32 @@ const MainStackScreens = () => (
             options={{
                 drawerIcon: ({color}) => (
                     <Ionicons name="person-outline" size={22} color={color} />
+                ),
+            }}
+        />
+        <Drawer.Screen
+            name="Chat-Home"
+            component={chatHomeDrawerStack}
+            options={{
+                drawerIcon: ({color}) => (
+                    <Ionicons
+                        name="chatbox-ellipses-outline"
+                        size={22}
+                        color={color}
+                    />
+                ),
+            }}
+        />
+        <Drawer.Screen
+            name="Support"
+            component={supportDrawerStack}
+            options={{
+                drawerIcon: ({color}) => (
+                    <CustomerService
+                        name="customerservice"
+                        size={22}
+                        color={color}
+                    />
                 ),
             }}
         />

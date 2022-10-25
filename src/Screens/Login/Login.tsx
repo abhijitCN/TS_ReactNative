@@ -6,6 +6,7 @@ import {
     Text,
     TextInput,
     ActivityIndicator,
+    Alert,
 } from 'react-native';
 import Toast from 'react-native-toast-message';
 import {UserContext} from '../../Context/AuthContext';
@@ -15,7 +16,10 @@ import {useNavigation} from '@react-navigation/native';
 import {rootState} from '../../Reducers/store';
 import FbIcon from 'react-native-vector-icons/SimpleLineIcons';
 import AppleIcon from 'react-native-vector-icons/AntDesign';
-
+import {
+    GoogleSignin,
+    statusCodes,
+} from '@react-native-google-signin/google-signin';
 interface textFields {
     email: string;
     password: string;
@@ -36,6 +40,26 @@ const Login = () => {
 
     const Authenticate = () => {
         dispatch(signInUser(data));
+    };
+
+    //Google Login
+    const googleSignIn = async () => {
+        Alert.alert('Google Login');
+        try {
+            await GoogleSignin.hasPlayServices();
+            const userInfo = await GoogleSignin.signIn();
+            console.log('Google Login User Info', userInfo);
+        } catch (error: any) {
+            if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+                // user cancelled the login flow
+            } else if (error.code === statusCodes.IN_PROGRESS) {
+                // operation (e.g. sign in) is in progress already
+            } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+                // play services not available or outdated
+            } else {
+                // some other error happened
+            }
+        }
     };
 
     return (
@@ -147,8 +171,8 @@ const Login = () => {
                                     }}></View>
                             </View>
                             <TouchableOpacity
-                                style={style.button}
-                                onPress={Authenticate}>
+                                onPress={googleSignIn}
+                                style={style.button}>
                                 <FbIcon
                                     name="social-facebook"
                                     size={22}
@@ -160,7 +184,7 @@ const Login = () => {
                             </TouchableOpacity>
                             <TouchableOpacity
                                 style={style.button}
-                                onPress={Authenticate}>
+                                onPress={googleSignIn}>
                                 <FbIcon
                                     name="social-google"
                                     size={20}
@@ -176,7 +200,7 @@ const Login = () => {
                             </TouchableOpacity>
                             <TouchableOpacity
                                 style={style.button}
-                                onPress={Authenticate}>
+                                onPress={googleSignIn}>
                                 <AppleIcon
                                     name="apple-o"
                                     size={22}
