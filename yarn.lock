@@ -2036,6 +2036,14 @@
   resolved "https://registry.npmjs.org/@types/prop-types/-/prop-types-15.7.5.tgz"
   integrity sha512-JCB8C6SnDoQf0cNycqd/35A7MjcnK+ZTqE7judS6o7utxUCg6imJg3QK2qzHKszlTjcj2cn+NwMB2i96ubpj7w==
 
+"@types/react-native-fbsdk@^3.0.2":
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/@types/react-native-fbsdk/-/react-native-fbsdk-3.0.2.tgz#25a61ad55b713a6284dbfe56497029c0ed1ff639"
+  integrity sha512-1Y4MYIQ5Kg0qxz25KFOl8d4p2oHdTm7ad7e6za4nBuFOmMOaKrhJeK3f/eG17zQ37yFMZpd7vf35DeEZckH+Mg==
+  dependencies:
+    "@types/react" "*"
+    "@types/react-native" "*"
+
 "@types/react-native-vector-icons@^6.4.12":
   version "6.4.12"
   resolved "https://registry.npmjs.org/@types/react-native-vector-icons/-/react-native-vector-icons-6.4.12.tgz"
@@ -2325,6 +2333,16 @@ agentkeepalive@^3.5.2:
   integrity sha512-e0L/HNe6qkQ7H19kTlRRqUibEAwDK5AFk6y3PtMsuut2VAH6+Q4xZml1tNDJD7kSAyqmbG/K08K5WEJYtUrSlQ==
   dependencies:
     humanize-ms "^1.2.1"
+
+agora-react-native-rtm@^1.5.0:
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/agora-react-native-rtm/-/agora-react-native-rtm-1.5.0.tgz#fe650a9a61db0c94cb804180eb4c1020da092c10"
+  integrity sha512-8LApJVTK21a6/JkOPwzkatrFrcvD/t4WUJNdc55BybBadrlSSE1yzz/1Ts/8tHVdzsX9Pya9pjMZ+UQBGovong==
+
+agora-rn-uikit@^4.0.2:
+  version "4.0.2"
+  resolved "https://registry.yarnpkg.com/agora-rn-uikit/-/agora-rn-uikit-4.0.2.tgz#6959ba9af3b04cefcc8c2d9974fe196e861c45d8"
+  integrity sha512-4a1nWrAuRq5W1g/KOgtI2Mhubdfv5NDltg8ZNdjoTKNxwhhZk2W9af25LkccMy9UdGUC/LCqIp7CzI9GJsEo2w==
 
 ajv@^6.10.0, ajv@^6.12.4:
   version "6.12.6"
@@ -6919,6 +6937,11 @@ react-native-device-info@^10.3.0:
   version "10.3.0"
   resolved "https://registry.yarnpkg.com/react-native-device-info/-/react-native-device-info-10.3.0.tgz#6bab64d84d3415dd00cc446c73ec5e2e61fddbe7"
   integrity sha512-/ziZN1sA1REbJTv5mQZ4tXggcTvSbct+u5kCaze8BmN//lbxcTvWsU6NQd4IihLt89VkbX+14IGc9sVApSxd/w==
+
+react-native-fbsdk@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/react-native-fbsdk/-/react-native-fbsdk-3.0.0.tgz#07ef41758bb17a0acaff744008af625a45ef9a01"
+  integrity sha512-i0JocuzLlGk13J0xFDjm8GlX7SADAL2kh/syE/HOn5HHdW+PFjC31MNj5AtzIw2TicHXpHGO6VPKNfdWFbxboA==
 
 react-native-flipper@^0.164.0:
   version "0.164.0"

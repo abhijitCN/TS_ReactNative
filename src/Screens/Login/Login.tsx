@@ -8,7 +8,6 @@ import {
     ActivityIndicator,
     Alert,
 } from 'react-native';
-import Toast from 'react-native-toast-message';
 import {UserContext} from '../../Context/AuthContext';
 import {useDispatch, useSelector} from 'react-redux';
 import {signInUser} from '../../Reducers/authSlice';
@@ -20,6 +19,11 @@ import {
     GoogleSignin,
     statusCodes,
 } from '@react-native-google-signin/google-signin';
+import {
+    LoginManager,
+    GraphRequestManager,
+    GraphRequest,
+} from 'react-native-fbsdk';
 interface textFields {
     email: string;
     password: string;
@@ -42,9 +46,13 @@ const Login = () => {
         dispatch(signInUser(data));
     };
 
+    useEffect(() => {
+        GoogleSignin.configure();
+    }, []);
+
     //Google Login
     const googleSignIn = async () => {
-        Alert.alert('Google Login');
+        //Alert.alert('Google Login');
         try {
             await GoogleSignin.hasPlayServices();
             const userInfo = await GoogleSignin.signIn();
@@ -59,6 +67,55 @@ const Login = () => {
             } else {
                 // some other error happened
             }
+        }
+    };
+    //FB Login
+    const fbLogin = (resCallback: any) => {
+        LoginManager.logOut();
+        return LoginManager.logInWithPermissions([
+            'email',
+            'public_profile',
+        ]).then(
+            (result: any) => {
+                console.log('fb result==>>>>>>', result);
+                if (
+                    result.declinedPermissions &&
+                    result.declinedPermissions.includes('email')
+                ) {
+                    resCallback({message: 'Email is required'});
+                }
+                if (result.isCancelled) {
+                    console.log('error');
+                } else {
+                    const infoRequest = new GraphRequest(
+                        '/me?fileds=email,name,picture, friend',
+                        null,
+                        resCallback,
+                    );
+                    new GraphRequestManager().addRequest(infoRequest).start();
+                }
+            },
+            function (error: string) {
+                console.log('Login fail with error:' + error);
+            },
+        );
+    };
+
+    const onFbLogin = async () => {
+        try {
+            await fbLogin(_responseInfoCallBack);
+        } catch (error: any) {
+            console.log('error raised', error);
+        }
+    };
+
+    const _responseInfoCallBack = async (error: any, result: any) => {
+        if (error) {
+            console.log('error top', error);
+            return;
+        } else {
+            const userData = result;
+            console.log('fb data+++++', userData);
         }
     };
 
@@ -138,9 +195,7 @@ const Login = () => {
                                     Password required
                                 </Text>
                             )}
-                            {/* <View>
-                                <Toast />
-                            </View> */}
+
                             <TouchableOpacity
                                 style={style.button}
                                 onPress={Authenticate}>
@@ -171,7 +226,7 @@ const Login = () => {
                                     }}></View>
                             </View>
                             <TouchableOpacity
-                                onPress={googleSignIn}
+                                onPress={onFbLogin}
                                 style={style.button}>
                                 <FbIcon
                                     name="social-facebook"
@@ -195,12 +250,14 @@ const Login = () => {
                                         style.buttonText,
                                         {paddingLeft: 5},
                                     ]}>
-                                    Google Login
+                                    Google Sign-up
                                 </Text>
                             </TouchableOpacity>
                             <TouchableOpacity
                                 style={style.button}
-                                onPress={googleSignIn}>
+                                onPress={() => {
+                                    Alert.alert('alert');
+                                }}>
                                 <AppleIcon
                                     name="apple-o"
                                     size={22}
@@ -225,9 +282,7 @@ const Login = () => {
                                 </Text>
                             </TouchableOpacity>
                         </View>
-                        <View>
-                            <Toast />
-                        </View>
+                        <View></View>
                     </View>
                 </>
             )}

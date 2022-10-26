@@ -338,11 +338,13 @@ const ChatHome = () => {
                     android: 20,
                 })}
             >
+                <Text style={styles.header}>Chat</Text>
+
                 {/*
           Header to hold the current friendly name of the device along with other devices in the group chat
           The below logic will launch the settings activity when the option is selected
           */}
-                <View style={styles.topContainer}>
+                {/* <View style={styles.topContainer}>
                     <Text style={styles.headingTopContainer}>{appTitle}</Text>
                     <View style={styles.membersOnlineContainer}>
                         <Text style={[styles.member, styles.highlight]}>
@@ -381,7 +383,7 @@ const ChatHome = () => {
                             />
                         </View>
                     </View>
-                </View>
+                </View> */}
 
                 {
                     //  Only minor styling for the message view, a production app would look far superior to this!

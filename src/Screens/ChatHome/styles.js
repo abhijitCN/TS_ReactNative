@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native'
+import { StyleSheet } from 'react-native'
 
 export default StyleSheet.create({
   sectionContainer: {
@@ -137,12 +137,13 @@ export default StyleSheet.create({
     display: 'none',
   },
   bottomContainer: {
-    width: '100%',
+    width: '95%',
     flexDirection: 'row',
     alignItems: 'center',
     padding: 8,
     height: 80,
     backgroundColor: '#d6dce4',
+    marginBottom: 15, alignSelf: 'center'
   },
   textInput: {
     flex: 1,
@@ -173,4 +174,6 @@ export default StyleSheet.create({
     height: undefined,
     aspectRatio: 0.9,
   },
+  header: { marginTop: 10, fontWeight: 'bold', fontSize: 25, alignSelf: 'center', marginBottom: 10 },
+
 })

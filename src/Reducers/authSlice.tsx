@@ -5,7 +5,6 @@ import {Alert} from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import {deleteDoc, doc, getDoc, setDoc} from 'firebase/firestore';
 import {db} from '../Constant/Firebase';
-import Toast from 'react-native-toast-message';
 import storage from '@react-native-firebase/storage';
 import {useState} from 'react';
 
@@ -35,11 +34,6 @@ export const signInUser: any = createAsyncThunk(
                     .auth()
                     .signInWithEmailAndPassword(body.email, body.password);
                 if (user?.user) {
-                    Toast.show({
-                        type: 'success',
-                        text1: 'Logout Successfully',
-                        position: 'top',
-                    });
                     return user?.user?._user?.email;
                 }
             } catch (error) {
@@ -90,9 +84,9 @@ export const signUpUser: any = createAsyncThunk(
                                     docId: body.phoneNo,
                                 })
                                 .then(() => {
-                                    Alert.alert(
-                                        'Register Successfully Please Login',
-                                    );
+                                    // Alert.alert(
+                                    //     'Register Successfully Please Login',
+                                    // );
                                 });
                         });
                 });
@@ -136,11 +130,7 @@ export const signUpUser: any = createAsyncThunk(
 export const signOut: any = createAsyncThunk('SignOut', body => {
     try {
         //await AsyncStorage.removeItem('userToken');
-        Toast.show({
-            type: 'success',
-            text1: 'Logout Successfully',
-            position: 'top',
-        });
+
         console.log('Logout');
     } catch (error) {
         console.log('Logout error');
@@ -154,7 +144,7 @@ const authSlice = createSlice({
     extraReducers: {
         //SignIn
         [signInUser.pending]: (state, action) => {
-            state.isLoading = false;
+            ///state.isLoading = false;
             state.globalLoading = true;
         },
         [signInUser.fulfilled]: (state, action) => {
@@ -168,7 +158,7 @@ const authSlice = createSlice({
             );
         },
         [signInUser.rejected]: (state, action) => {
-            state.isLoading = false;
+            //state.isLoading = false;
             state.globalLoading = false;
         },
         //signUp
@@ -180,6 +170,7 @@ const authSlice = createSlice({
         },
         [signUpUser.rejected]: (state, action) => {
             state.isLoading = false;
+            state.globalLoading = false;
         },
         //SignOut
         [signOut.pending]: (state, action) => {

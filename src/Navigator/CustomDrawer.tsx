@@ -63,7 +63,7 @@ const CustomDrawer = (props: any) => {
                         //console.log('FIND', key);
                         setUserData(key);
                         setAvatar(key.ImageUrl);
-                        //console.log('Unickly FIND AVATA**', avatar);
+                        console.log('Unickly FIND AVATA**', avatar);
                     }
                 });
             });

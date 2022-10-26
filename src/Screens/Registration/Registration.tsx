@@ -1,5 +1,5 @@
 import {firebase} from '@react-native-firebase/auth';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import firestore from '@react-native-firebase/firestore';
 import {
     View,
@@ -19,12 +19,16 @@ import {signUpUser} from '../../Reducers/authSlice';
 import {useNavigation} from '@react-navigation/native';
 import {doc} from 'firebase/firestore';
 import {db} from '../../Constant/Firebase';
-import Toast from 'react-native-toast-message';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
 import {rootState} from '../../Reducers/store';
 import FbIcon from 'react-native-vector-icons/SimpleLineIcons';
 import AppleIcon from 'react-native-vector-icons/AntDesign';
+import {
+    GoogleSignin,
+    statusCodes,
+} from '@react-native-google-signin/google-signin';
+import storage from '@react-native-firebase/storage';
 
 interface textFields {
     name: string;
@@ -48,6 +52,9 @@ function Registration() {
     const user: any = useSelector<any>(
         (state: rootState) => state.user.globalLoading,
     );
+    const globalSpinner: any = useSelector<any>(
+        (state: rootState) => state.user.globalLoading,
+    );
     console.log('globalLoading ?? ', user);
     const [validate, SetValiadate] = useState<boolean>(false);
 
@@ -64,6 +71,59 @@ function Registration() {
             Alert.alert('Register Successfully Please Login');
         } else {
             SetValiadate(true);
+        }
+    };
+
+    useEffect(() => {
+        GoogleSignin.configure();
+    }, []);
+
+    //Google Login
+    const googleSignUp = async () => {
+        try {
+            await GoogleSignin.hasPlayServices();
+            const userInfo = await GoogleSignin.signIn().then;
+            const uploadTask = storage()
+                .ref()
+                .child(`/userprofile/${Date.now()}`)
+                .putFile(userInfo.user.photo);
+            uploadTask.on(
+                'state_changed',
+                snapshot => {
+                    var progress =
+                        (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    if (progress == 100)
+                        console.log('Image Uploaded Successfully');
+                },
+                error => {
+                    console.log('error uploading image');
+                },
+                () => {
+                    uploadTask.snapshot?.ref
+                        .getDownloadURL()
+                        .then(downloadURL => {
+                            firestore()
+                                .collection('People')
+                                .doc(user.email)
+                                .set({
+                                    name: user.name,
+                                    email: user.email,
+                                    ImageUrl: downloadURL,
+                                });
+                        });
+                },
+            );
+            //console.log('user Info', userInfo.user.photo);
+        } catch (error: any) {
+            if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+                console.log('user cancelled the login flow');
+            } else if (error.code === statusCodes.IN_PROGRESS) {
+                console.log('operation (e.g. sign in) is in progress already');
+            } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+                console.log('play services not available or outdated');
+            } else {
+                console.log('some other error happened');
+            }
         }
     };
 
@@ -99,7 +159,7 @@ function Registration() {
 
     return (
         <>
-            {user ? (
+            {globalSpinner ? (
                 <>
                     <View
                         style={{
@@ -338,9 +398,7 @@ function Registration() {
                                         Password required
                                     </Text>
                                 )}
-                                <View>
-                                    <Toast />
-                                </View>
+                                <View></View>
                                 <TouchableOpacity
                                     style={style.button}
                                     onPress={Authenticate}>
@@ -372,7 +430,9 @@ function Registration() {
                                 </View>
                                 <TouchableOpacity
                                     style={style.button}
-                                    onPress={Authenticate}>
+                                    onPress={() => {
+                                        Alert.alert('alert');
+                                    }}>
                                     <FbIcon
                                         name="social-facebook"
                                         size={22}
@@ -384,7 +444,7 @@ function Registration() {
                                 </TouchableOpacity>
                                 <TouchableOpacity
                                     style={style.button}
-                                    onPress={Authenticate}>
+                                    onPress={googleSignUp}>
                                     <FbIcon
                                         name="social-google"
                                         size={20}
@@ -400,7 +460,9 @@ function Registration() {
                                 </TouchableOpacity>
                                 <TouchableOpacity
                                     style={style.button}
-                                    onPress={Authenticate}>
+                                    onPress={() => {
+                                        Alert.alert('alert');
+                                    }}>
                                     <AppleIcon
                                         name="apple-o"
                                         size={22}

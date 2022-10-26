@@ -1,12 +1,12 @@
 import React from 'react';
 import {Dimensions, StyleSheet, View, TextInput, Image} from 'react-native';
 const {height, width} = Dimensions.get('screen');
-import {useNavigation} from '@react-navigation/native';
+//import {useNavigation} from '@react-navigation/native';
 
-const Splash: React.FC = () => {
-    const navigation = useNavigation();
+const Splash: React.FC = ({navigation}) => {
+    //const navigation = useNavigation();
     setTimeout(() => {
-        navigation.navigate('Login');
+        navigation.replace('Login');
     }, 2000);
 
     return (
