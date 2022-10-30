@@ -10,11 +10,12 @@ import {
 } from 'react-native';
 import {UserContext} from '../../Context/AuthContext';
 import {useDispatch, useSelector} from 'react-redux';
-import {signInUser} from '../../Reducers/authSlice';
+import {googleSignInUser, signInUser} from '../../Reducers/authSlice';
 import {useNavigation} from '@react-navigation/native';
 import {rootState} from '../../Reducers/store';
 import FbIcon from 'react-native-vector-icons/SimpleLineIcons';
 import AppleIcon from 'react-native-vector-icons/AntDesign';
+import {appleAuth} from '@invertase/react-native-apple-authentication';
 import {
     GoogleSignin,
     statusCodes,
@@ -24,6 +25,7 @@ import {
     GraphRequestManager,
     GraphRequest,
 } from 'react-native-fbsdk';
+
 interface textFields {
     email: string;
     password: string;
@@ -34,13 +36,10 @@ const Login = () => {
     const [validate, SetValiadate] = useState<boolean>(false);
     const dispatch = useDispatch();
     const navigation = useNavigation();
-    const SPINNER: any = useSelector<any>(
-        (state: rootState) => state.toggleSpinner,
-    );
+
     const globalSpinner: any = useSelector<any>(
         (state: rootState) => state.user.globalLoading,
     );
-    useEffect(() => {}, [SPINNER.show]);
 
     const Authenticate = () => {
         dispatch(signInUser(data));
@@ -52,22 +51,23 @@ const Login = () => {
 
     //Google Login
     const googleSignIn = async () => {
-        //Alert.alert('Google Login');
-        try {
-            await GoogleSignin.hasPlayServices();
-            const userInfo = await GoogleSignin.signIn();
-            console.log('Google Login User Info', userInfo);
-        } catch (error: any) {
-            if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-                // user cancelled the login flow
-            } else if (error.code === statusCodes.IN_PROGRESS) {
-                // operation (e.g. sign in) is in progress already
-            } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-                // play services not available or outdated
-            } else {
-                // some other error happened
-            }
-        }
+        dispatch(googleSignInUser());
+        // try {
+        //     await GoogleSignin.hasPlayServices();
+        //     const userInfo = await GoogleSignin.signIn();
+        //     console.log('Google Login User Info', userInfo);
+        //     //dispatch({});
+        // } catch (error: any) {
+        //     if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+        //         console.log('user cancelled the login flow');
+        //     } else if (error.code === statusCodes.IN_PROGRESS) {
+        //         console.log('operation (e.g. sign in) is in progress already');
+        //     } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+        //         console.log(' play services not available or outdated');
+        //     } else {
+        //         console.log('some other error happened');
+        //     }
+        // }
     };
     //FB Login
     const fbLogin = (resCallback: any) => {
@@ -119,6 +119,17 @@ const Login = () => {
         }
     };
 
+    //Apple Login
+    const appleLogin = async () => {
+        const appleLoginResponse = await appleAuth.performRequest({
+            requestedOperation: appleAuth.Operation.LOGIN,
+            requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
+        });
+        //   const credentialState = await appleAuth.getCredentialStateForUser(appleAuthRequestResponse.user);
+        //   if (credentialState === appleAuth.State.AUTHORIZED) {
+        //   }
+    };
+
     return (
         <>
             {globalSpinner ? (
@@ -129,7 +140,7 @@ const Login = () => {
                             justifyContent: 'center',
                             flex: 1,
                         }}>
-                        <ActivityIndicator color="red" size="large" />
+                        <ActivityIndicator color="#0a3749" size="large" />
                     </View>
                 </>
             ) : (
@@ -216,7 +227,10 @@ const Login = () => {
                                         marginRight: 10,
                                         marginVertical: 20,
                                     }}></View>
-                                <Text>Or</Text>
+                                <Text
+                                    style={{fontSize: 20, fontWeight: 'bold'}}>
+                                    Or
+                                </Text>
                                 <View
                                     style={{
                                         height: 1,
@@ -255,9 +269,7 @@ const Login = () => {
                             </TouchableOpacity>
                             <TouchableOpacity
                                 style={style.button}
-                                onPress={() => {
-                                    Alert.alert('alert');
-                                }}>
+                                onPress={appleLogin}>
                                 <AppleIcon
                                     name="apple-o"
                                     size={22}

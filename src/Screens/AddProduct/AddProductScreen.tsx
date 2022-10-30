@@ -59,6 +59,7 @@ const AddProduct: React.FC = () => {
                 mediaType: 'photo',
             },
             (fileobj: any) => {
+                console.log('ROW fileobj', fileobj);
                 setData({...data, imageUrl: fileobj.assets[0].uri});
                 console.log('fileobj.assets[0].uri', data.imageUrl);
             },
@@ -114,7 +115,7 @@ const AddProduct: React.FC = () => {
                             justifyContent: 'center',
                             flex: 1,
                         }}>
-                        <ActivityIndicator color="red" size="large" />
+                        <ActivityIndicator color="#0a3749" size="large" />
                     </View>
                 </>
             ) : (

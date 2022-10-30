@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, StatusBar } from 'react-native';
-import LottieView from 'lottie-react-native';
+// import LottieView from 'lottie-react-native';
 import { useSelector } from 'react-redux';
 
 export default function Spinner() {
@@ -15,11 +15,11 @@ export default function Spinner() {
         animated={true}
       />
       <View style={styles.spinnerContainer}>
-        <LottieView
+        {/* <LottieView
           source={require('../assets/animations/Spinner.json')}
           autoPlay
           loop
-        />
+        /> */}
       </View>
     </View>
   ) : null;

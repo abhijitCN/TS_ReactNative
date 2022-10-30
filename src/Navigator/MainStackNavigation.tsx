@@ -132,16 +132,16 @@ const chatHomeDrawerStack = () => {
     );
 };
 
-const supportDrawerStack = () => {
+const SupportDrawerStack = () => {
     return (
         <MainStack.Navigator>
             <MainStack.Screen
-                name="supportVideoCall"
+                name="SupportVideoCall"
                 component={VideoCall}
                 options={{headerShown: false}}
             />
             <MainStack.Screen
-                name="supportVoiceCall"
+                name="SupportVoiceCall"
                 component={VoiceCall}
                 options={{headerShown: false}}
             />
@@ -220,7 +220,7 @@ const MainStackScreens = () => (
         />
         <Drawer.Screen
             name="Support"
-            component={supportDrawerStack}
+            component={SupportDrawerStack}
             options={{
                 drawerIcon: ({color}) => (
                     <CustomerService

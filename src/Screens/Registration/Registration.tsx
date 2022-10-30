@@ -15,7 +15,7 @@ import {
     ActivityIndicator,
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
-import {signUpUser} from '../../Reducers/authSlice';
+import {googleSignUpUserAuth, signUpUser} from '../../Reducers/authSlice';
 import {useNavigation} from '@react-navigation/native';
 import {doc} from 'firebase/firestore';
 import {db} from '../../Constant/Firebase';
@@ -49,13 +49,13 @@ function Registration() {
         imageUrl: '',
     });
     const dispatch = useDispatch();
-    const user: any = useSelector<any>(
-        (state: rootState) => state.user.globalLoading,
-    );
+    // const user: any = useSelector<any>(
+    //     (state: rootState) => state.user.globalLoading,
+    // );
     const globalSpinner: any = useSelector<any>(
         (state: rootState) => state.user.globalLoading,
     );
-    console.log('globalLoading ?? ', user);
+    console.log('globalLoading ?? ', globalSpinner);
     const [validate, SetValiadate] = useState<boolean>(false);
 
     const Authenticate = () => {
@@ -78,42 +78,49 @@ function Registration() {
         GoogleSignin.configure();
     }, []);
 
-    //Google Login
+    //Google Sign up
     const googleSignUp = async () => {
+        //dispatch(googleSignUpUserAuth());
         try {
             await GoogleSignin.hasPlayServices();
-            const userInfo = await GoogleSignin.signIn().then;
-            const uploadTask = storage()
-                .ref()
-                .child(`/userprofile/${Date.now()}`)
-                .putFile(userInfo.user.photo);
-            uploadTask.on(
-                'state_changed',
-                snapshot => {
-                    var progress =
-                        (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                    if (progress == 100)
-                        console.log('Image Uploaded Successfully');
-                },
-                error => {
-                    console.log('error uploading image');
-                },
-                () => {
-                    uploadTask.snapshot?.ref
-                        .getDownloadURL()
-                        .then(downloadURL => {
-                            firestore()
-                                .collection('People')
-                                .doc(user.email)
-                                .set({
-                                    name: user.name,
-                                    email: user.email,
-                                    ImageUrl: downloadURL,
+            const userInfo: any = await GoogleSignin.signIn().then(
+                (userInfo: any) => {
+                    const uploadTask = storage()
+                        .ref()
+                        .child(`/userprofile/${Date.now()}`)
+                        .putFile(userInfo.user.photo);
+                    uploadTask.on(
+                        'state_changed',
+                        snapshot => {
+                            var progress =
+                                (snapshot.bytesTransferred /
+                                    snapshot.totalBytes) *
+                                100;
+                            if (progress == 100)
+                                console.log('Image Uploaded Successfully');
+                        },
+                        error => {
+                            console.log('error uploading image');
+                        },
+                        () => {
+                            uploadTask.snapshot?.ref
+                                .getDownloadURL()
+                                .then(downloadURL => {
+                                    console.log('downloadURL', downloadURL);
+                                    // firestore()
+                                    //     .collection('People')
+                                    //     .doc(userInfo.user.email)
+                                    //     .set({
+                                    //         name: userInfo.user.name,
+                                    //         email: userInfo.user.email,
+                                    //         ImageUrl: downloadURL,
+                                    //     });
                                 });
-                        });
+                        },
+                    );
                 },
             );
-            //console.log('user Info', userInfo.user.photo);
+            console.log('user Info', userInfo.user.photo);
         } catch (error: any) {
             if (error.code === statusCodes.SIGN_IN_CANCELLED) {
                 console.log('user cancelled the login flow');
@@ -159,7 +166,8 @@ function Registration() {
 
     return (
         <>
-            {globalSpinner ? (
+            {/* {console.log('inside view', globalSpinner)} */}
+            {globalSpinner === true ? (
                 <>
                     <View
                         style={{
@@ -167,7 +175,7 @@ function Registration() {
                             justifyContent: 'center',
                             flex: 1,
                         }}>
-                        <ActivityIndicator color="red" size="large" />
+                        <ActivityIndicator color="#0a3749" size="large" />
                     </View>
                 </>
             ) : (
@@ -419,7 +427,13 @@ function Registration() {
                                             marginRight: 10,
                                             marginVertical: 20,
                                         }}></View>
-                                    <Text>Or</Text>
+                                    <Text
+                                        style={{
+                                            fontSize: 20,
+                                            fontWeight: 'bold',
+                                        }}>
+                                        Or
+                                    </Text>
                                     <View
                                         style={{
                                             height: 1,

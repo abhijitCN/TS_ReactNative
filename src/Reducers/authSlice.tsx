@@ -7,6 +7,10 @@ import {deleteDoc, doc, getDoc, setDoc} from 'firebase/firestore';
 import {db} from '../Constant/Firebase';
 import storage from '@react-native-firebase/storage';
 import {useState} from 'react';
+import {
+    GoogleSignin,
+    statusCodes,
+} from '@react-native-google-signin/google-signin';
 
 interface Initial {
     email: string;
@@ -44,10 +48,99 @@ export const signInUser: any = createAsyncThunk(
     },
 );
 
+export const googleSignInUser: any = createAsyncThunk(
+    'GoogleSignInUser',
+    async (body: any) => {
+        try {
+            await GoogleSignin.hasPlayServices();
+            const userInfo = await GoogleSignin.signIn();
+            console.log(
+                'Google Login User Info email ===> ',
+                userInfo.user.email,
+            );
+            const userEmail = userInfo.user.email;
+            return userEmail;
+        } catch (error: any) {
+            if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+                console.log('user cancelled the login flow');
+            } else if (error.code === statusCodes.IN_PROGRESS) {
+                console.log('operation (e.g. sign in) is in progress already');
+            } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+                console.log('play services not available or outdated');
+            } else {
+                console.log('some other error happened');
+            }
+        }
+    },
+);
+
+export const googleSignUpUserAuth: any = createAsyncThunk(
+    'GoogleSignUpUserAuth',
+    async (body: any, thunkAPI) => {
+        try {
+            await GoogleSignin.hasPlayServices();
+            const userInfo = await GoogleSignin.signIn();
+            //console.log('User info', userInfo);
+            return thunkAPI.dispatch(googleSignUpUserData({}));
+        } catch (error: any) {
+            if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+                console.log('user cancelled the login flow');
+            } else if (error.code === statusCodes.IN_PROGRESS) {
+                console.log('operation (e.g. sign in) is in progress already');
+            } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+                console.log('play services not available or outdated');
+            } else {
+                console.log('some other error happened');
+            }
+        }
+    },
+);
+
+export const googleSignUpUserData: any = createAsyncThunk(
+    'GoogleSignUpUserData',
+    async (body: any) => {
+        try {
+            const uploadTask = storage()
+                .ref()
+                .child(`/userprofile/${Date.now()}`)
+                .putFile(body.userInfo.user.photo);
+            uploadTask.on(
+                'state_changed',
+                snapshot => {
+                    var progress =
+                        (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    if (progress == 100)
+                        console.log(
+                            'Image Uploaded Successfully for Google sine-up',
+                        );
+                },
+                error => {
+                    console.log('error uploading image for Google sine-up');
+                },
+                () => {
+                    uploadTask.snapshot?.ref
+                        .getDownloadURL()
+                        .then(downloadURL => {
+                            firestore()
+                                .collection('People')
+                                .doc(body.userInfo.user.email)
+                                .set({
+                                    name: body.userInfo.user.name,
+                                    email: body.userInfo.user.email,
+                                    ImageUrl: downloadURL,
+                                });
+                        });
+                },
+            );
+        } catch (error: any) {
+            console.log('google Sign Up User Data error happened');
+        }
+    },
+);
+
 export const signUpUser: any = createAsyncThunk(
     'SignUpUser',
     async (body: any) => {
-        //const [image, setImage] = useState('');
         const myDoc = doc(db, 'User', 'UserData');
         console.log('BODY >> ', body);
         const uploadTask = storage()
@@ -161,6 +254,31 @@ const authSlice = createSlice({
             //state.isLoading = false;
             state.globalLoading = false;
         },
+        //GoogleSignIn
+        [googleSignInUser.pending]: (state, action) => {
+            state.globalLoading = true;
+        },
+        [googleSignInUser.fulfilled]: (state, action) => {
+            state.globalLoading = false;
+            state.email = action.payload;
+            AsyncStorage.setItem(
+                'Token',
+                JSON.stringify((state.isLoading = true)),
+            );
+        },
+        [googleSignInUser.rejected]: (state, action) => {
+            state.globalLoading = false;
+        },
+        // GoogleSignUp
+        [googleSignUpUserAuth.pending]: (state, action) => {
+            state.globalLoading = true;
+        },
+        [googleSignUpUserAuth.fulfilled]: (state, action) => {
+            state.globalLoading = false;
+        },
+        [googleSignUpUserAuth.rejected]: (state, action) => {
+            state.globalLoading = false;
+        },
         //signUp
         [signUpUser.pending]: (state, action) => {
             state.globalLoading = true;
@@ -169,7 +287,6 @@ const authSlice = createSlice({
             state.globalLoading = false;
         },
         [signUpUser.rejected]: (state, action) => {
-            state.isLoading = false;
             state.globalLoading = false;
         },
         //SignOut

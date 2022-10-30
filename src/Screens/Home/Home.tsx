@@ -40,6 +40,13 @@ interface textFields {
     email: string;
     password: string;
 }
+interface itemType {
+    ImageUrl: any;
+    name: string;
+    price: string;
+    quantity: string;
+    category: string;
+}
 
 const wait = (timeout: any) => {
     return new Promise(resolve => setTimeout(resolve, timeout));
@@ -48,7 +55,7 @@ const wait = (timeout: any) => {
 function Home() {
     const navigation = useNavigation();
     const dispatch = useDispatch();
-    const [data, setData] = useState([]);
+    const [data, setData] = useState<itemType[]>([]);
     const [avatar, setAvatar] = useState();
     const [refreshing, setRefreshing] = React.useState(false);
     const user: any = useSelector<any>((state: rootState) => state.user);
@@ -197,7 +204,7 @@ function Home() {
                             justifyContent: 'center',
                             flex: 1,
                         }}>
-                        <ActivityIndicator color="red" size="large" />
+                        <ActivityIndicator color="#0a3749" size="large" />
                     </View>
                 </>
             ) : (
@@ -434,7 +441,7 @@ const style = StyleSheet.create({
         fontWeight: '600',
     },
     header: {marginTop: 10, fontWeight: 'bold', fontSize: 25},
-    helloText: {fontSize: 20, fontWeight: 'bold'},
+    helloText: {fontSize: 20, fontWeight: 'bold', marginTop: 6},
     image: {width: 50, height: 50, borderRadius: 25},
     container: {
         flexDirection: 'row',

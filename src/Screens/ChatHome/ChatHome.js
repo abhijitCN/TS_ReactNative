@@ -480,7 +480,7 @@ const ChatHome = () => {
                         placeholder='Type your message here...'
                     />
                     <View style={styles.submitButton}>
-                        <Button title='Send' onPress={handleSend} color='#33687B' />
+                        <Button title='Send' onPress={handleSend} color='#0a3749' />
                     </View>
                 </View>
             </KeyboardAvoidingView>

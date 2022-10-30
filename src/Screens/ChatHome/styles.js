@@ -121,7 +121,7 @@ export default StyleSheet.create({
     marginRight: 16,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(51, 104, 123, 1)',
+    backgroundColor: 'rgba(51, 104, 13,4)',
   },
   avatarMe: {
     width: 38,
@@ -131,7 +131,7 @@ export default StyleSheet.create({
     marginLeft: 16,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(151, 204, 223, 1)',
+    backgroundColor: '#0a3749',
   },
   avatarNone: {
     display: 'none',
