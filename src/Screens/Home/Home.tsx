@@ -62,7 +62,7 @@ function Home() {
     const profile: any = useSelector<any>((state: rootState) => state.profile);
     const [userData, setUserData] = useState<any>({});
 
-    console.log(' < user > ', profile);
+    //console.log(' < user > ', profile);
     // const SPINNER: any = useSelector<any>(
     //     (state: rootState) => state.toggleSpinner,
     // );
@@ -87,9 +87,12 @@ function Home() {
                 // console.log('Total querySnapshot: ', querySnapshot.size);
                 querySnapshot.forEach(documentSnapshot => {
                     var key = Object(documentSnapshot.data());
-                    console.log('KEYS && ?? ', key.email);
-                    //console.log('user.email **', user.email);
-                    console.log('User Email ?? ', key.email === user.email);
+                    console.log('Keys Email ?? ', key.email);
+                    console.log('user.email **', user.email);
+                    console.log(
+                        'User Email True ?? ',
+                        key.email === user.email,
+                    );
                     if (key.email === user.email) {
                         //console.log('FIND', key);
                         setUserData(key);
@@ -155,14 +158,17 @@ function Home() {
                     userAvatar.push({
                         avatarUrl: ImageUrl,
                     });
+                    // documentData.filter((item: any) => {
+                    //     console.log('item.email', item.email);
+                    // });
                 });
             });
         //setAvatar(userAvatar);
     };
 
     useEffect(() => {
-        getUserAvatar();
-        console.log('** avatar image now >> **', avatar);
+        //getUserAvatar();
+        //console.log('** avatar image now >> **', avatar);
     }, []);
 
     const getAllProducts = async () => {
@@ -192,7 +198,7 @@ function Home() {
     useEffect(() => {
         getAllProducts();
         //console.log('**HOLE DATA**', data);
-    }, []);
+    }, [data]);
 
     return (
         <>
@@ -209,7 +215,7 @@ function Home() {
                 </>
             ) : (
                 <> */}
-            <View style={style.main}>
+            <SafeAreaView style={style.main}>
                 <View style={style.container}>
                     <TouchableOpacity
                         onPress={() => navigation.openDrawer()}
@@ -404,7 +410,7 @@ function Home() {
                     /> */}
                     <Icon name="plus" color={'#ffffff'} size={40} />
                 </TouchableOpacity>
-            </View>
+            </SafeAreaView>
             {/* </>
             )} */}
         </>

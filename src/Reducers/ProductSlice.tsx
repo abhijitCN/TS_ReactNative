@@ -95,7 +95,7 @@ export const addProduct: any = createAsyncThunk(
                                 quantity: body.quantity,
                                 ImageUrl: downloadURL,
                                 category: body.categoryName,
-                                docId: body.name,
+                                docId: body.userMail,
                             });
                     })
                     .catch(error => {

@@ -90,7 +90,7 @@ const EditProfile = () => {
                 const uploadTask = storage()
                     .ref()
                     .child(`/userprofile/${Date.now()}`)
-                    .putFile(fileobj.assets[0].uri);
+                    .putFile(fileobj ? fileobj.assets[0].uri : null);
                 uploadTask.on(
                     'state_changed',
                     snapshot => {
@@ -133,7 +133,7 @@ const EditProfile = () => {
                 const uploadTask = storage()
                     .ref()
                     .child(`/userprofile/${Date.now()}`)
-                    .putFile(fileobj.assets[0].uri);
+                    .putFile(fileobj ? fileobj.assets[0].uri : null);
                 uploadTask.on(
                     'state_changed',
                     snapshot => {

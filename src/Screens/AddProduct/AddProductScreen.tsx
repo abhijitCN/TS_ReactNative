@@ -24,6 +24,7 @@ interface textFields {
     quantity: string;
     //category: string;
     imageUrl: any;
+    userMail: string;
 }
 
 const AddProduct: React.FC = () => {
@@ -32,6 +33,7 @@ const AddProduct: React.FC = () => {
     const globalSpinner: any = useSelector<any>(
         (state: rootState) => state.product.isLoading,
     );
+    const user: any = useSelector<any>((state: rootState) => state.user);
     const [modalVisible, setModalVisible] = useState(false);
     const [data, setData] = useState<textFields>({
         name: '',
@@ -39,6 +41,7 @@ const AddProduct: React.FC = () => {
         quantity: '',
         //category: '',
         imageUrl: '',
+        userMail: user.email,
     });
     const Categorys = [
         {id: 1, name: 'fruits'},

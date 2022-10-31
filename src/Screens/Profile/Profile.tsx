@@ -8,7 +8,6 @@ import {
     TouchableOpacity,
 } from 'react-native';
 const {height, width} = Dimensions.get('screen');
-import Toast from 'react-native-toast-message';
 import firestore from '@react-native-firebase/firestore';
 import {useDispatch, useSelector} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
@@ -30,11 +29,6 @@ const Profile = () => {
 
     const logOut = () => {
         dispatch(signOut());
-        Toast.show({
-            type: 'success',
-            text1: 'Logout Successfully',
-            position: 'top',
-        });
     };
 
     const getUserAvatar = async () => {
@@ -127,9 +121,6 @@ const Profile = () => {
                             />
                         </>
                     )}
-                </View>
-                <View>
-                    <Toast />
                 </View>
             </View>
             <View

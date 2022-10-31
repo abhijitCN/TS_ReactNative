@@ -55,7 +55,7 @@ function Registration() {
     const globalSpinner: any = useSelector<any>(
         (state: rootState) => state.user.globalLoading,
     );
-    console.log('globalLoading ?? ', globalSpinner);
+    //console.log('globalLoading ?? ', globalSpinner);
     const [validate, SetValiadate] = useState<boolean>(false);
 
     const Authenticate = () => {
@@ -167,7 +167,7 @@ function Registration() {
     return (
         <>
             {/* {console.log('inside view', globalSpinner)} */}
-            {globalSpinner === true ? (
+            {globalSpinner ? (
                 <>
                     <View
                         style={{

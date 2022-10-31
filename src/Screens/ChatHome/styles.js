@@ -20,7 +20,7 @@ export default StyleSheet.create({
   outerContainer: {
     width: '100%',
     height: '100%',
-    backgroundColor: '#d6dce4',
+    backgroundColor: '#ffffff',
   },
   innerContainer: {
     width: '100%',
@@ -35,7 +35,7 @@ export default StyleSheet.create({
     backgroundColor: 'rgba(51, 104, 123, 1)',
   },
   textTopContainer: {
-    color: 'rgba(255, 255, 255, 1)',
+    color: '#ffffff',
   },
   headingTopContainer: {
     color: 'rgba(255, 255, 255, 1)',
@@ -142,7 +142,7 @@ export default StyleSheet.create({
     alignItems: 'center',
     padding: 8,
     height: 80,
-    backgroundColor: '#d6dce4',
+    backgroundColor: '#ffffff',
     marginBottom: 15, alignSelf: 'center'
   },
   textInput: {

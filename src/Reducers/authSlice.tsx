@@ -223,8 +223,8 @@ export const signUpUser: any = createAsyncThunk(
 export const signOut: any = createAsyncThunk('SignOut', body => {
     try {
         //await AsyncStorage.removeItem('userToken');
-
         console.log('Logout');
+        Alert.alert('Logout Successfully');
     } catch (error) {
         console.log('Logout error');
     }

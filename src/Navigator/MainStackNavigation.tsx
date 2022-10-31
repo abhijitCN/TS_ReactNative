@@ -35,6 +35,8 @@ import {
 import ChatHome from '../Screens/ChatHome/ChatHome';
 import VideoCall from '../Screens/Support/VideoCall';
 import VoiceCall from '../Screens/Support/VoiceCall';
+import MyProduct from '../Screens/Myproduct/MyProduct';
+import Selection from '../Screens/Support/Selection';
 
 const MainStack = createNativeStackNavigator<MainRootStackParamList>();
 const Drawer = createDrawerNavigator();
@@ -49,7 +51,7 @@ function HomeScreen2() {
     );
 }
 
-const homeDrawerStack = () => {
+const HomeDrawerStack = () => {
     return (
         <MainStack.Navigator>
             <MainStack.Screen
@@ -66,7 +68,7 @@ const homeDrawerStack = () => {
     );
 };
 
-const addProductDrawerStack = () => {
+const AddProductDrawerStack = () => {
     return (
         <MainStack.Navigator>
             <MainStack.Screen
@@ -83,7 +85,7 @@ const addProductDrawerStack = () => {
     );
 };
 
-const profileDrawerStack = () => {
+const ProfileDrawerStack = () => {
     return (
         <MainStack.Navigator>
             <MainStack.Screen
@@ -120,7 +122,7 @@ const profileDrawerStack = () => {
     );
 };
 
-const chatHomeDrawerStack = () => {
+const ChatHomeDrawerStack = () => {
     return (
         <MainStack.Navigator>
             <MainStack.Screen
@@ -136,6 +138,11 @@ const SupportDrawerStack = () => {
     return (
         <MainStack.Navigator>
             <MainStack.Screen
+                name="Selection"
+                component={Selection}
+                options={{headerShown: false}}
+            />
+            <MainStack.Screen
                 name="SupportVideoCall"
                 component={VideoCall}
                 options={{headerShown: false}}
@@ -143,6 +150,18 @@ const SupportDrawerStack = () => {
             <MainStack.Screen
                 name="SupportVoiceCall"
                 component={VoiceCall}
+                options={{headerShown: false}}
+            />
+        </MainStack.Navigator>
+    );
+};
+
+const MyProductStack = () => {
+    return (
+        <MainStack.Navigator>
+            <MainStack.Screen
+                name="MyProduct"
+                component={MyProduct}
                 options={{headerShown: false}}
             />
         </MainStack.Navigator>
@@ -180,7 +199,7 @@ const MainStackScreens = () => (
         }}>
         <Drawer.Screen
             name="Home"
-            component={homeDrawerStack}
+            component={HomeDrawerStack}
             options={{
                 drawerIcon: ({color}) => (
                     <Ionicons name="home" size={22} color={color} />
@@ -189,7 +208,20 @@ const MainStackScreens = () => (
         />
         <Drawer.Screen
             name="Add Products"
-            component={addProductDrawerStack}
+            component={AddProductDrawerStack}
+            options={{
+                drawerIcon: ({color}) => (
+                    <CustomerService
+                        name="pluscircleo"
+                        size={22}
+                        color={color}
+                    />
+                ),
+            }}
+        />
+        <Drawer.Screen
+            name="My Product"
+            component={MyProductStack}
             options={{
                 drawerIcon: ({color}) => (
                     <Product name="product-hunt" size={22} color={color} />
@@ -198,7 +230,7 @@ const MainStackScreens = () => (
         />
         <Drawer.Screen
             name="Profile"
-            component={profileDrawerStack}
+            component={ProfileDrawerStack}
             options={{
                 drawerIcon: ({color}) => (
                     <Ionicons name="person-outline" size={22} color={color} />
@@ -207,7 +239,7 @@ const MainStackScreens = () => (
         />
         <Drawer.Screen
             name="Chat-Home"
-            component={chatHomeDrawerStack}
+            component={ChatHomeDrawerStack}
             options={{
                 drawerIcon: ({color}) => (
                     <Ionicons
