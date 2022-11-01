@@ -53,7 +53,7 @@ const wait = (timeout: any) => {
 };
 
 function Home() {
-    const navigation = useNavigation();
+    const navigation: any = useNavigation();
     const dispatch = useDispatch();
     const [data, setData] = useState<itemType[]>([]);
     const [avatar, setAvatar] = useState();
@@ -80,25 +80,44 @@ function Home() {
     }, []);
     const sample = async () => {
         //console.log('called sample');
+        const emailArray: any = [];
         await firestore()
             .collection('People')
             .get()
             .then(querySnapshot => {
                 // console.log('Total querySnapshot: ', querySnapshot.size);
                 querySnapshot.forEach(documentSnapshot => {
-                    var key = Object(documentSnapshot.data());
-                    console.log('Keys Email ?? ', key.email);
+                    var {email, ImageUrl} = Object(documentSnapshot.data());
+                    //console.log('Keys Email ?? ', key.email);
                     console.log('user.email **', user.email);
-                    console.log(
-                        'User Email True ?? ',
-                        key.email === user.email,
-                    );
-                    if (key.email === user.email) {
-                        //console.log('FIND', key);
-                        setUserData(key);
-                        setAvatar(key.ImageUrl);
-                        //console.log('Unickly FIND **', avatar);
-                    }
+                    // console.log(
+                    //     'User Email True ?? ',
+                    //     key.email === user.email,
+                    // );
+                    emailArray.push({
+                        email: email,
+                        ImageUrl: ImageUrl,
+                    });
+                    emailArray.filter((item: any) => {
+                        if (item.email === user.email) {
+                            //console.log('FIND', key);
+                            //setUserData(key);
+                            //setAvatar(key.ImageUrl);
+                            console.log(
+                                'Unickly FIND **',
+                                item.email === user.email,
+                            );
+                            console.log('Unickly FIND Image**', item.ImageUrl);
+                            setAvatar(item.ImageUrl);
+                        }
+                    });
+                    console.log('email Array', emailArray);
+                    // if (key.email === user.email) {
+                    //     //console.log('FIND', key);
+                    //     setUserData(key);
+                    //     setAvatar(key.ImageUrl);
+                    //     //console.log('Unickly FIND **', avatar);
+                    // }
                 });
             });
     };

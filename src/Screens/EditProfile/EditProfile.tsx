@@ -37,22 +37,22 @@ interface DescribableFunction {
     (someArg: number): boolean;
 }
 const EditProfile = () => {
-    const navigation = useNavigation();
+    const navigation: any = useNavigation();
     const dispatch = useDispatch();
     const Route = useRoute();
     let data: any = Route.params;
     let Phone: any = data.data.phoneNo;
     let AvaterUrl: any = data.data.ImageUrl;
-    console.log('Global Route data phone', Phone);
-    console.log('Global Route data phone', AvaterUrl);
+    //console.log('Global Route data phone', Phone);
+    //console.log('Global Route data phone', AvaterUrl);
     const userProfilePicture: any = useSelector<any>(
         (state: rootState) => state.profile,
     );
-    console.log('userProfilePicture <<<>>>  ', userProfilePicture);
+    //console.log('userProfilePicture <<<>>>  ', userProfilePicture);
     const SPINNER: any = useSelector<any>(
         (state: rootState) => state.toggleSpinner,
     );
-    console.log(' <INITIAL SPINNER > ', SPINNER);
+    console.log('toggleSpinner in change password **', SPINNER);
     const [editValue, setEditValue] = useState<editValue | any>({
         name: '',
         phoneNo: '',
@@ -64,22 +64,22 @@ const EditProfile = () => {
     const profile: any = useSelector<any>((state: rootState) => state.profile);
 
     useEffect(() => {
-        console.log(' <useEffect SPINNER > ', SPINNER);
+        //console.log(' <useEffect SPINNER > ', SPINNER);
     }, [SPINNER.show]);
 
     useEffect(() => {
         getUserData(data);
-        console.log('userProfilePicture <<<>>>  ', userProfilePicture);
+        //console.log('userProfilePicture <<<>>>  ', userProfilePicture);
     }, []);
 
     const getUserData = (fn: DescribableFunction) => {
         let data: any = Route.params;
-        console.log('This page data', data.data);
+        //console.log('This page data', data.data);
         setEditValue(data.data ? data.data : null);
     };
 
     const pickImageAndUploadFromCamera = () => {
-        console.log('pick Image And Upload');
+        //console.log('pick Image And Upload');
         setModalVisible(!modalVisible);
         launchCamera(
             {
@@ -122,7 +122,7 @@ const EditProfile = () => {
 
     const pickImageAndUploadFromGallery = () => {
         setModalVisible(!modalVisible);
-        console.log('pick Image And Upload');
+        //console.log('pick Image And Upload');
         setModalVisible(!modalVisible);
         launchImageLibrary(
             {
@@ -169,6 +169,7 @@ const EditProfile = () => {
 
     const onPress = async () => {
         dispatch(toggleSpinner(true));
+        console.log('SPINNER?.show == true ** ', SPINNER?.show);
         await firestore()
             .collection('People')
             .doc(Phone)
@@ -180,6 +181,7 @@ const EditProfile = () => {
 
             .then(() => {
                 dispatch(toggleSpinner(false));
+                console.log('SPINNER?.show == false ** ', SPINNER?.show);
                 navigation.navigate('Home');
                 Alert.alert('Update Successfully.');
             });

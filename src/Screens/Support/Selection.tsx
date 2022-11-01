@@ -5,7 +5,7 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import {useNavigation} from '@react-navigation/native';
 
 export default function Selection() {
-    const navigation = useNavigation();
+    const navigation: any = useNavigation();
 
     return (
         <View style={{flex: 1}}>

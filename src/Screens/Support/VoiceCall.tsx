@@ -23,9 +23,9 @@ import {
 } from 'react-native-agora';
 
 const appId = 'a22539bebe8b4312bc60a8bd34c202bc';
-const channelName = 'Abhijitsaha@007';
+const channelName = 'videocall';
 const token =
-    '007eJxTYFAVUjE9+pjp6fm9VxQrtubu1Dj3ccVltZ8Na05rHeEs3F6iwJBoZGRqbJmUmpRqkWRibGiUlGxmkGiRlGJskmxkAOTZdUcnNwQyMmRd0WVmZIBAEJ+fwTEpIzMrs6Q4MSPRwcDAnIEBADGcJB8=';
+    '007eJxTYAitmuSgmHT+6sZP85hC/3QE1ExgOZL93b34xwMhseUfRLYqMCQaGZkaWyalJqVaJJkYGxolJZsZJFokpRibJBsZAHm32RKTGwIZGfg19rEwMkAgiM/JUJaZkpqfnJiTw8AAADEVIcw=';
 const uid = 0;
 
 const VoiceCall = () => {
@@ -110,14 +110,47 @@ const VoiceCall = () => {
 
     return (
         <SafeAreaView style={styles.main}>
-            <Text style={styles.head}>Agora Video Calling Quickstart</Text>
+            <Text style={styles.head2}>Video Calling</Text>
             <View style={styles.btnContainer}>
-                <Text onPress={join} style={styles.button}>
-                    Join
-                </Text>
-                <Text onPress={leave} style={styles.button}>
-                    Leave
-                </Text>
+                <View
+                    style={{
+                        height: 50,
+                        width: 100,
+                        backgroundColor: '#0a3749',
+                        borderRadius: 25,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        marginRight: 15,
+                    }}>
+                    <Text
+                        onPress={join}
+                        style={{
+                            fontWeight: 'bold',
+                            color: '#ffffff',
+                            fontSize: 22,
+                        }}>
+                        Join
+                    </Text>
+                </View>
+                <View
+                    style={{
+                        height: 50,
+                        width: 100,
+                        backgroundColor: '#0a3749',
+                        borderRadius: 25,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                    }}>
+                    <Text
+                        onPress={join}
+                        style={{
+                            fontWeight: 'bold',
+                            color: '#ffffff',
+                            fontSize: 22,
+                        }}>
+                        Leave
+                    </Text>
+                </View>
             </View>
             <ScrollView
                 style={styles.scroll}
@@ -146,13 +179,15 @@ const styles = StyleSheet.create({
         color: '#ffffff',
         backgroundColor: '#0055cc',
         margin: 5,
+        alignSelf: 'center',
     },
-    main: {flex: 1, alignItems: 'center'},
-    scroll: {flex: 1, backgroundColor: '#ddeeff', width: '100%'},
+    main: {flex: 1, alignItems: 'center', backgroundColor: '#ffffff'},
+    scroll: {flex: 1, backgroundColor: '#ffffff', width: '100%'},
     scrollContainer: {alignItems: 'center'},
     videoView: {width: '90%', height: 200},
     btnContainer: {flexDirection: 'row', justifyContent: 'center'},
     head: {fontSize: 20},
+    head2: {marginVertical: 10, fontWeight: 'bold', fontSize: 25},
 });
 
 export default VoiceCall;

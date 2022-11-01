@@ -29,6 +29,7 @@ import {
     statusCodes,
 } from '@react-native-google-signin/google-signin';
 import storage from '@react-native-firebase/storage';
+import {toggleSpinner} from '../../Reducers/toggleSpinnerSlice';
 
 interface textFields {
     name: string;
@@ -39,7 +40,7 @@ interface textFields {
 }
 
 function Registration() {
-    const navigation = useNavigation();
+    const navigation: any = useNavigation();
     const [modalVisible, setModalVisible] = useState(false);
     const [data, setData] = useState<textFields>({
         name: '',
@@ -52,6 +53,10 @@ function Registration() {
     // const user: any = useSelector<any>(
     //     (state: rootState) => state.user.globalLoading,
     // );
+    const SPINNER: any = useSelector<any>(
+        (state: rootState) => state.toggleSpinner,
+    );
+    console.log('toggleSpinner in change password **', SPINNER);
     const globalSpinner: any = useSelector<any>(
         (state: rootState) => state.user.globalLoading,
     );
@@ -66,13 +71,21 @@ function Registration() {
             data.phoneNo &&
             data.imageUrl
         ) {
+            dispatch(toggleSpinner(true));
+            console.log('SPINNER?.show == true ** ', SPINNER?.show);
             dispatch(signUpUser(data));
+            dispatch(toggleSpinner(false));
+            console.log('SPINNER?.show == false ** ', SPINNER?.show);
             navigation.navigate('Login');
             Alert.alert('Register Successfully Please Login');
         } else {
             SetValiadate(true);
         }
     };
+
+    useEffect(() => {
+        //console.log(' <useEffect SPINNER > ', SPINNER);
+    }, [SPINNER.show]);
 
     useEffect(() => {
         GoogleSignin.configure();
@@ -107,14 +120,14 @@ function Registration() {
                                 .getDownloadURL()
                                 .then(downloadURL => {
                                     console.log('downloadURL', downloadURL);
-                                    // firestore()
-                                    //     .collection('People')
-                                    //     .doc(userInfo.user.email)
-                                    //     .set({
-                                    //         name: userInfo.user.name,
-                                    //         email: userInfo.user.email,
-                                    //         ImageUrl: downloadURL,
-                                    //     });
+                                    firestore()
+                                        .collection('People')
+                                        .doc(userInfo.user.email)
+                                        .set({
+                                            name: userInfo.user.name,
+                                            email: userInfo.user.email,
+                                            ImageUrl: downloadURL,
+                                        });
                                 });
                         },
                     );
@@ -165,9 +178,9 @@ function Registration() {
     };
 
     return (
-        <>
+        <View style={{flex: 1}}>
             {/* {console.log('inside view', globalSpinner)} */}
-            {globalSpinner ? (
+            {SPINNER?.show === true ? (
                 <>
                     <View
                         style={{
@@ -558,7 +571,7 @@ function Registration() {
                     </ScrollView>
                 </>
             )}
-        </>
+        </View>
     );
 }
 

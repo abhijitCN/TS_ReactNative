@@ -23,34 +23,34 @@ interface editValue {
 }
 
 const ChangePassword = () => {
-    const navigation = useNavigation();
+    const navigation: any = useNavigation();
     const dispatch = useDispatch();
     const SPINNER: any = useSelector<any>(
         (state: rootState) => state.toggleSpinner,
     );
+    console.log('toggleSpinner in change password **', SPINNER);
+
     const globalSpinner: any = useSelector<any>(
         (state: rootState) => state.profile.IsLoading,
     );
-    console.log('globalSpinner in change password **', globalSpinner);
     const [editValue, setEditValue] = useState<editValue | any>({
         currentPassword: '',
         newPassword: '',
     });
     const [validate, SetValiadate] = useState<boolean>(false);
-
     useEffect(() => {
-        console.log(' <useEffect SPINNER > ', SPINNER);
+        //console.log(' <useEffect SPINNER > ', SPINNER);
     }, [SPINNER.show]);
 
     const reauthenticate = () => {
         if (editValue.currentPassword) {
             var user: any = firebase.auth().currentUser;
-            console.log('reauthenticate function call', user?.email);
+            //console.log('reauthenticate function call', user?.email);
             var cred = firebase.auth.EmailAuthProvider.credential(
                 user.email,
                 editValue.currentPassword,
             );
-            console.log('cred ?? ', cred);
+            //console.log('cred ?? ', cred);
             return user.reauthenticateWithCredential(cred);
         } else {
             SetValiadate(true);
@@ -70,11 +70,11 @@ const ChangePassword = () => {
                             navigation.navigate('Home');
                         })
                         .catch((error: any) => {
-                            console.log(error.message);
+                            //console.log(error.message);
                         });
                 })
                 .catch((error: any) => {
-                    console.log(error.message);
+                    //console.log(error.message);
                 });
         } else {
             SetValiadate(true);
@@ -82,14 +82,17 @@ const ChangePassword = () => {
     };
 
     const ChangePasswordAsync = () => {
-        console.log('sending Value ** ', editValue);
+        dispatch(toggleSpinner(true));
+        console.log('SPINNER?.show == true ** ', SPINNER?.show);
         dispatch(passwordChange(editValue));
+        dispatch(toggleSpinner(false));
+        console.log('SPINNER?.show == false ** ', SPINNER?.show);
         navigation.navigate('Home');
     };
 
     return (
         <View style={styles.main}>
-            {globalSpinner == true ? (
+            {SPINNER?.show === true ? (
                 <>
                     <View
                         style={{

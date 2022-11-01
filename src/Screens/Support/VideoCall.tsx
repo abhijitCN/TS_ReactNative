@@ -83,9 +83,9 @@ const VideoCall = () => {
     const [remoteUid, setRemoteUid] = useState(0); // Uid of the remote user
     const [message, setMessage] = useState(''); // Message to the user
     const appId = 'a22539bebe8b4312bc60a8bd34c202bc';
-    const channelName = 'Abhijitsaha@007';
+    const channelName = 'videocall';
     const token =
-        '007eJxTYFAVUjE9+pjp6fm9VxQrtubu1Dj3ccVltZ8Na05rHeEs3F6iwJBoZGRqbJmUmpRqkWRibGiUlGxmkGiRlGJskmxkAOTZdUcnNwQyMmRd0WVmZIBAEJ+fwTEpIzMrs6Q4MSPRwcDAnIEBADGcJB8=';
+        '007eJxTYAitmuSgmHT+6sZP85hC/3QE1ExgOZL93b34xwMhseUfRLYqMCQaGZkaWyalJqVaJJkYGxolJZsZJFokpRibJBsZAHm32RKTGwIZGfg19rEwMkAgiM/JUJaZkpqfnJiTw8AAADEVIcw=';
     const uid = 0;
     function showMessage(msg: string) {
         setMessage(msg);
@@ -158,13 +158,42 @@ const VideoCall = () => {
                 contentContainerStyle={styles.scrollContainer}>
                 <Text style={styles.head}>Video Calling</Text>
                 <View style={styles.btnContainer}>
-                    <View style={{minHeight: 60, minWidth: 70}}>
-                        <Text onPress={join} style={styles.button}>
+                    <View
+                        style={{
+                            height: 50,
+                            width: 100,
+                            backgroundColor: '#0a3749',
+                            borderRadius: 25,
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            marginRight: 15,
+                        }}>
+                        <Text
+                            onPress={join}
+                            style={{
+                                fontWeight: 'bold',
+                                color: '#ffffff',
+                                fontSize: 22,
+                            }}>
                             Join
                         </Text>
                     </View>
-                    <View style={{minHeight: 60, minWidth: 70}}>
-                        <Text onPress={leave} style={styles.button}>
+                    <View
+                        style={{
+                            height: 50,
+                            width: 100,
+                            backgroundColor: '#0a3749',
+                            borderRadius: 25,
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                        }}>
+                        <Text
+                            onPress={join}
+                            style={{
+                                fontWeight: 'bold',
+                                color: '#ffffff',
+                                fontSize: 22,
+                            }}>
                             Leave
                         </Text>
                     </View>

@@ -9,8 +9,13 @@ export type MainRootStackParamList = {
     EditProfile:any;
     ChangePassword:any;
     AddAddress:any;
-    Map:any
-    AddProduct:any
+    Map:any;
+    AddProduct:any;
+    ChatHome:any;
+    Selection:any;
+    SupportVideoCall:any;
+    SupportVoiceCall:any;
+    MyProduct:any
 };
 export type MainDrawerParamList = {
     Home: {showMsg: boolean};

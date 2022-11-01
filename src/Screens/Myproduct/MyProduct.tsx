@@ -23,7 +23,7 @@ interface itemType {
 }
 
 const MyProduct = () => {
-    const navigation = useNavigation();
+    const navigation: any = useNavigation();
     const [data, setData] = useState<itemType[]>([]);
     const [avatar, setAvatar] = useState();
     const [refreshing, setRefreshing] = React.useState(false);

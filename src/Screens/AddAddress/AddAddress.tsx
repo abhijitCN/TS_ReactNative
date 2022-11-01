@@ -14,7 +14,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 
 const AddAddress = () => {
-    const navigation = useNavigation();
+    const navigation: any = useNavigation();
     const [geometry, setGeometry1] = useState<any>({});
     const [geometry2, setGeometry2] = useState<any>({});
 
@@ -37,7 +37,7 @@ const AddAddress = () => {
                         setGeometry1(details?.geometry?.location)
                     }
                     query={{
-                        key: 'AIzaSyDWiQo9spq2PLzl5i4OR2oBEXRoaMcgwYQ',
+                        key: '',
                     }}
                     fetchDetails={true}
                     onFail={error => console.log(error)}

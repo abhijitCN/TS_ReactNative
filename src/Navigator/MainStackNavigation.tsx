@@ -15,23 +15,6 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Product from 'react-native-vector-icons/FontAwesome5';
 import CustomerService from 'react-native-vector-icons/AntDesign';
 import CustomDrawer from './CustomDrawer';
-
-import {
-    View,
-    TouchableOpacity,
-    Text,
-    StyleSheet,
-    Image,
-    ActivityIndicator,
-    Alert,
-    Button,
-    TextInput,
-    FlatList,
-    ScrollView,
-    SafeAreaView,
-    StatusBar,
-    RefreshControl,
-} from 'react-native';
 import ChatHome from '../Screens/ChatHome/ChatHome';
 import VideoCall from '../Screens/Support/VideoCall';
 import VoiceCall from '../Screens/Support/VoiceCall';
@@ -40,16 +23,6 @@ import Selection from '../Screens/Support/Selection';
 
 const MainStack = createNativeStackNavigator<MainRootStackParamList>();
 const Drawer = createDrawerNavigator();
-
-function HomeScreen2() {
-    const navigation = useNavigation();
-    return (
-        <Drawer.Navigator screenOptions={{drawerPosition: 'left'}}>
-            <Drawer.Screen name="Home" component={HomeScreen} />
-            {/* <Drawer.Screen name="Profile" component={ProfileScreen} /> */}
-        </Drawer.Navigator>
-    );
-}
 
 const HomeDrawerStack = () => {
     return (

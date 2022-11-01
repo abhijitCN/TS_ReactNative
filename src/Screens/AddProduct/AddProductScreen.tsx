@@ -26,9 +26,12 @@ interface textFields {
     imageUrl: any;
     userMail: string;
 }
+interface categoryType {
+    name: string;
+}
 
 const AddProduct: React.FC = () => {
-    const navigation = useNavigation();
+    const navigation: any = useNavigation();
     const dispatch = useDispatch();
     const globalSpinner: any = useSelector<any>(
         (state: rootState) => state.product.isLoading,
@@ -83,7 +86,7 @@ const AddProduct: React.FC = () => {
             },
         );
     };
-    const [selectItem, setSelectItem] = useState(null);
+    const [selectItem, setSelectItem] = useState<any>(null);
     const onSelect = (item: any) => {
         setSelectItem(item);
     };

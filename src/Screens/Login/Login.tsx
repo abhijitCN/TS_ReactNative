@@ -35,7 +35,7 @@ const Login = () => {
     const [data, setData] = useState<textFields>({email: '', password: ''});
     const [validate, SetValiadate] = useState<boolean>(false);
     const dispatch = useDispatch();
-    const navigation = useNavigation();
+    const navigation: any = useNavigation();
 
     const globalSpinner: any = useSelector<any>(
         (state: rootState) => state.user.globalLoading,
