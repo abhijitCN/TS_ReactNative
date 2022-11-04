@@ -16,6 +16,8 @@ import {rootState} from '../../Reducers/store';
 import FbIcon from 'react-native-vector-icons/SimpleLineIcons';
 import AppleIcon from 'react-native-vector-icons/AntDesign';
 import {appleAuth} from '@invertase/react-native-apple-authentication';
+import firestore from '@react-native-firebase/firestore';
+
 import {
     GoogleSignin,
     statusCodes,
@@ -54,9 +56,50 @@ const Login = () => {
         dispatch(googleSignInUser());
         // try {
         //     await GoogleSignin.hasPlayServices();
-        //     const userInfo = await GoogleSignin.signIn();
-        //     console.log('Google Login User Info', userInfo);
-        //     //dispatch({});
+        //     const Info: any = await GoogleSignin.signIn().then(
+        //         (userInfo: any) => {
+        //             console.log('userInfo all', userInfo);
+        //             const emailArray: any = [];
+        //              firestore()
+        //                 .collection('People')
+        //                 .get()
+        //                 .then(querySnapshot => {
+        //                     querySnapshot.forEach(documentSnapshot => {
+        //                         var {email, ImageUrl} = Object(documentSnapshot.data());
+        //                         //console.log('Keys Email ?? ', key.email);
+        //                         console.log('user.email **', userInfo.user.email);
+        //                         // console.log(
+        //                         //     'User Email True ?? ',
+        //                         //     key.email === user.email,
+        //                         // );
+        //                         emailArray.push({
+        //                             email: email,
+        //                             ImageUrl: ImageUrl,
+        //                         });
+        //                         emailArray.filter((item: any) => {
+        //                             if (item.email === userInfo.user.email) {
+        //                                 //console.log('FIND', key);
+        //                                 //setUserData(key);
+        //                                 //setAvatar(key.ImageUrl);
+        //                                 console.log(
+        //                                     'Unickly FIND **',
+        //                                     item.email === userInfo.user.email,
+        //                                 );
+        //                                 console.log('Unickly FIND Image**', item.ImageUrl);
+        //                             }
+        //                         });
+        //                         console.log('email Array', emailArray);
+        //                         // if (key.email === user.email) {
+        //                         //     //console.log('FIND', key);
+        //                         //     setUserData(key);
+        //                         //     setAvatar(key.ImageUrl);
+        //                         //     //console.log('Unickly FIND **', avatar);
+        //                         // }
+        //                     });
+        //                 });
+        //         },
+        //     );
+        //     //console.log('user Info', userInfo.user.photo);
         // } catch (error: any) {
         //     if (error.code === statusCodes.SIGN_IN_CANCELLED) {
         //         console.log('user cancelled the login flow');
@@ -264,7 +307,7 @@ const Login = () => {
                                         style.buttonText,
                                         {paddingLeft: 5},
                                     ]}>
-                                    Google Sign-up
+                                    Google Login
                                 </Text>
                             </TouchableOpacity>
                             <TouchableOpacity

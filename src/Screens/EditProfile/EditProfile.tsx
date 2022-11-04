@@ -14,7 +14,7 @@ import {
     ActivityIndicator,
 } from 'react-native';
 const {height, width} = Dimensions.get('screen');
-import Toast from 'react-native-toast-message';
+//import Toast from 'react-native-toast-message';
 import firestore from '@react-native-firebase/firestore';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -43,7 +43,8 @@ const EditProfile = () => {
     let data: any = Route.params;
     let Phone: any = data.data.phoneNo;
     let AvaterUrl: any = data.data.ImageUrl;
-    //console.log('Global Route data phone', Phone);
+    let userName: any = data.data.name;
+    console.log('Global Route data name $>>>>>>', userName);
     //console.log('Global Route data phone', AvaterUrl);
     const userProfilePicture: any = useSelector<any>(
         (state: rootState) => state.profile,
@@ -174,7 +175,7 @@ const EditProfile = () => {
             .collection('People')
             .doc(Phone)
             .update({
-                ImageUrl: image ? image : null,
+                ImageUrl: image ? image : AvaterUrl,
                 name: editValue.name ? editValue.name : null,
                 phoneNo: editValue.phoneNo ? editValue.phoneNo : null,
             })
@@ -281,10 +282,6 @@ const EditProfile = () => {
                                 onPress={onPress}>
                                 <Text style={style.buttonText}>Submit</Text>
                             </TouchableOpacity>
-
-                            <View>
-                                <Toast />
-                            </View>
                         </View>
                         <Modal
                             animationType="slide"

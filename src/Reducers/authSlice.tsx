@@ -99,6 +99,7 @@ export const googleSignUpUserAuth: any = createAsyncThunk(
 export const googleSignUpUserData: any = createAsyncThunk(
     'GoogleSignUpUserData',
     async (body: any) => {
+        console.log('GOOGLE REGISTRATION ALL DATA', body);
         try {
             const uploadTask = storage()
                 .ref()
@@ -275,6 +276,14 @@ const authSlice = createSlice({
         },
         [googleSignUpUserAuth.fulfilled]: (state, action) => {
             state.globalLoading = false;
+            state.email = action.payload; //*
+            //state.isLoading = true;
+            //return state;
+            AsyncStorage.setItem(
+                //*
+                'Token', //*
+                JSON.stringify((state.isLoading = true)), //*
+            ); //
         },
         [googleSignUpUserAuth.rejected]: (state, action) => {
             state.globalLoading = false;

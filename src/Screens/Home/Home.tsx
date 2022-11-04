@@ -465,7 +465,7 @@ const style = StyleSheet.create({
         fontSize: 16,
         fontWeight: '600',
     },
-    header: {marginTop: 10, fontWeight: 'bold', fontSize: 25},
+    header: {marginTop: 10, fontWeight: 'bold', fontSize: 25, marginBottom: 5},
     helloText: {fontSize: 20, fontWeight: 'bold', marginTop: 6},
     image: {width: 50, height: 50, borderRadius: 25},
     container: {

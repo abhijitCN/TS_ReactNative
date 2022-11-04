@@ -1,74 +1,12 @@
-// import React, {useState} from 'react';
-// import AgoraUIKit, {PropsInterface} from 'agora-rn-uikit';
-// import {Text, View} from 'react-native';
-
-// // import { Container } from './styles';
-
-// const VideoCall = () => {
-//     const [videoCall, setVideoCall] = useState(true);
-//     const connectionData = {
-//         appId: '<app-id>',
-//         channel: '<channel-name>',
-//         token: '<token>',
-//     };
-//     const props: PropsInterface = {
-//         rtcProps: {
-//             appId: 'a22539bebe8b4312bc60a8bd34c202bc',
-//             channel: 'Testing',
-//         },
-//         callbacks: {
-//             EndCall: () => setVideoCall(false),
-//         },
-//     };
-//     const callbacks = {
-//         EndCall: () => setVideoCall(false),
-//     };
-//     return (
-//         <View>
-//             {videoCall ? (
-//                 <AgoraUIKit
-//                     //connectionData={connectionData}
-//                     rtcProps={props.rtcProps}
-//                     callbacks={props.callbacks}
-//                 />
-//             ) : (
-//                 <Text onPress={() => setVideoCall(true)}>Start Call</Text>
-//             )}
-//         </View>
-//     );
-// };
-
-//export default VideoCall;
-
-// import React, {useState} from 'react';
-// import AgoraUIKit from 'agora-rn-uikit';
-// import {Text, View} from 'react-native';
-// const VideoCall = () => {
-//     const [videoCall, setVideoCall] = useState(true);
-//     const connectionData = {
-//         appId: '<Agora App ID>',
-//         channel: 'test',
-//     };
-//     const rtcCallbacks = {
-//         EndCall: () => setVideoCall(false),
-//     };
-//     return (
-//         <View>
-//             {videoCall ? (
-//                 <AgoraUIKit
-//                     connectionData={connectionData}
-//                     rtcCallbacks={rtcCallbacks}
-//                 />
-//             ) : (
-//                 <Text onPress={() => setVideoCall(true)}>Start Call</Text>
-//             )}
-//         </View>
-//     );
-// };
-// export default VideoCall;
-
 import React, {useRef, useState, useEffect} from 'react';
-import {SafeAreaView, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {
+    SafeAreaView,
+    ScrollView,
+    StyleSheet,
+    Text,
+    View,
+    TouchableOpacity,
+} from 'react-native';
 import {PermissionsAndroid, Platform} from 'react-native';
 import {
     ClientRoleType,
@@ -78,26 +16,25 @@ import {
     ChannelProfileType,
 } from 'react-native-agora';
 const VideoCall = () => {
-    const agoraEngineRef = useRef<IRtcEngine>(); // Agora engine instance
-    const [isJoined, setIsJoined] = useState(false); // Indicates if the local user has joined the channel
-    const [remoteUid, setRemoteUid] = useState(0); // Uid of the remote user
-    const [message, setMessage] = useState(''); // Message to the user
+    const agoraEngineRef = useRef<IRtcEngine>();
+    const [isJoined, setIsJoined] = useState(false);
+    const [remoteUid, setRemoteUid] = useState(0);
+    const [message, setMessage] = useState('');
     const appId = 'a22539bebe8b4312bc60a8bd34c202bc';
     const channelName = 'videocall';
     const token =
         '007eJxTYAitmuSgmHT+6sZP85hC/3QE1ExgOZL93b34xwMhseUfRLYqMCQaGZkaWyalJqVaJJkYGxolJZsZJFokpRibJBsZAHm32RKTGwIZGfg19rEwMkAgiM/JUJaZkpqfnJiTw8AAADEVIcw=';
     const uid = 0;
+
     function showMessage(msg: string) {
         setMessage(msg);
     }
     useEffect(() => {
-        // Initialize Agora engine when the app starts
         setupVideoSDKEngine();
     });
 
     const setupVideoSDKEngine = async () => {
         try {
-            // use the helper function to get permissions
             await getPermission();
             agoraEngineRef.current = createAgoraRtcEngine();
             const agoraEngine = agoraEngineRef.current;
@@ -125,6 +62,7 @@ const VideoCall = () => {
             console.log(e);
         }
     };
+
     const join = async () => {
         if (isJoined) {
             return;
@@ -141,6 +79,7 @@ const VideoCall = () => {
             console.log(e);
         }
     };
+
     const leave = () => {
         try {
             agoraEngineRef.current?.leaveChannel();
@@ -151,6 +90,7 @@ const VideoCall = () => {
             console.log(e);
         }
     };
+
     return (
         <SafeAreaView style={styles.main}>
             <ScrollView
@@ -158,7 +98,8 @@ const VideoCall = () => {
                 contentContainerStyle={styles.scrollContainer}>
                 <Text style={styles.head}>Video Calling</Text>
                 <View style={styles.btnContainer}>
-                    <View
+                    <TouchableOpacity
+                        onPress={join}
                         style={{
                             height: 50,
                             width: 100,
@@ -169,7 +110,6 @@ const VideoCall = () => {
                             marginRight: 15,
                         }}>
                         <Text
-                            onPress={join}
                             style={{
                                 fontWeight: 'bold',
                                 color: '#ffffff',
@@ -177,8 +117,9 @@ const VideoCall = () => {
                             }}>
                             Join
                         </Text>
-                    </View>
-                    <View
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={leave}
                         style={{
                             height: 50,
                             width: 100,
@@ -188,7 +129,6 @@ const VideoCall = () => {
                             justifyContent: 'center',
                         }}>
                         <Text
-                            onPress={join}
                             style={{
                                 fontWeight: 'bold',
                                 color: '#ffffff',
@@ -196,7 +136,7 @@ const VideoCall = () => {
                             }}>
                             Leave
                         </Text>
-                    </View>
+                    </TouchableOpacity>
                 </View>
                 {isJoined ? (
                     <React.Fragment key={0}>
@@ -207,7 +147,7 @@ const VideoCall = () => {
                         <Text>Local user uid: {uid}</Text>
                     </React.Fragment>
                 ) : (
-                    <Text>Join a channel</Text>
+                    <Text style={{marginTop: 50}}>Join a channel</Text>
                 )}
                 {isJoined && remoteUid !== 0 ? (
                     <React.Fragment key={remoteUid}>
@@ -233,7 +173,6 @@ const styles = StyleSheet.create({
         color: '#ffffff',
         backgroundColor: '#0a3749',
         margin: 5,
-        //alignSelf: 'center',
     },
     main: {flex: 1, alignItems: 'center'},
     scroll: {flex: 1, backgroundColor: '#ffffff', width: '100%'},

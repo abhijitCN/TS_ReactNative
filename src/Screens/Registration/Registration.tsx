@@ -96,44 +96,23 @@ function Registration() {
         //dispatch(googleSignUpUserAuth());
         try {
             await GoogleSignin.hasPlayServices();
-            const userInfo: any = await GoogleSignin.signIn().then(
+            const Info: any = await GoogleSignin.signIn().then(
                 (userInfo: any) => {
-                    const uploadTask = storage()
-                        .ref()
-                        .child(`/userprofile/${Date.now()}`)
-                        .putFile(userInfo.user.photo);
-                    uploadTask.on(
-                        'state_changed',
-                        snapshot => {
-                            var progress =
-                                (snapshot.bytesTransferred /
-                                    snapshot.totalBytes) *
-                                100;
-                            if (progress == 100)
-                                console.log('Image Uploaded Successfully');
-                        },
-                        error => {
-                            console.log('error uploading image');
-                        },
-                        () => {
-                            uploadTask.snapshot?.ref
-                                .getDownloadURL()
-                                .then(downloadURL => {
-                                    console.log('downloadURL', downloadURL);
-                                    firestore()
-                                        .collection('People')
-                                        .doc(userInfo.user.email)
-                                        .set({
-                                            name: userInfo.user.name,
-                                            email: userInfo.user.email,
-                                            ImageUrl: downloadURL,
-                                        });
-                                });
-                        },
-                    );
+                    console.log('userInfo all', userInfo);
+                    firestore()
+                        .collection('People')
+                        .doc(userInfo.user.email)
+                        .set({
+                            name: userInfo.user.name,
+                            docId: userInfo.user.email,
+                            email: userInfo.user.email,
+                            ImageUrl: userInfo.user.photo,
+                        });
+                    Alert.alert('Google Sign-up Successfully Please Login');
+                    navigation.navigate('Login');
                 },
             );
-            console.log('user Info', userInfo.user.photo);
+            //console.log('user Info', userInfo.user.photo);
         } catch (error: any) {
             if (error.code === statusCodes.SIGN_IN_CANCELLED) {
                 console.log('user cancelled the login flow');

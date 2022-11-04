@@ -1,19 +1,12 @@
-// import React from 'react';
-// import {Text, View} from 'react-native';
-
-// // import { Container } from './styles';
-
-// const VoiceCall: React.FC = () => {
-//     return (
-//         <View>
-//             <Text>Voice Call</Text>
-//         </View>
-//     );
-// };
-
-// export default VoiceCall;
 import React, {useRef, useState, useEffect} from 'react';
-import {SafeAreaView, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {
+    SafeAreaView,
+    ScrollView,
+    StyleSheet,
+    Text,
+    View,
+    TouchableOpacity,
+} from 'react-native';
 import {PermissionsAndroid, Platform} from 'react-native';
 import {
     ClientRoleType,
@@ -29,10 +22,10 @@ const token =
 const uid = 0;
 
 const VoiceCall = () => {
-    const agoraEngineRef = useRef<IRtcEngine>(); // Agora engine instance
-    const [isJoined, setIsJoined] = useState(false); // Indicates if the local user has joined the channel
-    const [remoteUid, setRemoteUid] = useState(0); // Uid of the remote user
-    const [message, setMessage] = useState(''); // Message to the user
+    const agoraEngineRef = useRef<IRtcEngine>();
+    const [isJoined, setIsJoined] = useState(false);
+    const [remoteUid, setRemoteUid] = useState(0);
+    const [message, setMessage] = useState('');
 
     const getPermission = async () => {
         if (Platform.OS === 'android') {
@@ -47,13 +40,11 @@ const VoiceCall = () => {
     }
 
     useEffect(() => {
-        // Initialize Agora engine when the app starts
         setupVoiceSDKEngine();
     });
 
     const setupVoiceSDKEngine = async () => {
         try {
-            // use the helper function to get permissions
             await getPermission();
             agoraEngineRef.current = createAgoraRtcEngine();
             const agoraEngine = agoraEngineRef.current;
@@ -110,9 +101,10 @@ const VoiceCall = () => {
 
     return (
         <SafeAreaView style={styles.main}>
-            <Text style={styles.head2}>Video Calling</Text>
+            <Text style={styles.head2}>Voice Calling</Text>
             <View style={styles.btnContainer}>
-                <View
+                <TouchableOpacity
+                    onPress={join}
                     style={{
                         height: 50,
                         width: 100,
@@ -123,7 +115,6 @@ const VoiceCall = () => {
                         marginRight: 15,
                     }}>
                     <Text
-                        onPress={join}
                         style={{
                             fontWeight: 'bold',
                             color: '#ffffff',
@@ -131,8 +122,9 @@ const VoiceCall = () => {
                         }}>
                         Join
                     </Text>
-                </View>
-                <View
+                </TouchableOpacity>
+                <TouchableOpacity
+                    onPress={leave}
                     style={{
                         height: 50,
                         width: 100,
@@ -142,7 +134,6 @@ const VoiceCall = () => {
                         justifyContent: 'center',
                     }}>
                     <Text
-                        onPress={join}
                         style={{
                             fontWeight: 'bold',
                             color: '#ffffff',
@@ -150,7 +141,7 @@ const VoiceCall = () => {
                         }}>
                         Leave
                     </Text>
-                </View>
+                </TouchableOpacity>
             </View>
             <ScrollView
                 style={styles.scroll}
@@ -158,7 +149,7 @@ const VoiceCall = () => {
                 {isJoined ? (
                     <Text>Local user uid: {uid}</Text>
                 ) : (
-                    <Text>Join a channel</Text>
+                    <Text style={{marginTop: 50}}>Join a channel</Text>
                 )}
                 {isJoined && remoteUid !== 0 ? (
                     <Text>Remote user uid: {remoteUid}</Text>
@@ -189,5 +180,14 @@ const styles = StyleSheet.create({
     head: {fontSize: 20},
     head2: {marginVertical: 10, fontWeight: 'bold', fontSize: 25},
 });
+
+const getPermission = async () => {
+    if (Platform.OS === 'android') {
+        await PermissionsAndroid.requestMultiple([
+            PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
+            PermissionsAndroid.PERMISSIONS.CAMERA,
+        ]);
+    }
+};
 
 export default VoiceCall;
