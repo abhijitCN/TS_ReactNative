@@ -63,7 +63,7 @@ function Registration() {
     //console.log('globalLoading ?? ', globalSpinner);
     const [validate, SetValiadate] = useState<boolean>(false);
 
-    const Authenticate = () => {
+    const Authenticate = async () => {
         if (
             data.password &&
             data.email &&
@@ -71,13 +71,13 @@ function Registration() {
             data.phoneNo &&
             data.imageUrl
         ) {
-            dispatch(toggleSpinner(true));
-            console.log('SPINNER?.show == true ** ', SPINNER?.show);
+            //dispatch(toggleSpinner(true));
+            //console.log('SPINNER?.show == true ** ', SPINNER?.show);
             dispatch(signUpUser(data));
-            dispatch(toggleSpinner(false));
-            console.log('SPINNER?.show == false ** ', SPINNER?.show);
+            //dispatch(toggleSpinner(false));
+            //console.log('SPINNER?.show == false ** ', SPINNER?.show);
+            Alert.alert('Register Successfully Please Login.**');
             navigation.navigate('Login');
-            Alert.alert('Register Successfully Please Login');
         } else {
             SetValiadate(true);
         }
@@ -93,37 +93,38 @@ function Registration() {
 
     //Google Sign up
     const googleSignUp = async () => {
-        //dispatch(googleSignUpUserAuth());
-        try {
-            await GoogleSignin.hasPlayServices();
-            const Info: any = await GoogleSignin.signIn().then(
-                (userInfo: any) => {
-                    console.log('userInfo all', userInfo);
-                    firestore()
-                        .collection('People')
-                        .doc(userInfo.user.email)
-                        .set({
-                            name: userInfo.user.name,
-                            docId: userInfo.user.email,
-                            email: userInfo.user.email,
-                            ImageUrl: userInfo.user.photo,
-                        });
-                    Alert.alert('Google Sign-up Successfully Please Login');
-                    navigation.navigate('Login');
-                },
-            );
-            //console.log('user Info', userInfo.user.photo);
-        } catch (error: any) {
-            if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-                console.log('user cancelled the login flow');
-            } else if (error.code === statusCodes.IN_PROGRESS) {
-                console.log('operation (e.g. sign in) is in progress already');
-            } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-                console.log('play services not available or outdated');
-            } else {
-                console.log('some other error happened');
-            }
-        }
+        dispatch(googleSignUpUserAuth());
+        navigation.navigate('Login');
+        // try {
+        //     await GoogleSignin.hasPlayServices();
+        //     const Info: any = await GoogleSignin.signIn().then(
+        //         (userInfo: any) => {
+        //             console.log('userInfo all', userInfo);
+        //             firestore()
+        //                 .collection('People')
+        //                 .doc(userInfo.user.email)
+        //                 .set({
+        //                     name: userInfo.user.name,
+        //                     docId: userInfo.user.email,
+        //                     email: userInfo.user.email,
+        //                     ImageUrl: userInfo.user.photo,
+        //                 });
+        //             Alert.alert('Google Sign-up Successfully Please Login');
+        //             navigation.navigate('Login');
+        //         },
+        //     );
+        //     //console.log('user Info', userInfo.user.photo);
+        // } catch (error: any) {
+        //     if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+        //         console.log('user cancelled the login flow');
+        //     } else if (error.code === statusCodes.IN_PROGRESS) {
+        //         console.log('operation (e.g. sign in) is in progress already');
+        //     } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+        //         console.log('play services not available or outdated');
+        //     } else {
+        //         console.log('some other error happened');
+        //     }
+        // }
     };
 
     const pickImageAndUploadFromCamera = () => {
@@ -159,7 +160,7 @@ function Registration() {
     return (
         <View style={{flex: 1}}>
             {/* {console.log('inside view', globalSpinner)} */}
-            {SPINNER?.show === true ? (
+            {globalSpinner ? (
                 <>
                     <View
                         style={{

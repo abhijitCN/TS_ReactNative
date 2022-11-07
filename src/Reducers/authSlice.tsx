@@ -78,10 +78,21 @@ export const googleSignUpUserAuth: any = createAsyncThunk(
     'GoogleSignUpUserAuth',
     async (body: any, thunkAPI) => {
         try {
-            await GoogleSignin.hasPlayServices();
-            const userInfo = await GoogleSignin.signIn();
-            //console.log('User info', userInfo);
-            return thunkAPI.dispatch(googleSignUpUserData({}));
+            const Info: any = await GoogleSignin.signIn().then(
+                (userInfo: any) => {
+                    console.log('userInfo all', userInfo);
+                    firestore()
+                        .collection('People')
+                        .doc(userInfo.user.email)
+                        .set({
+                            name: userInfo.user.name,
+                            docId: userInfo.user.email,
+                            email: userInfo.user.email,
+                            ImageUrl: userInfo.user.photo,
+                        });
+                    Alert.alert('Google Sign-up Successfully Please Login');
+                },
+            );
         } catch (error: any) {
             if (error.code === statusCodes.SIGN_IN_CANCELLED) {
                 console.log('user cancelled the login flow');
@@ -276,14 +287,14 @@ const authSlice = createSlice({
         },
         [googleSignUpUserAuth.fulfilled]: (state, action) => {
             state.globalLoading = false;
-            state.email = action.payload; //*
-            //state.isLoading = true;
-            //return state;
-            AsyncStorage.setItem(
-                //*
-                'Token', //*
-                JSON.stringify((state.isLoading = true)), //*
-            ); //
+            // state.email = action.payload; //*
+            // //state.isLoading = true;
+            // //return state;
+            // AsyncStorage.setItem(
+            //     //*
+            //     'Token', //*
+            //     JSON.stringify((state.isLoading = true)), //*
+            // ); //
         },
         [googleSignUpUserAuth.rejected]: (state, action) => {
             state.globalLoading = false;

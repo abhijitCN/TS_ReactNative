@@ -113,6 +113,14 @@ const Login = () => {
         // }
     };
     //FB Login
+    const onFbLogin = async () => {
+        try {
+            await fbLogin(_responseInfoCallBack);
+        } catch (error: any) {
+            console.log('error raised', error);
+        }
+    };
+
     const fbLogin = (resCallback: any) => {
         LoginManager.logOut();
         return LoginManager.logInWithPermissions([
@@ -142,14 +150,6 @@ const Login = () => {
                 console.log('Login fail with error:' + error);
             },
         );
-    };
-
-    const onFbLogin = async () => {
-        try {
-            await fbLogin(_responseInfoCallBack);
-        } catch (error: any) {
-            console.log('error raised', error);
-        }
     };
 
     const _responseInfoCallBack = async (error: any, result: any) => {

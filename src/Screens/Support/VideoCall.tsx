@@ -21,9 +21,9 @@ const VideoCall = () => {
     const [remoteUid, setRemoteUid] = useState(0);
     const [message, setMessage] = useState('');
     const appId = 'a22539bebe8b4312bc60a8bd34c202bc';
-    const channelName = 'videocall';
+    const channelName = 'videocall2';
     const token =
-        '007eJxTYAitmuSgmHT+6sZP85hC/3QE1ExgOZL93b34xwMhseUfRLYqMCQaGZkaWyalJqVaJJkYGxolJZsZJFokpRibJBsZAHm32RKTGwIZGfg19rEwMkAgiM/JUJaZkpqfnJiTw8AAADEVIcw=';
+        '007eJxTYLDr799msUX1/awVnT8+rNrJI3zpvEiebcOuzUnsdapywp4KDIlGRqbGlkmpSakWSSbGhkZJyWYGiRZJKcYmyUYGQN6KSRnJDYGMDEXb3jExMkAgiM/FUJaZkpqfnJiTY8TAAAAnUSIU';
     const uid = 0;
 
     function showMessage(msg: string) {
