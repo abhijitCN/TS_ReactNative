@@ -15,8 +15,12 @@ import {
     RtcSurfaceView,
     ChannelProfileType,
 } from 'react-native-agora';
+import ArrowBack from 'react-native-vector-icons/Ionicons';
+import {useNavigation, useRoute} from '@react-navigation/native';
+
 const VideoCall = () => {
     const agoraEngineRef = useRef<IRtcEngine>();
+    const navigation: any = useNavigation();
     const [isJoined, setIsJoined] = useState(false);
     const [remoteUid, setRemoteUid] = useState(0);
     const [message, setMessage] = useState('');
@@ -93,10 +97,32 @@ const VideoCall = () => {
 
     return (
         <SafeAreaView style={styles.main}>
+            <View
+                style={{
+                    flexDirection: 'row',
+                    //alignItems: 'center',
+                    justifyContent: 'center',
+                }}>
+                <TouchableOpacity
+                    onPress={() => navigation.goBack()}
+                    style={{
+                        position: 'absolute',
+                        top: 12,
+                        left: 2,
+                        padding: 5,
+                        paddingRight: 12,
+                    }}>
+                    <ArrowBack
+                        name="arrow-back-circle-outline"
+                        color={'#0a3749'}
+                        size={40}
+                    />
+                </TouchableOpacity>
+                <Text style={styles.head}>Video Call</Text>
+            </View>
             <ScrollView
                 style={styles.scroll}
                 contentContainerStyle={styles.scrollContainer}>
-                <Text style={styles.head}>Video Calling</Text>
                 <View style={styles.btnContainer}>
                     <TouchableOpacity
                         onPress={join}
@@ -174,7 +200,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#0a3749',
         margin: 5,
     },
-    main: {flex: 1, alignItems: 'center'},
+    main: {flex: 1, backgroundColor: '#ffffff'},
     scroll: {flex: 1, backgroundColor: '#ffffff', width: '100%'},
     scrollContainer: {alignItems: 'center'},
     videoView: {width: '95%', height: 600},
@@ -182,7 +208,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
     },
-    head: {marginVertical: 10, fontWeight: 'bold', fontSize: 25},
+    head: {marginVertical: 20, fontWeight: 'bold', fontSize: 25},
     info: {backgroundColor: '#ffffff', color: '#0000ff'},
 });
 

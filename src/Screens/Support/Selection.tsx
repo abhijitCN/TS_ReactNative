@@ -1,23 +1,32 @@
-import {View, Text} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import React from 'react';
 import VideoCall from 'react-native-vector-icons/MaterialIcons';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 import {useNavigation} from '@react-navigation/native';
+import ArrowBack from 'react-native-vector-icons/Ionicons';
 
 export default function Selection() {
     const navigation: any = useNavigation();
 
     return (
         <View style={{flex: 1}}>
-            <Text
-                style={{
-                    marginTop: 10,
-                    fontWeight: 'bold',
-                    fontSize: 25,
-                    alignSelf: 'center',
-                }}>
-                Video Call / Voice Call
-            </Text>
+            <View style={styles.container}>
+                <TouchableOpacity
+                    onPress={() => navigation.goBack()}
+                    style={{
+                        position: 'absolute',
+                        top: 10,
+                        left: 2,
+                        padding: 5,
+                        paddingRight: 12,
+                    }}>
+                    <ArrowBack
+                        name="arrow-back-circle-outline"
+                        color={'#0a3749'}
+                        size={40}
+                    />
+                </TouchableOpacity>
+                <Text style={styles.header}>Video Call / Voice Call</Text>
+            </View>
             <View
                 style={{
                     alignItems: 'center',
@@ -70,3 +79,12 @@ export default function Selection() {
         </View>
     );
 }
+
+const styles = StyleSheet.create({
+    header: {marginTop: 16, fontWeight: 'bold', fontSize: 25},
+    container: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+});

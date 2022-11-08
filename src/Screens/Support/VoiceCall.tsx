@@ -14,6 +14,8 @@ import {
     IRtcEngine,
     ChannelProfileType,
 } from 'react-native-agora';
+import {useNavigation, useRoute} from '@react-navigation/native';
+import ArrowBack from 'react-native-vector-icons/Ionicons';
 
 const appId = 'a22539bebe8b4312bc60a8bd34c202bc';
 const channelName = 'videocall2';
@@ -26,6 +28,7 @@ const VoiceCall = () => {
     const [isJoined, setIsJoined] = useState(false);
     const [remoteUid, setRemoteUid] = useState(0);
     const [message, setMessage] = useState('');
+    const navigation: any = useNavigation();
 
     const getPermission = async () => {
         if (Platform.OS === 'android') {
@@ -101,7 +104,29 @@ const VoiceCall = () => {
 
     return (
         <SafeAreaView style={styles.main}>
-            <Text style={styles.head2}>Voice Calling</Text>
+            <View
+                style={{
+                    flexDirection: 'row',
+                    //alignItems: 'center',
+                    justifyContent: 'center',
+                }}>
+                <TouchableOpacity
+                    onPress={() => navigation.goBack()}
+                    style={{
+                        position: 'absolute',
+                        top: 12,
+                        left: 2,
+                        padding: 5,
+                        paddingRight: 12,
+                    }}>
+                    <ArrowBack
+                        name="arrow-back-circle-outline"
+                        color={'#0a3749'}
+                        size={40}
+                    />
+                </TouchableOpacity>
+                <Text style={styles.head2}>Voice Call</Text>
+            </View>
             <View style={styles.btnContainer}>
                 <TouchableOpacity
                     onPress={join}
@@ -172,13 +197,13 @@ const styles = StyleSheet.create({
         margin: 5,
         alignSelf: 'center',
     },
-    main: {flex: 1, alignItems: 'center', backgroundColor: '#ffffff'},
+    main: {flex: 1, backgroundColor: '#ffffff'},
     scroll: {flex: 1, backgroundColor: '#ffffff', width: '100%'},
     scrollContainer: {alignItems: 'center'},
     videoView: {width: '90%', height: 200},
     btnContainer: {flexDirection: 'row', justifyContent: 'center'},
     head: {fontSize: 20},
-    head2: {marginVertical: 10, fontWeight: 'bold', fontSize: 25},
+    head2: {marginVertical: 20, fontWeight: 'bold', fontSize: 25},
 });
 
 const getPermission = async () => {

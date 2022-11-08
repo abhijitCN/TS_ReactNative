@@ -14,8 +14,11 @@ import {
     SafeAreaView,
     StatusBar,
     RefreshControl,
+    Modal,
+    Pressable,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Entypo';
+import Filter from 'react-native-vector-icons/AntDesign';
 //import AsyncStorage from '@react-native-async-storage/async-storage';
 //import Toast from 'react-native-toast-message';
 import {useDispatch, useSelector} from 'react-redux';
@@ -61,6 +64,7 @@ function Home() {
     const user: any = useSelector<any>((state: rootState) => state.user);
     const profile: any = useSelector<any>((state: rootState) => state.profile);
     const [userData, setUserData] = useState<any>({});
+    const [modalVisible, setModalVisible] = useState(false);
 
     //console.log(' < user > ', profile);
     // const SPINNER: any = useSelector<any>(
@@ -306,12 +310,13 @@ function Home() {
                 </View>
                 <ScrollView
                     contentContainerStyle={style.scrollView}
-                    refreshControl={
-                        <RefreshControl
-                            refreshing={refreshing}
-                            onRefresh={onRefresh}
-                        />
-                    }>
+                    // refreshControl={
+                    //     <RefreshControl
+                    //         refreshing={refreshing}
+                    //         onRefresh={onRefresh}
+                    //     />
+                    // }
+                >
                     <View style={{flex: 1}}>
                         <FlatList
                             data={data}
@@ -324,7 +329,13 @@ function Home() {
 
                                                 //backgroundColor: 'green',
                                             }}>
-                                            <View
+                                            <TouchableOpacity
+                                                onPress={() =>
+                                                    navigation.navigate(
+                                                        'ProductDetails',
+                                                        {items: item},
+                                                    )
+                                                }
                                                 style={{
                                                     //padding: 12,
                                                     margin: 12,
@@ -406,7 +417,7 @@ function Home() {
                                                         {item.category}
                                                     </Text>
                                                 </View>
-                                            </View>
+                                            </TouchableOpacity>
                                         </View>
                                     </>
                                 );
@@ -417,16 +428,68 @@ function Home() {
                         />
                     </View>
                 </ScrollView>
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={modalVisible}
+                    onRequestClose={() => {
+                        // Alert.alert('Modal closed');
+                        setModalVisible(!modalVisible);
+                    }}>
+                    <View style={style.centeredView}>
+                        <View style={style.modalView}>
+                            <Text style={style.modalText}>Choose Option</Text>
+                            <View
+                                style={{
+                                    //flexDirection: 'row',
+                                    justifyContent: 'space-evenly',
+                                    alignItems: 'center',
+                                    //marginVertical: 10,
+                                }}>
+                                <Pressable
+                                    style={[style.button2, style.buttonClose]}
+                                    // onPress={() =>
+                                    //     pickImageAndUploadFromCamera()
+                                    // }
+                                >
+                                    <Text style={style.textStyle}>
+                                        Sort By Category
+                                    </Text>
+                                </Pressable>
+                                <Pressable
+                                    style={[style.button2, style.buttonClose]}
+                                    // onPress={() =>
+                                    //     pickImageAndUploadFromGallery()
+                                    // }
+                                >
+                                    <Text style={style.textStyle}>
+                                        Sort By Price
+                                    </Text>
+                                </Pressable>
+                                <Pressable
+                                    style={[style.button2, style.buttonClose]}
+                                    // onPress={() =>
+                                    //     pickImageAndUploadFromGallery()
+                                    // }
+                                >
+                                    <Text style={style.textStyle}>
+                                        Sort By Quantity
+                                    </Text>
+                                </Pressable>
+                            </View>
+                        </View>
+                    </View>
+                </Modal>
+                <TouchableOpacity
+                    activeOpacity={0.7}
+                    onPress={() => setModalVisible(true)}
+                    style={style.touchableOpacityStyle2}>
+                    <Filter name="filter" color={'#ffffff'} size={40} />
+                </TouchableOpacity>
                 <TouchableOpacity
                     activeOpacity={0.7}
                     onPress={clickHandler}
                     style={style.touchableOpacityStyle}>
-                    {/* <Image
-                        source={{
-                            uri: 'https://raw.githubusercontent.com/AboutReact/sampleresource/master/plus_icon.png',
-                        }}
-                        style={style.floatingButtonStyle}
-                    /> */}
                     <Icon name="plus" color={'#ffffff'} size={40} />
                 </TouchableOpacity>
             </SafeAreaView>
@@ -465,7 +528,7 @@ const style = StyleSheet.create({
         fontSize: 16,
         fontWeight: '600',
     },
-    header: {marginTop: 10, fontWeight: 'bold', fontSize: 25, marginBottom: 5},
+    header: {marginTop: 20, fontWeight: 'bold', fontSize: 25, marginBottom: 5},
     helloText: {fontSize: 20, fontWeight: 'bold', marginTop: 6},
     image: {width: 50, height: 50, borderRadius: 25},
     container: {
@@ -480,7 +543,26 @@ const style = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         right: 30,
-        bottom: 30,
+        bottom: 20,
+        backgroundColor: '#0a3749',
+        borderRadius: 50,
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+    },
+    touchableOpacityStyle2: {
+        position: 'absolute',
+        width: 60,
+        height: 60,
+        alignItems: 'center',
+        justifyContent: 'center',
+        right: 30,
+        bottom: 85,
         backgroundColor: '#0a3749',
         borderRadius: 50,
         shadowColor: '#000',
@@ -506,6 +588,53 @@ const style = StyleSheet.create({
     },
     scrollView: {
         flex: 1,
+    },
+    centeredView: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 22,
+    },
+    modalView: {
+        margin: 10,
+        backgroundColor: '#ffffff',
+        borderRadius: 20,
+        padding: 55,
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+    },
+    button2: {
+        borderRadius: 20,
+        padding: 10,
+        elevation: 2,
+        marginVertical: 5,
+        minWidth: 200,
+    },
+    buttonOpen: {
+        backgroundColor: '#F194FF',
+    },
+    buttonClose: {
+        backgroundColor: '#95d6f0',
+    },
+    textStyle: {
+        color: '#0a3749',
+        fontWeight: 'bold',
+        textAlign: 'center',
+        fontSize: 16,
+    },
+    modalText: {
+        marginBottom: 30,
+        textAlign: 'center',
+        fontWeight: 'bold',
+        fontSize: 25,
+        color: '#0a3749',
     },
 });
 export default Home;

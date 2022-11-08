@@ -15,6 +15,7 @@ import {useNavigation} from '@react-navigation/native';
 import {signOut} from '../../Reducers/authSlice';
 import {rootState} from '../../Reducers/store';
 import {toggleSpinner} from '../../Reducers/toggleSpinnerSlice';
+import ArrowBack from 'react-native-vector-icons/Ionicons';
 
 const Profile = () => {
     const navigation: any = useNavigation();
@@ -105,7 +106,27 @@ const Profile = () => {
                 </>
             ) : (
                 <>
-                    <View style={{alignItems: 'center'}}>
+                    <View
+                        style={{
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                        }}>
+                        <TouchableOpacity
+                            onPress={() => navigation.goBack()}
+                            style={{
+                                position: 'absolute',
+                                top: 10,
+                                left: 2,
+                                padding: 5,
+                                paddingRight: 12,
+                            }}>
+                            <ArrowBack
+                                name="arrow-back-circle-outline"
+                                color={'#0a3749'}
+                                size={40}
+                            />
+                        </TouchableOpacity>
                         <View>
                             <Text
                                 style={{
@@ -116,6 +137,11 @@ const Profile = () => {
                                 Profile
                             </Text>
                         </View>
+                    </View>
+                    <View
+                        style={{
+                            alignItems: 'center',
+                        }}>
                         <View>
                             {avatar ? (
                                 //profile?.Image ?
@@ -149,11 +175,6 @@ const Profile = () => {
                                 </>
                             )}
                         </View>
-                    </View>
-                    <View
-                        style={{
-                            alignItems: 'center',
-                        }}>
                         <TouchableOpacity
                             style={style.button}
                             onPress={() =>

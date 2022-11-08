@@ -20,6 +20,7 @@ import VideoCall from '../Screens/Support/VideoCall';
 import VoiceCall from '../Screens/Support/VoiceCall';
 import MyProduct from '../Screens/Myproduct/MyProduct';
 import Selection from '../Screens/Support/Selection';
+import ProductDetailsScreen from '../Screens/ProductDetails/ProductDetails';
 
 const MainStack = createNativeStackNavigator<MainRootStackParamList>();
 const Drawer = createDrawerNavigator();
@@ -35,6 +36,11 @@ const HomeDrawerStack = () => {
             <MainStack.Screen
                 name="AddProduct"
                 component={AddProductScreen}
+                options={{headerShown: false}}
+            />
+            <MainStack.Screen
+                name="ProductDetails"
+                component={ProductDetailsScreen}
                 options={{headerShown: false}}
             />
         </MainStack.Navigator>
@@ -98,6 +104,11 @@ const ProfileDrawerStack = () => {
 const ChatHomeDrawerStack = () => {
     return (
         <MainStack.Navigator>
+            <MainStack.Screen
+                name="Home"
+                component={HomeScreen}
+                options={{headerShown: false}}
+            />
             <MainStack.Screen
                 name="ChatHome"
                 component={ChatHome}

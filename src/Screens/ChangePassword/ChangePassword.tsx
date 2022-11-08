@@ -16,6 +16,7 @@ import {passwordChange} from '../../Reducers/profileSlice';
 import {useDispatch, useSelector} from 'react-redux';
 import {rootState} from '../../Reducers/store';
 import {toggleSpinner} from '../../Reducers/toggleSpinnerSlice';
+import ArrowBack from 'react-native-vector-icons/Ionicons';
 
 interface editValue {
     currentPassword: string;
@@ -105,17 +106,25 @@ const ChangePassword = () => {
                 </>
             ) : (
                 <>
+                    <View style={styles.container}>
+                        <TouchableOpacity
+                            onPress={() => navigation.goBack()}
+                            style={{
+                                position: 'absolute',
+                                top: 10,
+                                left: 2,
+                                padding: 5,
+                                paddingRight: 12,
+                            }}>
+                            <ArrowBack
+                                name="arrow-back-circle-outline"
+                                color={'#0a3749'}
+                                size={40}
+                            />
+                        </TouchableOpacity>
+                        <Text style={styles.header}>Change Password</Text>
+                    </View>
                     <ScrollView>
-                        <View style={{alignSelf: 'center'}}>
-                            <Text
-                                style={{
-                                    fontWeight: 'bold',
-                                    fontSize: 25,
-                                    paddingTop: 20,
-                                }}>
-                                Change Password
-                            </Text>
-                        </View>
                         <View style={{marginTop: 50}}>
                             <TextInput
                                 style={[
@@ -189,6 +198,12 @@ const ChangePassword = () => {
 const styles = StyleSheet.create({
     main: {
         flex: 1,
+    },
+    header: {marginTop: 16, fontWeight: 'bold', fontSize: 25},
+    container: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     button: {
         alignItems: 'center',

@@ -17,6 +17,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {addProduct, addProductImage} from '../../Reducers/ProductSlice';
 import {rootState} from '../../Reducers/store';
 import {useFocusEffect} from '@react-navigation/native';
+import ArrowBack from 'react-native-vector-icons/Ionicons';
 
 interface textFields {
     name: string;
@@ -129,6 +130,21 @@ const AddProduct: React.FC = () => {
                     <View style={style.main}>
                         <ScrollView style={{marginVertical: 0}}>
                             <View style={style.container}>
+                                <TouchableOpacity
+                                    onPress={() => navigation.goBack()}
+                                    style={{
+                                        position: 'absolute',
+                                        top: 10,
+                                        left: 2,
+                                        padding: 5,
+                                        paddingRight: 12,
+                                    }}>
+                                    <ArrowBack
+                                        name="arrow-back-circle-outline"
+                                        color={'#0a3749'}
+                                        size={40}
+                                    />
+                                </TouchableOpacity>
                                 <Text style={style.header}>Add Product</Text>
                             </View>
                             <View style={{}}>
@@ -395,7 +411,7 @@ const style = StyleSheet.create({
     main: {
         flex: 1,
     },
-    header: {marginTop: 20, fontWeight: 'bold', fontSize: 25},
+    header: {marginTop: 16, fontWeight: 'bold', fontSize: 25},
     container: {
         flexDirection: 'row',
         alignItems: 'center',

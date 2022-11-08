@@ -25,6 +25,7 @@ import {PickImageAndUpload} from '../../Reducers/profileSlice';
 import {rootState} from '../../Reducers/store';
 import {profileImage} from '../../Reducers/profileSlice';
 import {toggleSpinner} from '../../Reducers/toggleSpinnerSlice';
+import ArrowBack from 'react-native-vector-icons/Ionicons';
 
 interface editValue {
     name: string;
@@ -204,18 +205,27 @@ const EditProfile = () => {
             ) : (
                 <>
                     <ScrollView>
-                        <View style={{alignSelf: 'center'}}>
-                            <Text
+                        <View style={style.container}>
+                            <TouchableOpacity
+                                onPress={() => navigation.goBack()}
                                 style={{
-                                    fontWeight: 'bold',
-                                    fontSize: 25,
-                                    paddingVertical: 20,
+                                    position: 'absolute',
+                                    top: 10,
+                                    left: 2,
+                                    padding: 5,
+                                    paddingRight: 12,
                                 }}>
-                                Edit Profile
-                            </Text>
+                                <ArrowBack
+                                    name="arrow-back-circle-outline"
+                                    color={'#0a3749'}
+                                    size={40}
+                                />
+                            </TouchableOpacity>
+                            <Text style={style.header}>Edit Profile</Text>
                         </View>
                         <View style={{}}>
                             <TouchableOpacity
+                                style={{marginTop: 20}}
                                 onPress={() => setModalVisible(true)}>
                                 {profile?.Image ? (
                                     <>
@@ -345,6 +355,12 @@ const EditProfile = () => {
 const style = StyleSheet.create({
     main: {
         flex: 1,
+    },
+    header: {marginTop: 16, fontWeight: 'bold', fontSize: 25},
+    container: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     button: {
         alignItems: 'center',

@@ -13,6 +13,7 @@ import {useSelector} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
 import {rootState} from '../../Reducers/store';
 import firestore from '@react-native-firebase/firestore';
+import ArrowBack from 'react-native-vector-icons/Ionicons';
 
 interface itemType {
     ImageUrl: any;
@@ -86,6 +87,21 @@ const MyProduct = () => {
     return (
         <SafeAreaView style={style.main}>
             <View style={style.container}>
+                <TouchableOpacity
+                    onPress={() => navigation.goBack()}
+                    style={{
+                        position: 'absolute',
+                        top: 10,
+                        left: 2,
+                        padding: 5,
+                        paddingRight: 12,
+                    }}>
+                    <ArrowBack
+                        name="arrow-back-circle-outline"
+                        color={'#0a3749'}
+                        size={40}
+                    />
+                </TouchableOpacity>
                 <Text style={style.header}>My Products</Text>
                 <TouchableOpacity
                     onPress={() => navigation.navigate('Profile')}
@@ -236,7 +252,7 @@ const style = StyleSheet.create({
         fontSize: 16,
         fontWeight: '600',
     },
-    header: {marginTop: 10, fontWeight: 'bold', fontSize: 25},
+    header: {marginTop: 20, fontWeight: 'bold', fontSize: 25},
     helloText: {fontSize: 20, fontWeight: 'bold', marginTop: 6},
     image: {width: 50, height: 50, borderRadius: 25},
     container: {
