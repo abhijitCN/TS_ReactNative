@@ -180,18 +180,18 @@ export const signUpUser: any = createAsyncThunk(
                         .then(() => {
                             firestore()
                                 .collection('People')
-                                .doc(body.phoneNo)
-                                .set({
-                                    name: body.name,
-                                    email: body.email,
-                                    phoneNo: body.phoneNo,
-                                    ImageUrl: downloadURL,
-                                    docId: body.phoneNo,
-                                })
-                                .then(() => {
-                                    // Alert.alert(
-                                    //     'Register Successfully Please Login',
-                                    // );
+                                .add({EMAIL: body.email})
+                                .then(doc => {
+                                    firestore()
+                                        .collection('People')
+                                        .doc(doc.id)
+                                        .set({
+                                            name: body.name,
+                                            email: body.email,
+                                            phoneNo: body.phoneNo,
+                                            ImageUrl: downloadURL,
+                                            docId: doc.id,
+                                        });
                                 });
                         });
                 });

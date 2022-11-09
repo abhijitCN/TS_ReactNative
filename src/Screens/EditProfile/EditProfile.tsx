@@ -42,10 +42,10 @@ const EditProfile = () => {
     const dispatch = useDispatch();
     const Route = useRoute();
     let data: any = Route.params;
-    let Phone: any = data.data.phoneNo;
+    let Phone: any = data.data.docId;
     let AvaterUrl: any = data.data.ImageUrl;
     let userName: any = data.data.name;
-    console.log('Global Route data name $>>>>>>', userName);
+    console.log('data.data.docId $>>>>>>', data.data.docId);
     //console.log('Global Route data phone', AvaterUrl);
     const userProfilePicture: any = useSelector<any>(
         (state: rootState) => state.profile,
