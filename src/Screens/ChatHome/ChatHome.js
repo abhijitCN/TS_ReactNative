@@ -6,7 +6,7 @@ import {
     TextInput,
     KeyboardAvoidingView,
     Button,
-    useColorScheme,
+    TouchableOpacity,
     View,
     AppState,
     Image,
@@ -25,6 +25,7 @@ import {
     LearnMoreLinks,
     ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen'
+import ArrowBack from 'react-native-vector-icons/Ionicons';
 
 //  The deviceId is required to initiate the PubNub object, this will be updated once
 //  the application launches with an ID based on the device's hardware (considering the
@@ -338,54 +339,28 @@ const ChatHome = () => {
                     android: 20,
                 })}
             >
-                {/*
-          Header to hold the current friendly name of the device along with other devices in the group chat
-          The below logic will launch the settings activity when the option is selected
-          */}
-                <View style={styles.topContainer}>
-                    <Text style={styles.headingTopContainer}>{appTitle}</Text>
-                    <View style={styles.membersOnlineContainer}>
-                        <Text style={[styles.member, styles.highlight]}>
-                            Members Online:
-                        </Text>
-                        {onlineMembers['online'].map(member => (
-                            <Text style={styles.member} key={member}>
-                                {friendlyNames[member] !== undefined
-                                    ? friendlyNames[member]
-                                    : member}
-                            </Text>
-                        ))}
-                    </View>
-
-                    <Text style={[styles.textTopContainer, styles.highlight]}>
-                        Friendly Name:
-                    </Text>
-                    <View style={styles.friendlyNameEdit}>
-                        <TextInput
-                            style={styles.textInputFriendlyName}
-                            value={myFriendlyName}
-                            defaultValue={myFriendlyName}
-                            editable={friendlyNameEditable}
-                            onChangeText={setMyFriendlyName}
-                            onSubmitEditing={handleSaveFriendlyName}
-                            returnKeyType='send'
-                            enablesReturnKeyAutomatically={true}
-                            placeholder='friendly name'
-                        />
-                        <View style={styles.saveFriendlyName}>
-                            <Button
-                                title={friendlyNameButtonText}
-                                buttonStyle={styles.saveFriendlyName}
-                                color='#33687B'
-                                onPress={handleSaveFriendlyName}
-                            />
-                        </View>
-                    </View>
-                </View>
-
-                {
-                    //  Only minor styling for the message view, a production app would look far superior to this!
-                }
+                {/* <View style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                }}> */}
+                <TouchableOpacity
+                    onPress={() => navigation.goBack()}
+                    style={{
+                        position: 'absolute',
+                        top: 10,
+                        left: 2,
+                        padding: 5,
+                        paddingRight: 12,
+                    }}>
+                    <ArrowBack
+                        name="arrow-back-circle-outline"
+                        color={'#0a3749'}
+                        size={40}
+                    />
+                </TouchableOpacity>
+                <Text style={styles.header}>Chat</Text>
+                {/* </View> */}
                 <ScrollView
                     ref={ref => {
                         this.scrollView = ref
@@ -478,7 +453,7 @@ const ChatHome = () => {
                         placeholder='Type your message here...'
                     />
                     <View style={styles.submitButton}>
-                        <Button title='Send' onPress={handleSend} color='#33687B' />
+                        <Button title='Send' onPress={handleSend} color='#0a3749' />
                     </View>
                 </View>
             </KeyboardAvoidingView>

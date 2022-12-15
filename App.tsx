@@ -26,8 +26,8 @@ const App = () => {
     };
 
     const isAuthenticate = verify.isLoading && verify.email;
-    //console.log('isAuthenticate ??', isAuthenticate);
-
+    console.log('verify.isLoading ?*?', verify.isLoading);
+    console.log('isAuthenticate ?*?', isAuthenticate);
     return <>{isAuthenticate ? <MainStackNavigation /> : <AuthNavigator />}</>;
 };
 

@@ -5,9 +5,9 @@ import {Alert} from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import {deleteDoc, doc, getDoc, setDoc} from 'firebase/firestore';
 import {db} from '../Constant/Firebase';
-import Toast from 'react-native-toast-message';
 import storage from '@react-native-firebase/storage';
 import {useState} from 'react';
+import {getDatabase, ref, set} from 'firebase/database';
 
 interface Initial {
     isLoading: boolean;
@@ -83,24 +83,27 @@ export const addProduct: any = createAsyncThunk(
                 console.log('error uploading image');
             },
             () => {
-                uploadTask.snapshot?.ref
-                    .getDownloadURL()
-                    .then(downloadURL => {
-                        firestore()
-                            .collection('AllProducts')
-                            .doc(body.name)
-                            .set({
-                                name: body.name,
-                                price: body.price,
-                                quantity: body.quantity,
-                                ImageUrl: downloadURL,
-                                category: body.categoryName,
-                                docId: body.name,
-                            });
-                    })
-                    .catch(error => {
-                        console.log('error', error);
-                    });
+                uploadTask.snapshot?.ref.getDownloadURL().then(downloadURL => {
+                    firestore()
+                        .collection('AllProducts')
+                        .add({EMAIL: downloadURL})
+                        .then(doc => {
+                            firestore()
+                                .collection('AllProducts')
+                                .doc(doc.id)
+                                .set({
+                                    name: body.name,
+                                    price: body.price,
+                                    quantity: body.quantity,
+                                    ImageUrl: downloadURL,
+                                    category: body.categoryName,
+                                    docId: doc.id,
+                                });
+                        })
+                        .catch(error => {
+                            console.log('error', error);
+                        });
+                });
             },
         );
         // if (

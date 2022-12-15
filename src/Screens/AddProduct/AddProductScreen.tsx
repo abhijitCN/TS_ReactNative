@@ -17,6 +17,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {addProduct, addProductImage} from '../../Reducers/ProductSlice';
 import {rootState} from '../../Reducers/store';
 import {useFocusEffect} from '@react-navigation/native';
+import ArrowBack from 'react-native-vector-icons/Ionicons';
 
 interface textFields {
     name: string;
@@ -24,14 +25,19 @@ interface textFields {
     quantity: string;
     //category: string;
     imageUrl: any;
+    userMail: string;
+}
+interface categoryType {
+    name: string;
 }
 
 const AddProduct: React.FC = () => {
-    const navigation = useNavigation();
+    const navigation: any = useNavigation();
     const dispatch = useDispatch();
     const globalSpinner: any = useSelector<any>(
         (state: rootState) => state.product.isLoading,
     );
+    const user: any = useSelector<any>((state: rootState) => state.user);
     const [modalVisible, setModalVisible] = useState(false);
     const [data, setData] = useState<textFields>({
         name: '',
@@ -39,6 +45,7 @@ const AddProduct: React.FC = () => {
         quantity: '',
         //category: '',
         imageUrl: '',
+        userMail: user.email,
     });
     const Categorys = [
         {id: 1, name: 'fruits'},
@@ -59,6 +66,7 @@ const AddProduct: React.FC = () => {
                 mediaType: 'photo',
             },
             (fileobj: any) => {
+                console.log('ROW fileobj', fileobj);
                 setData({...data, imageUrl: fileobj.assets[0].uri});
                 console.log('fileobj.assets[0].uri', data.imageUrl);
             },
@@ -79,7 +87,7 @@ const AddProduct: React.FC = () => {
             },
         );
     };
-    const [selectItem, setSelectItem] = useState(null);
+    const [selectItem, setSelectItem] = useState<any>(null);
     const onSelect = (item: any) => {
         setSelectItem(item);
     };
@@ -114,7 +122,7 @@ const AddProduct: React.FC = () => {
                             justifyContent: 'center',
                             flex: 1,
                         }}>
-                        <ActivityIndicator color="red" size="large" />
+                        <ActivityIndicator color="#0a3749" size="large" />
                     </View>
                 </>
             ) : (
@@ -122,6 +130,21 @@ const AddProduct: React.FC = () => {
                     <View style={style.main}>
                         <ScrollView style={{marginVertical: 0}}>
                             <View style={style.container}>
+                                <TouchableOpacity
+                                    onPress={() => navigation.goBack()}
+                                    style={{
+                                        position: 'absolute',
+                                        top: 10,
+                                        left: 2,
+                                        padding: 5,
+                                        paddingRight: 12,
+                                    }}>
+                                    <ArrowBack
+                                        name="arrow-back-circle-outline"
+                                        color={'#0a3749'}
+                                        size={40}
+                                    />
+                                </TouchableOpacity>
                                 <Text style={style.header}>Add Product</Text>
                             </View>
                             <View style={{}}>
@@ -388,7 +411,7 @@ const style = StyleSheet.create({
     main: {
         flex: 1,
     },
-    header: {marginTop: 20, fontWeight: 'bold', fontSize: 25},
+    header: {marginTop: 16, fontWeight: 'bold', fontSize: 25},
     container: {
         flexDirection: 'row',
         alignItems: 'center',

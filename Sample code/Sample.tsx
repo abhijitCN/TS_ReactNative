@@ -328,7 +328,7 @@ function Sample({navigation}) {
                             justifyContent: 'center',
                             flex: 1,
                         }}>
-                        <ActivityIndicator color="red" size="large" />
+                        <ActivityIndicator color="#0a3749" size="large" />
                     </View>
                 </>
             ) : ( */}
@@ -478,3 +478,427 @@ const onChangePasswordPress = () => {
         },
     }}
 />;
+
+//Video call
+// import React, {useState} from 'react';
+// import AgoraUIKit, {PropsInterface} from 'agora-rn-uikit';
+// import {Text, View} from 'react-native';
+
+// // import { Container } from './styles';
+
+// const VideoCall = () => {
+//     const [videoCall, setVideoCall] = useState(true);
+//     const connectionData = {
+//         appId: '<app-id>',
+//         channel: '<channel-name>',
+//         token: '<token>',
+//     };
+//     const props: PropsInterface = {
+//         rtcProps: {
+//             appId: 'a22539bebe8b4312bc60a8bd34c202bc',
+//             channel: 'Testing',
+//         },
+//         callbacks: {
+//             EndCall: () => setVideoCall(false),
+//         },
+//     };
+//     const callbacks = {
+//         EndCall: () => setVideoCall(false),
+//     };
+//     return (
+//         <View>
+//             {videoCall ? (
+//                 <AgoraUIKit
+//                     //connectionData={connectionData}
+//                     rtcProps={props.rtcProps}
+//                     callbacks={props.callbacks}
+//                 />
+//             ) : (
+//                 <Text onPress={() => setVideoCall(true)}>Start Call</Text>
+//             )}
+//         </View>
+//     );
+// };
+
+//export default VideoCall;
+
+// import React, {useState} from 'react';
+// import AgoraUIKit from 'agora-rn-uikit';
+// import {Text, View} from 'react-native';
+// const VideoCall = () => {
+//     const [videoCall, setVideoCall] = useState(true);
+//     const connectionData = {
+//         appId: '<Agora App ID>',
+//         channel: 'test',
+//     };
+//     const rtcCallbacks = {
+//         EndCall: () => setVideoCall(false),
+//     };
+//     return (
+//         <View>
+//             {videoCall ? (
+//                 <AgoraUIKit
+//                     connectionData={connectionData}
+//                     rtcCallbacks={rtcCallbacks}
+//                 />
+//             ) : (
+//                 <Text onPress={() => setVideoCall(true)}>Start Call</Text>
+//             )}
+//         </View>
+//     );
+// };
+// export default VideoCall;
+
+import React, {useRef, useState, useEffect} from 'react';
+import {SafeAreaView, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {PermissionsAndroid, Platform} from 'react-native';
+import {
+    ClientRoleType,
+    createAgoraRtcEngine,
+    IRtcEngine,
+    RtcSurfaceView,
+    ChannelProfileType,
+} from 'react-native-agora';
+const VideoCall = () => {
+    const agoraEngineRef = useRef<IRtcEngine>(); // Agora engine instance
+    const [isJoined, setIsJoined] = useState(false); // Indicates if the local user has joined the channel
+    const [remoteUid, setRemoteUid] = useState(0); // Uid of the remote user
+    const [message, setMessage] = useState(''); // Message to the user
+    const appId = 'a22539bebe8b4312bc60a8bd34c202bc';
+    const channelName = 'videocall';
+    const token =
+        '007eJxTYAitmuSgmHT+6sZP85hC/3QE1ExgOZL93b34xwMhseUfRLYqMCQaGZkaWyalJqVaJJkYGxolJZsZJFokpRibJBsZAHm32RKTGwIZGfg19rEwMkAgiM/JUJaZkpqfnJiTw8AAADEVIcw=';
+    const uid = 0;
+    function showMessage(msg: string) {
+        setMessage(msg);
+    }
+    useEffect(() => {
+        // Initialize Agora engine when the app starts
+        setupVideoSDKEngine();
+    });
+
+    const setupVideoSDKEngine = async () => {
+        try {
+            // use the helper function to get permissions
+            await getPermission();
+            agoraEngineRef.current = createAgoraRtcEngine();
+            const agoraEngine = agoraEngineRef.current;
+            agoraEngine.registerEventHandler({
+                onJoinChannelSuccess: () => {
+                    showMessage(
+                        'Successfully joined the channel ' + channelName,
+                    );
+                    setIsJoined(true);
+                },
+                onUserJoined: (_connection, Uid) => {
+                    showMessage('Remote user joined with uid ' + Uid);
+                    setRemoteUid(Uid);
+                },
+                onUserOffline: (_connection, Uid) => {
+                    showMessage('Remote user left the channel. uid: ' + Uid);
+                    setRemoteUid(0);
+                },
+            });
+            agoraEngine.initialize({
+                appId: appId,
+            });
+            agoraEngine.enableVideo();
+        } catch (e) {
+            console.log(e);
+        }
+    };
+    const join = async () => {
+        if (isJoined) {
+            return;
+        }
+        try {
+            agoraEngineRef.current?.setChannelProfile(
+                ChannelProfileType.ChannelProfileCommunication,
+            );
+            agoraEngineRef.current?.startPreview();
+            agoraEngineRef.current?.joinChannel(token, channelName, uid, {
+                clientRoleType: ClientRoleType.ClientRoleBroadcaster,
+            });
+        } catch (e) {
+            console.log(e);
+        }
+    };
+    const leave = () => {
+        try {
+            agoraEngineRef.current?.leaveChannel();
+            setRemoteUid(0);
+            setIsJoined(false);
+            showMessage('You left the channel');
+        } catch (e) {
+            console.log(e);
+        }
+    };
+    return (
+        <SafeAreaView style={styles.main}>
+            <ScrollView
+                style={styles.scroll}
+                contentContainerStyle={styles.scrollContainer}>
+                <Text style={styles.head}>Video Calling</Text>
+                <View style={styles.btnContainer}>
+                    <View
+                        style={{
+                            height: 50,
+                            width: 100,
+                            backgroundColor: '#0a3749',
+                            borderRadius: 25,
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            marginRight: 15,
+                        }}>
+                        <Text
+                            onPress={join}
+                            style={{
+                                fontWeight: 'bold',
+                                color: '#ffffff',
+                                fontSize: 22,
+                            }}>
+                            Join
+                        </Text>
+                    </View>
+                    <View
+                        style={{
+                            height: 50,
+                            width: 100,
+                            backgroundColor: '#0a3749',
+                            borderRadius: 25,
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                        }}>
+                        <Text
+                            onPress={join}
+                            style={{
+                                fontWeight: 'bold',
+                                color: '#ffffff',
+                                fontSize: 22,
+                            }}>
+                            Leave
+                        </Text>
+                    </View>
+                </View>
+                {isJoined ? (
+                    <React.Fragment key={0}>
+                        <RtcSurfaceView
+                            canvas={{uid: 0}}
+                            style={styles.videoView}
+                        />
+                        <Text>Local user uid: {uid}</Text>
+                    </React.Fragment>
+                ) : (
+                    <Text>Join a channel</Text>
+                )}
+                {isJoined && remoteUid !== 0 ? (
+                    <React.Fragment key={remoteUid}>
+                        <RtcSurfaceView
+                            canvas={{uid: remoteUid}}
+                            style={styles.videoView}
+                        />
+                        <Text>Remote user uid: {remoteUid}</Text>
+                    </React.Fragment>
+                ) : (
+                    <Text>Waiting for a remote user to join</Text>
+                )}
+                <Text style={styles.info}>{message}</Text>
+            </ScrollView>
+        </SafeAreaView>
+    );
+};
+const styles = StyleSheet.create({
+    button: {
+        paddingHorizontal: 25,
+        paddingVertical: 4,
+        fontWeight: 'bold',
+        color: '#ffffff',
+        backgroundColor: '#0a3749',
+        margin: 5,
+        //alignSelf: 'center',
+    },
+    main: {flex: 1, alignItems: 'center'},
+    scroll: {flex: 1, backgroundColor: '#ffffff', width: '100%'},
+    scrollContainer: {alignItems: 'center'},
+    videoView: {width: '95%', height: 600},
+    btnContainer: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+    },
+    head: {marginVertical: 10, fontWeight: 'bold', fontSize: 25},
+    info: {backgroundColor: '#ffffff', color: '#0000ff'},
+});
+
+const getPermission = async () => {
+    if (Platform.OS === 'android') {
+        await PermissionsAndroid.requestMultiple([
+            PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
+            PermissionsAndroid.PERMISSIONS.CAMERA,
+        ]);
+    }
+};
+
+export default VideoCall;
+
+//Google login with checking validation (email)
+export const googleSignInUser: any = createAsyncThunk(
+    'GoogleSignInUser',
+    async (body: any) => {
+        try {
+            await GoogleSignin.hasPlayServices();
+            const Info: any = await GoogleSignin.signIn().then(
+                (userInfo: any) => {
+                    console.log('userInfo all', userInfo);
+                    const emailArray: any = [];
+                    firestore()
+                        .collection('People')
+                        .get()
+                        .then(querySnapshot => {
+                            querySnapshot.forEach(documentSnapshot => {
+                                var {email, ImageUrl} = Object(
+                                    documentSnapshot.data(),
+                                );
+                                //console.log('Keys Email ?? ', key.email);
+                                console.log(
+                                    'user.email **',
+                                    userInfo.user.email,
+                                );
+                                // console.log(
+                                //     'User Email True ?? ',
+                                //     key.email === user.email,
+                                // );
+                                emailArray.push({
+                                    email: email,
+                                    ImageUrl: ImageUrl,
+                                });
+                                emailArray.filter((item: any) => {
+                                    if (item.email === userInfo.user.email) {
+                                        //console.log('FIND', key);
+                                        //setUserData(key);
+                                        //setAvatar(key.ImageUrl);
+                                        console.log(
+                                            'Unickly FIND **',
+                                            item.email === userInfo.user.email,
+                                        );
+                                        console.log(
+                                            'Unickly FIND Image**',
+                                            item.ImageUrl,
+                                        );
+                                        return userInfo.user.email;
+                                    }
+                                });
+                                console.log('email Array', emailArray);
+                                // if (key.email === user.email) {
+                                //     //console.log('FIND', key);
+                                //     setUserData(key);
+                                //     setAvatar(key.ImageUrl);
+                                //     //console.log('Unickly FIND **', avatar);
+                                // }
+                            });
+                        });
+                },
+            );
+            //console.log('user Info', userInfo.user.photo);
+            return Info.user.email;
+        } catch (error: any) {
+            if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+                console.log('user cancelled the login flow');
+            } else if (error.code === statusCodes.IN_PROGRESS) {
+                console.log('operation (e.g. sign in) is in progress already');
+            } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+                console.log('play services not available or outdated');
+            } else {
+                console.log('some other error happened');
+            }
+        }
+    },
+);
+
+//////////////////////////////////////old dropdown.tsx/////////////////////////
+import React, {useState} from 'react';
+import {Text} from 'react-native';
+import {View, TouchableOpacity, StyleSheet} from 'react-native';
+import Icon from 'react-native-vector-icons/AntDesign';
+
+interface category {
+    fruits: string;
+    price: string;
+    quantity: string;
+    category: string;
+    imageUrl: any;
+}
+
+const Dropdown = ({data, value = {}, onSelect = () => {}}) => {
+    //console.log('Selected Value', value);
+    const [showOption, setShowOption] = useState(false);
+
+    const onSelectedItem = (val: any) => {
+        setShowOption(false);
+        onSelect(val);
+    };
+    console.log('>>Selected Value **', value);
+
+    return (
+        <View style={styles.main}>
+            <TouchableOpacity
+                activeOpacity={0.8}
+                style={styles.dropdownContainer}
+                onPress={() => setShowOption(!showOption)}>
+                <Text style={{color: '#1b94c4'}}>
+                    {!!value ? value?.name : `Choose Category`}
+                </Text>
+                <Icon
+                    name="caretright"
+                    color={'#0a3749'}
+                    size={15}
+                    style={{
+                        transform: [{rotate: showOption ? '90deg' : '0deg'}],
+                    }}
+                />
+            </TouchableOpacity>
+            {showOption && (
+                <View>
+                    {data.map((val, i) => {
+                        return (
+                            <TouchableOpacity
+                                onPress={() => onSelectedItem(val)}
+                                style={{
+                                    //backgroundColor  val.id == val.id ? 'pink' : 'white',
+                                    paddingVertical: 8,
+                                    borderRadius: 4,
+                                    paddingHorizontal: 6,
+                                }}>
+                                <Text
+                                    key={i}
+                                    style={{color: '#1b94c4', marginTop: 5}}>
+                                    {val.id} : {val.name}
+                                </Text>
+                            </TouchableOpacity>
+                        );
+                    })}
+                </View>
+            )}
+        </View>
+    );
+};
+
+const styles = StyleSheet.create({
+    main: {
+        paddingHorizontal: 12,
+    },
+    dropdownContainer: {
+        backgroundColor: '#eafafc',
+        padding: 8,
+        height: 60,
+        paddingHorizontal: 12,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        borderWidth: 1,
+        borderColor: '#1b94c4',
+        borderRadius: 10,
+        marginVertical: 10,
+    },
+});
+
+export default Dropdown;

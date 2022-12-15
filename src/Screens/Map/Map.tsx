@@ -12,6 +12,8 @@ import React, {useState} from 'react';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import MapView from 'react-native-maps';
 import {Marker, Polyline} from 'react-native-maps';
+import ArrowBack from 'react-native-vector-icons/Ionicons';
+
 const Map = () => {
     const navigation = useNavigation();
     const Route = useRoute();
@@ -22,16 +24,24 @@ const Map = () => {
     //console.log('geometryData ** ', lat.geometryData.lat);
     return (
         <View style={styles.main}>
-            <Text
-                style={{
-                    fontWeight: 'bold',
-                    fontSize: 25,
-                    paddingTop: 20,
-                    paddingBottom: 20,
-                    alignSelf: 'center',
-                }}>
-                Map
-            </Text>
+            <View style={styles.container}>
+                <TouchableOpacity
+                    onPress={() => navigation.goBack()}
+                    style={{
+                        position: 'absolute',
+                        top: 10,
+                        left: 2,
+                        padding: 5,
+                        paddingRight: 12,
+                    }}>
+                    <ArrowBack
+                        name="arrow-back-circle-outline"
+                        color={'#0a3749'}
+                        size={40}
+                    />
+                </TouchableOpacity>
+                <Text style={styles.header}>Map</Text>
+            </View>
             <View style={{flex: 1}}>
                 <MapView
                     style={[styles.mapStyle, {marginBottom: currentLocButton}]}
@@ -72,6 +82,13 @@ const Map = () => {
 const styles = StyleSheet.create({
     main: {
         flex: 1,
+    },
+    header: {marginTop: 16, fontWeight: 'bold', fontSize: 25},
+    container: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginBottom: 20,
     },
     mapStyle: {
         ...StyleSheet.absoluteFillObject,

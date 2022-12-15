@@ -8,18 +8,26 @@ import {
     ActivityIndicator,
     Alert,
 } from 'react-native';
-import Toast from 'react-native-toast-message';
 import {UserContext} from '../../Context/AuthContext';
 import {useDispatch, useSelector} from 'react-redux';
-import {signInUser} from '../../Reducers/authSlice';
+import {googleSignInUser, signInUser} from '../../Reducers/authSlice';
 import {useNavigation} from '@react-navigation/native';
 import {rootState} from '../../Reducers/store';
 import FbIcon from 'react-native-vector-icons/SimpleLineIcons';
 import AppleIcon from 'react-native-vector-icons/AntDesign';
+import {appleAuth} from '@invertase/react-native-apple-authentication';
+import firestore from '@react-native-firebase/firestore';
+
 import {
     GoogleSignin,
     statusCodes,
 } from '@react-native-google-signin/google-signin';
+import {
+    LoginManager,
+    GraphRequestManager,
+    GraphRequest,
+} from 'react-native-fbsdk';
+
 interface textFields {
     email: string;
     password: string;
@@ -29,37 +37,140 @@ const Login = () => {
     const [data, setData] = useState<textFields>({email: '', password: ''});
     const [validate, SetValiadate] = useState<boolean>(false);
     const dispatch = useDispatch();
-    const navigation = useNavigation();
-    const SPINNER: any = useSelector<any>(
-        (state: rootState) => state.toggleSpinner,
-    );
+    const navigation: any = useNavigation();
+
     const globalSpinner: any = useSelector<any>(
         (state: rootState) => state.user.globalLoading,
     );
-    useEffect(() => {}, [SPINNER.show]);
 
     const Authenticate = () => {
         dispatch(signInUser(data));
     };
 
+    useEffect(() => {
+        GoogleSignin.configure();
+    }, []);
+
     //Google Login
     const googleSignIn = async () => {
-        Alert.alert('Google Login');
+        dispatch(googleSignInUser());
+        // try {
+        //     await GoogleSignin.hasPlayServices();
+        //     const Info: any = await GoogleSignin.signIn().then(
+        //         (userInfo: any) => {
+        //             console.log('userInfo all', userInfo);
+        //             const emailArray: any = [];
+        //              firestore()
+        //                 .collection('People')
+        //                 .get()
+        //                 .then(querySnapshot => {
+        //                     querySnapshot.forEach(documentSnapshot => {
+        //                         var {email, ImageUrl} = Object(documentSnapshot.data());
+        //                         //console.log('Keys Email ?? ', key.email);
+        //                         console.log('user.email **', userInfo.user.email);
+        //                         // console.log(
+        //                         //     'User Email True ?? ',
+        //                         //     key.email === user.email,
+        //                         // );
+        //                         emailArray.push({
+        //                             email: email,
+        //                             ImageUrl: ImageUrl,
+        //                         });
+        //                         emailArray.filter((item: any) => {
+        //                             if (item.email === userInfo.user.email) {
+        //                                 //console.log('FIND', key);
+        //                                 //setUserData(key);
+        //                                 //setAvatar(key.ImageUrl);
+        //                                 console.log(
+        //                                     'Unickly FIND **',
+        //                                     item.email === userInfo.user.email,
+        //                                 );
+        //                                 console.log('Unickly FIND Image**', item.ImageUrl);
+        //                             }
+        //                         });
+        //                         console.log('email Array', emailArray);
+        //                         // if (key.email === user.email) {
+        //                         //     //console.log('FIND', key);
+        //                         //     setUserData(key);
+        //                         //     setAvatar(key.ImageUrl);
+        //                         //     //console.log('Unickly FIND **', avatar);
+        //                         // }
+        //                     });
+        //                 });
+        //         },
+        //     );
+        //     //console.log('user Info', userInfo.user.photo);
+        // } catch (error: any) {
+        //     if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+        //         console.log('user cancelled the login flow');
+        //     } else if (error.code === statusCodes.IN_PROGRESS) {
+        //         console.log('operation (e.g. sign in) is in progress already');
+        //     } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+        //         console.log(' play services not available or outdated');
+        //     } else {
+        //         console.log('some other error happened');
+        //     }
+        // }
+    };
+    //FB Login
+    const onFbLogin = async () => {
         try {
-            await GoogleSignin.hasPlayServices();
-            const userInfo = await GoogleSignin.signIn();
-            console.log('Google Login User Info', userInfo);
+            await fbLogin(_responseInfoCallBack);
         } catch (error: any) {
-            if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-                // user cancelled the login flow
-            } else if (error.code === statusCodes.IN_PROGRESS) {
-                // operation (e.g. sign in) is in progress already
-            } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-                // play services not available or outdated
-            } else {
-                // some other error happened
-            }
+            console.log('error raised', error);
         }
+    };
+
+    const fbLogin = (resCallback: any) => {
+        LoginManager.logOut();
+        return LoginManager.logInWithPermissions([
+            'email',
+            'public_profile',
+        ]).then(
+            (result: any) => {
+                console.log('fb result==>>>>>>', result);
+                if (
+                    result.declinedPermissions &&
+                    result.declinedPermissions.includes('email')
+                ) {
+                    resCallback({message: 'Email is required'});
+                }
+                if (result.isCancelled) {
+                    console.log('error');
+                } else {
+                    const infoRequest = new GraphRequest(
+                        '/me?fileds=email,name,picture, friend',
+                        null,
+                        resCallback,
+                    );
+                    new GraphRequestManager().addRequest(infoRequest).start();
+                }
+            },
+            function (error: string) {
+                console.log('Login fail with error:' + error);
+            },
+        );
+    };
+
+    const _responseInfoCallBack = async (error: any, result: any) => {
+        if (error) {
+            console.log('error top', error);
+            return;
+        } else {
+            const userData = result;
+            console.log('fb data+++++', userData);
+        }
+    };
+
+    //Apple Login
+    const appleLogin = async () => {
+        const appleLoginResponse = await appleAuth.performRequest({
+            requestedOperation: appleAuth.Operation.LOGIN,
+            requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
+        });
+        //   const credentialState = await appleAuth.getCredentialStateForUser(appleAuthRequestResponse.user);
+        //   if (credentialState === appleAuth.State.AUTHORIZED) {
+        //   }
     };
 
     return (
@@ -72,7 +183,7 @@ const Login = () => {
                             justifyContent: 'center',
                             flex: 1,
                         }}>
-                        <ActivityIndicator color="red" size="large" />
+                        <ActivityIndicator color="#0a3749" size="large" />
                     </View>
                 </>
             ) : (
@@ -138,9 +249,7 @@ const Login = () => {
                                     Password required
                                 </Text>
                             )}
-                            {/* <View>
-                                <Toast />
-                            </View> */}
+
                             <TouchableOpacity
                                 style={style.button}
                                 onPress={Authenticate}>
@@ -161,7 +270,10 @@ const Login = () => {
                                         marginRight: 10,
                                         marginVertical: 20,
                                     }}></View>
-                                <Text>Or</Text>
+                                <Text
+                                    style={{fontSize: 20, fontWeight: 'bold'}}>
+                                    Or
+                                </Text>
                                 <View
                                     style={{
                                         height: 1,
@@ -171,7 +283,7 @@ const Login = () => {
                                     }}></View>
                             </View>
                             <TouchableOpacity
-                                onPress={googleSignIn}
+                                onPress={onFbLogin}
                                 style={style.button}>
                                 <FbIcon
                                     name="social-facebook"
@@ -200,7 +312,7 @@ const Login = () => {
                             </TouchableOpacity>
                             <TouchableOpacity
                                 style={style.button}
-                                onPress={googleSignIn}>
+                                onPress={appleLogin}>
                                 <AppleIcon
                                     name="apple-o"
                                     size={22}
@@ -225,9 +337,7 @@ const Login = () => {
                                 </Text>
                             </TouchableOpacity>
                         </View>
-                        <View>
-                            <Toast />
-                        </View>
+                        <View></View>
                     </View>
                 </>
             )}

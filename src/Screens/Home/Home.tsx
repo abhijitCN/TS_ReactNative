@@ -14,8 +14,11 @@ import {
     SafeAreaView,
     StatusBar,
     RefreshControl,
+    Modal,
+    Pressable,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Entypo';
+import Filter from 'react-native-vector-icons/AntDesign';
 //import AsyncStorage from '@react-native-async-storage/async-storage';
 //import Toast from 'react-native-toast-message';
 import {useDispatch, useSelector} from 'react-redux';
@@ -40,22 +43,30 @@ interface textFields {
     email: string;
     password: string;
 }
+interface itemType {
+    ImageUrl: any;
+    name: string;
+    price: string;
+    quantity: string;
+    category: string;
+}
 
 const wait = (timeout: any) => {
     return new Promise(resolve => setTimeout(resolve, timeout));
 };
 
 function Home() {
-    const navigation = useNavigation();
+    const navigation: any = useNavigation();
     const dispatch = useDispatch();
-    const [data, setData] = useState([]);
+    const [data, setData] = useState<itemType[]>([]);
     const [avatar, setAvatar] = useState();
     const [refreshing, setRefreshing] = React.useState(false);
     const user: any = useSelector<any>((state: rootState) => state.user);
     const profile: any = useSelector<any>((state: rootState) => state.profile);
     const [userData, setUserData] = useState<any>({});
+    const [modalVisible, setModalVisible] = useState(false);
 
-    console.log(' < user > ', profile);
+    //console.log(' < user > ', profile);
     // const SPINNER: any = useSelector<any>(
     //     (state: rootState) => state.toggleSpinner,
     // );
@@ -73,22 +84,44 @@ function Home() {
     }, []);
     const sample = async () => {
         //console.log('called sample');
+        const emailArray: any = [];
         await firestore()
             .collection('People')
             .get()
             .then(querySnapshot => {
                 // console.log('Total querySnapshot: ', querySnapshot.size);
                 querySnapshot.forEach(documentSnapshot => {
-                    var key = Object(documentSnapshot.data());
-                    console.log('KEYS && ?? ', key.email);
-                    //console.log('user.email **', user.email);
-                    console.log('User Email ?? ', key.email === user.email);
-                    if (key.email === user.email) {
-                        //console.log('FIND', key);
-                        setUserData(key);
-                        setAvatar(key.ImageUrl);
-                        //console.log('Unickly FIND **', avatar);
-                    }
+                    var {email, ImageUrl} = Object(documentSnapshot.data());
+                    //console.log('Keys Email ?? ', key.email);
+                    console.log('user.email **', user.email);
+                    // console.log(
+                    //     'User Email True ?? ',
+                    //     key.email === user.email,
+                    // );
+                    emailArray.push({
+                        email: email,
+                        ImageUrl: ImageUrl,
+                    });
+                    emailArray.filter((item: any) => {
+                        if (item.email === user.email) {
+                            //console.log('FIND', key);
+                            //setUserData(key);
+                            //setAvatar(key.ImageUrl);
+                            console.log(
+                                'Unickly FIND **',
+                                item.email === user.email,
+                            );
+                            console.log('Unickly FIND Image**', item.ImageUrl);
+                            setAvatar(item.ImageUrl);
+                        }
+                    });
+                    console.log('email Array', emailArray);
+                    // if (key.email === user.email) {
+                    //     //console.log('FIND', key);
+                    //     setUserData(key);
+                    //     setAvatar(key.ImageUrl);
+                    //     //console.log('Unickly FIND **', avatar);
+                    // }
                 });
             });
     };
@@ -148,14 +181,17 @@ function Home() {
                     userAvatar.push({
                         avatarUrl: ImageUrl,
                     });
+                    // documentData.filter((item: any) => {
+                    //     console.log('item.email', item.email);
+                    // });
                 });
             });
         //setAvatar(userAvatar);
     };
 
     useEffect(() => {
-        getUserAvatar();
-        console.log('** avatar image now >> **', avatar);
+        //getUserAvatar();
+        //console.log('** avatar image now >> **', avatar);
     }, []);
 
     const getAllProducts = async () => {
@@ -185,7 +221,7 @@ function Home() {
     useEffect(() => {
         getAllProducts();
         //console.log('**HOLE DATA**', data);
-    }, []);
+    }, [data]);
 
     return (
         <>
@@ -197,12 +233,12 @@ function Home() {
                             justifyContent: 'center',
                             flex: 1,
                         }}>
-                        <ActivityIndicator color="red" size="large" />
+                        <ActivityIndicator color="#0a3749" size="large" />
                     </View>
                 </>
             ) : (
                 <> */}
-            <View style={style.main}>
+            <SafeAreaView style={style.main}>
                 <View style={style.container}>
                     <TouchableOpacity
                         onPress={() => navigation.openDrawer()}
@@ -274,12 +310,13 @@ function Home() {
                 </View>
                 <ScrollView
                     contentContainerStyle={style.scrollView}
-                    refreshControl={
-                        <RefreshControl
-                            refreshing={refreshing}
-                            onRefresh={onRefresh}
-                        />
-                    }>
+                    // refreshControl={
+                    //     <RefreshControl
+                    //         refreshing={refreshing}
+                    //         onRefresh={onRefresh}
+                    //     />
+                    // }
+                >
                     <View style={{flex: 1}}>
                         <FlatList
                             data={data}
@@ -292,7 +329,13 @@ function Home() {
 
                                                 //backgroundColor: 'green',
                                             }}>
-                                            <View
+                                            <TouchableOpacity
+                                                onPress={() =>
+                                                    navigation.navigate(
+                                                        'ProductDetails',
+                                                        {items: item},
+                                                    )
+                                                }
                                                 style={{
                                                     //padding: 12,
                                                     margin: 12,
@@ -374,7 +417,7 @@ function Home() {
                                                         {item.category}
                                                     </Text>
                                                 </View>
-                                            </View>
+                                            </TouchableOpacity>
                                         </View>
                                     </>
                                 );
@@ -385,19 +428,71 @@ function Home() {
                         />
                     </View>
                 </ScrollView>
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={modalVisible}
+                    onRequestClose={() => {
+                        // Alert.alert('Modal closed');
+                        setModalVisible(!modalVisible);
+                    }}>
+                    <View style={style.centeredView}>
+                        <View style={style.modalView}>
+                            <Text style={style.modalText}>Choose Option</Text>
+                            <View
+                                style={{
+                                    //flexDirection: 'row',
+                                    justifyContent: 'space-evenly',
+                                    alignItems: 'center',
+                                    //marginVertical: 10,
+                                }}>
+                                <Pressable
+                                    style={[style.button2, style.buttonClose]}
+                                    // onPress={() =>
+                                    //     pickImageAndUploadFromCamera()
+                                    // }
+                                >
+                                    <Text style={style.textStyle}>
+                                        Sort By Category
+                                    </Text>
+                                </Pressable>
+                                <Pressable
+                                    style={[style.button2, style.buttonClose]}
+                                    // onPress={() =>
+                                    //     pickImageAndUploadFromGallery()
+                                    // }
+                                >
+                                    <Text style={style.textStyle}>
+                                        Sort By Price
+                                    </Text>
+                                </Pressable>
+                                <Pressable
+                                    style={[style.button2, style.buttonClose]}
+                                    // onPress={() =>
+                                    //     pickImageAndUploadFromGallery()
+                                    // }
+                                >
+                                    <Text style={style.textStyle}>
+                                        Sort By Quantity
+                                    </Text>
+                                </Pressable>
+                            </View>
+                        </View>
+                    </View>
+                </Modal>
+                <TouchableOpacity
+                    activeOpacity={0.7}
+                    onPress={() => setModalVisible(true)}
+                    style={style.touchableOpacityStyle2}>
+                    <Filter name="filter" color={'#ffffff'} size={40} />
+                </TouchableOpacity>
                 <TouchableOpacity
                     activeOpacity={0.7}
                     onPress={clickHandler}
                     style={style.touchableOpacityStyle}>
-                    {/* <Image
-                        source={{
-                            uri: 'https://raw.githubusercontent.com/AboutReact/sampleresource/master/plus_icon.png',
-                        }}
-                        style={style.floatingButtonStyle}
-                    /> */}
                     <Icon name="plus" color={'#ffffff'} size={40} />
                 </TouchableOpacity>
-            </View>
+            </SafeAreaView>
             {/* </>
             )} */}
         </>
@@ -433,8 +528,8 @@ const style = StyleSheet.create({
         fontSize: 16,
         fontWeight: '600',
     },
-    header: {marginTop: 10, fontWeight: 'bold', fontSize: 25},
-    helloText: {fontSize: 20, fontWeight: 'bold'},
+    header: {marginTop: 20, fontWeight: 'bold', fontSize: 25, marginBottom: 5},
+    helloText: {fontSize: 20, fontWeight: 'bold', marginTop: 6},
     image: {width: 50, height: 50, borderRadius: 25},
     container: {
         flexDirection: 'row',
@@ -448,7 +543,26 @@ const style = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         right: 30,
-        bottom: 30,
+        bottom: 20,
+        backgroundColor: '#0a3749',
+        borderRadius: 50,
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+    },
+    touchableOpacityStyle2: {
+        position: 'absolute',
+        width: 60,
+        height: 60,
+        alignItems: 'center',
+        justifyContent: 'center',
+        right: 30,
+        bottom: 85,
         backgroundColor: '#0a3749',
         borderRadius: 50,
         shadowColor: '#000',
@@ -474,6 +588,53 @@ const style = StyleSheet.create({
     },
     scrollView: {
         flex: 1,
+    },
+    centeredView: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 22,
+    },
+    modalView: {
+        margin: 10,
+        backgroundColor: '#ffffff',
+        borderRadius: 20,
+        padding: 55,
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+    },
+    button2: {
+        borderRadius: 20,
+        padding: 10,
+        elevation: 2,
+        marginVertical: 5,
+        minWidth: 200,
+    },
+    buttonOpen: {
+        backgroundColor: '#F194FF',
+    },
+    buttonClose: {
+        backgroundColor: '#95d6f0',
+    },
+    textStyle: {
+        color: '#0a3749',
+        fontWeight: 'bold',
+        textAlign: 'center',
+        fontSize: 16,
+    },
+    modalText: {
+        marginBottom: 30,
+        textAlign: 'center',
+        fontWeight: 'bold',
+        fontSize: 25,
+        color: '#0a3749',
     },
 });
 export default Home;

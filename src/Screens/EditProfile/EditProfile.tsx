@@ -14,7 +14,7 @@ import {
     ActivityIndicator,
 } from 'react-native';
 const {height, width} = Dimensions.get('screen');
-import Toast from 'react-native-toast-message';
+//import Toast from 'react-native-toast-message';
 import firestore from '@react-native-firebase/firestore';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -25,6 +25,7 @@ import {PickImageAndUpload} from '../../Reducers/profileSlice';
 import {rootState} from '../../Reducers/store';
 import {profileImage} from '../../Reducers/profileSlice';
 import {toggleSpinner} from '../../Reducers/toggleSpinnerSlice';
+import ArrowBack from 'react-native-vector-icons/Ionicons';
 
 interface editValue {
     name: string;
@@ -37,22 +38,23 @@ interface DescribableFunction {
     (someArg: number): boolean;
 }
 const EditProfile = () => {
-    const navigation = useNavigation();
+    const navigation: any = useNavigation();
     const dispatch = useDispatch();
     const Route = useRoute();
     let data: any = Route.params;
-    let Phone: any = data.data.phoneNo;
+    let Phone: any = data.data.docId;
     let AvaterUrl: any = data.data.ImageUrl;
-    console.log('Global Route data phone', Phone);
-    console.log('Global Route data phone', AvaterUrl);
+    let userName: any = data.data.name;
+    console.log('data.data.docId $>>>>>>', data.data.docId);
+    //console.log('Global Route data phone', AvaterUrl);
     const userProfilePicture: any = useSelector<any>(
         (state: rootState) => state.profile,
     );
-    console.log('userProfilePicture <<<>>>  ', userProfilePicture);
+    //console.log('userProfilePicture <<<>>>  ', userProfilePicture);
     const SPINNER: any = useSelector<any>(
         (state: rootState) => state.toggleSpinner,
     );
-    console.log(' <INITIAL SPINNER > ', SPINNER);
+    console.log('toggleSpinner in change password **', SPINNER);
     const [editValue, setEditValue] = useState<editValue | any>({
         name: '',
         phoneNo: '',
@@ -64,22 +66,22 @@ const EditProfile = () => {
     const profile: any = useSelector<any>((state: rootState) => state.profile);
 
     useEffect(() => {
-        console.log(' <useEffect SPINNER > ', SPINNER);
+        //console.log(' <useEffect SPINNER > ', SPINNER);
     }, [SPINNER.show]);
 
     useEffect(() => {
         getUserData(data);
-        console.log('userProfilePicture <<<>>>  ', userProfilePicture);
+        //console.log('userProfilePicture <<<>>>  ', userProfilePicture);
     }, []);
 
     const getUserData = (fn: DescribableFunction) => {
         let data: any = Route.params;
-        console.log('This page data', data.data);
+        //console.log('This page data', data.data);
         setEditValue(data.data ? data.data : null);
     };
 
     const pickImageAndUploadFromCamera = () => {
-        console.log('pick Image And Upload');
+        //console.log('pick Image And Upload');
         setModalVisible(!modalVisible);
         launchCamera(
             {
@@ -90,7 +92,7 @@ const EditProfile = () => {
                 const uploadTask = storage()
                     .ref()
                     .child(`/userprofile/${Date.now()}`)
-                    .putFile(fileobj.assets[0].uri);
+                    .putFile(fileobj ? fileobj.assets[0].uri : null);
                 uploadTask.on(
                     'state_changed',
                     snapshot => {
@@ -122,7 +124,7 @@ const EditProfile = () => {
 
     const pickImageAndUploadFromGallery = () => {
         setModalVisible(!modalVisible);
-        console.log('pick Image And Upload');
+        //console.log('pick Image And Upload');
         setModalVisible(!modalVisible);
         launchImageLibrary(
             {
@@ -133,7 +135,7 @@ const EditProfile = () => {
                 const uploadTask = storage()
                     .ref()
                     .child(`/userprofile/${Date.now()}`)
-                    .putFile(fileobj.assets[0].uri);
+                    .putFile(fileobj ? fileobj.assets[0].uri : null);
                 uploadTask.on(
                     'state_changed',
                     snapshot => {
@@ -169,17 +171,19 @@ const EditProfile = () => {
 
     const onPress = async () => {
         dispatch(toggleSpinner(true));
+        console.log('SPINNER?.show == true ** ', SPINNER?.show);
         await firestore()
             .collection('People')
             .doc(Phone)
             .update({
-                ImageUrl: image ? image : null,
+                ImageUrl: image ? image : AvaterUrl,
                 name: editValue.name ? editValue.name : null,
                 phoneNo: editValue.phoneNo ? editValue.phoneNo : null,
             })
 
             .then(() => {
                 dispatch(toggleSpinner(false));
+                console.log('SPINNER?.show == false ** ', SPINNER?.show);
                 navigation.navigate('Home');
                 Alert.alert('Update Successfully.');
             });
@@ -195,24 +199,33 @@ const EditProfile = () => {
                             justifyContent: 'center',
                             flex: 1,
                         }}>
-                        <ActivityIndicator color="red" size="large" />
+                        <ActivityIndicator color="#0a3749" size="large" />
                     </View>
                 </>
             ) : (
                 <>
                     <ScrollView>
-                        <View style={{alignSelf: 'center'}}>
-                            <Text
+                        <View style={style.container}>
+                            <TouchableOpacity
+                                onPress={() => navigation.goBack()}
                                 style={{
-                                    fontWeight: 'bold',
-                                    fontSize: 25,
-                                    paddingVertical: 20,
+                                    position: 'absolute',
+                                    top: 10,
+                                    left: 2,
+                                    padding: 5,
+                                    paddingRight: 12,
                                 }}>
-                                Edit Profile
-                            </Text>
+                                <ArrowBack
+                                    name="arrow-back-circle-outline"
+                                    color={'#0a3749'}
+                                    size={40}
+                                />
+                            </TouchableOpacity>
+                            <Text style={style.header}>Edit Profile</Text>
                         </View>
                         <View style={{}}>
                             <TouchableOpacity
+                                style={{marginTop: 20}}
                                 onPress={() => setModalVisible(true)}>
                                 {profile?.Image ? (
                                     <>
@@ -279,10 +292,6 @@ const EditProfile = () => {
                                 onPress={onPress}>
                                 <Text style={style.buttonText}>Submit</Text>
                             </TouchableOpacity>
-
-                            <View>
-                                <Toast />
-                            </View>
                         </View>
                         <Modal
                             animationType="slide"
@@ -346,6 +355,12 @@ const EditProfile = () => {
 const style = StyleSheet.create({
     main: {
         flex: 1,
+    },
+    header: {marginTop: 16, fontWeight: 'bold', fontSize: 25},
+    container: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     button: {
         alignItems: 'center',

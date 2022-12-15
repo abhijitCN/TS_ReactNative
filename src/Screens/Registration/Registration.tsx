@@ -1,5 +1,5 @@
 import {firebase} from '@react-native-firebase/auth';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import firestore from '@react-native-firebase/firestore';
 import {
     View,
@@ -15,16 +15,21 @@ import {
     ActivityIndicator,
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
-import {signUpUser} from '../../Reducers/authSlice';
+import {googleSignUpUserAuth, signUpUser} from '../../Reducers/authSlice';
 import {useNavigation} from '@react-navigation/native';
 import {doc} from 'firebase/firestore';
 import {db} from '../../Constant/Firebase';
-import Toast from 'react-native-toast-message';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
 import {rootState} from '../../Reducers/store';
 import FbIcon from 'react-native-vector-icons/SimpleLineIcons';
 import AppleIcon from 'react-native-vector-icons/AntDesign';
+import {
+    GoogleSignin,
+    statusCodes,
+} from '@react-native-google-signin/google-signin';
+import storage from '@react-native-firebase/storage';
+import {toggleSpinner} from '../../Reducers/toggleSpinnerSlice';
 
 interface textFields {
     name: string;
@@ -35,7 +40,7 @@ interface textFields {
 }
 
 function Registration() {
-    const navigation = useNavigation();
+    const navigation: any = useNavigation();
     const [modalVisible, setModalVisible] = useState(false);
     const [data, setData] = useState<textFields>({
         name: '',
@@ -45,13 +50,20 @@ function Registration() {
         imageUrl: '',
     });
     const dispatch = useDispatch();
-    const user: any = useSelector<any>(
+    // const user: any = useSelector<any>(
+    //     (state: rootState) => state.user.globalLoading,
+    // );
+    const SPINNER: any = useSelector<any>(
+        (state: rootState) => state.toggleSpinner,
+    );
+    console.log('toggleSpinner in change password **', SPINNER);
+    const globalSpinner: any = useSelector<any>(
         (state: rootState) => state.user.globalLoading,
     );
-    console.log('globalLoading ?? ', user);
+    //console.log('globalLoading ?? ', globalSpinner);
     const [validate, SetValiadate] = useState<boolean>(false);
 
-    const Authenticate = () => {
+    const Authenticate = async () => {
         if (
             data.password &&
             data.email &&
@@ -59,12 +71,60 @@ function Registration() {
             data.phoneNo &&
             data.imageUrl
         ) {
+            //dispatch(toggleSpinner(true));
+            //console.log('SPINNER?.show == true ** ', SPINNER?.show);
             dispatch(signUpUser(data));
+            //dispatch(toggleSpinner(false));
+            //console.log('SPINNER?.show == false ** ', SPINNER?.show);
+            Alert.alert('Register Successfully Please Login.**');
             navigation.navigate('Login');
-            Alert.alert('Register Successfully Please Login');
         } else {
             SetValiadate(true);
         }
+    };
+
+    useEffect(() => {
+        //console.log(' <useEffect SPINNER > ', SPINNER);
+    }, [SPINNER.show]);
+
+    useEffect(() => {
+        GoogleSignin.configure();
+    }, []);
+
+    //Google Sign up
+    const googleSignUp = async () => {
+        dispatch(googleSignUpUserAuth());
+        navigation.navigate('Login');
+        // try {
+        //     await GoogleSignin.hasPlayServices();
+        //     const Info: any = await GoogleSignin.signIn().then(
+        //         (userInfo: any) => {
+        //             console.log('userInfo all', userInfo);
+        //             firestore()
+        //                 .collection('People')
+        //                 .doc(userInfo.user.email)
+        //                 .set({
+        //                     name: userInfo.user.name,
+        //                     docId: userInfo.user.email,
+        //                     email: userInfo.user.email,
+        //                     ImageUrl: userInfo.user.photo,
+        //                 });
+        //             Alert.alert('Google Sign-up Successfully Please Login');
+        //             navigation.navigate('Login');
+        //         },
+        //     );
+        //     //console.log('user Info', userInfo.user.photo);
+        // } catch (error: any) {
+        //     if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+        //         console.log('user cancelled the login flow');
+        //     } else if (error.code === statusCodes.IN_PROGRESS) {
+        //         console.log('operation (e.g. sign in) is in progress already');
+        //     } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+        //         console.log('play services not available or outdated');
+        //     } else {
+        //         console.log('some other error happened');
+        //     }
+        // }
     };
 
     const pickImageAndUploadFromCamera = () => {
@@ -98,8 +158,9 @@ function Registration() {
     };
 
     return (
-        <>
-            {user ? (
+        <View style={{flex: 1}}>
+            {/* {console.log('inside view', globalSpinner)} */}
+            {globalSpinner ? (
                 <>
                     <View
                         style={{
@@ -107,7 +168,7 @@ function Registration() {
                             justifyContent: 'center',
                             flex: 1,
                         }}>
-                        <ActivityIndicator color="red" size="large" />
+                        <ActivityIndicator color="#0a3749" size="large" />
                     </View>
                 </>
             ) : (
@@ -338,9 +399,7 @@ function Registration() {
                                         Password required
                                     </Text>
                                 )}
-                                <View>
-                                    <Toast />
-                                </View>
+                                <View></View>
                                 <TouchableOpacity
                                     style={style.button}
                                     onPress={Authenticate}>
@@ -361,7 +420,13 @@ function Registration() {
                                             marginRight: 10,
                                             marginVertical: 20,
                                         }}></View>
-                                    <Text>Or</Text>
+                                    <Text
+                                        style={{
+                                            fontSize: 20,
+                                            fontWeight: 'bold',
+                                        }}>
+                                        Or
+                                    </Text>
                                     <View
                                         style={{
                                             height: 1,
@@ -372,7 +437,9 @@ function Registration() {
                                 </View>
                                 <TouchableOpacity
                                     style={style.button}
-                                    onPress={Authenticate}>
+                                    onPress={() => {
+                                        Alert.alert('alert');
+                                    }}>
                                     <FbIcon
                                         name="social-facebook"
                                         size={22}
@@ -384,7 +451,7 @@ function Registration() {
                                 </TouchableOpacity>
                                 <TouchableOpacity
                                     style={style.button}
-                                    onPress={Authenticate}>
+                                    onPress={googleSignUp}>
                                     <FbIcon
                                         name="social-google"
                                         size={20}
@@ -400,7 +467,9 @@ function Registration() {
                                 </TouchableOpacity>
                                 <TouchableOpacity
                                     style={style.button}
-                                    onPress={Authenticate}>
+                                    onPress={() => {
+                                        Alert.alert('alert');
+                                    }}>
                                     <AppleIcon
                                         name="apple-o"
                                         size={22}
@@ -482,7 +551,7 @@ function Registration() {
                     </ScrollView>
                 </>
             )}
-        </>
+        </View>
     );
 }
 

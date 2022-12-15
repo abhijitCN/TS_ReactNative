@@ -12,24 +12,33 @@ import React, {useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
+import ArrowBack from 'react-native-vector-icons/Ionicons';
 
 const AddAddress = () => {
-    const navigation = useNavigation();
+    const navigation: any = useNavigation();
     const [geometry, setGeometry1] = useState<any>({});
     const [geometry2, setGeometry2] = useState<any>({});
 
     return (
         <View style={styles.main}>
-            <Text
-                style={{
-                    fontWeight: 'bold',
-                    fontSize: 25,
-                    paddingTop: 20,
-                    paddingBottom: 20,
-                    alignSelf: 'center',
-                }}>
-                Add Address
-            </Text>
+            <View style={styles.container}>
+                <TouchableOpacity
+                    onPress={() => navigation.goBack()}
+                    style={{
+                        position: 'absolute',
+                        top: 10,
+                        left: 2,
+                        padding: 5,
+                        paddingRight: 12,
+                    }}>
+                    <ArrowBack
+                        name="arrow-back-circle-outline"
+                        color={'#0a3749'}
+                        size={40}
+                    />
+                </TouchableOpacity>
+                <Text style={styles.header}>Add Address</Text>
+            </View>
             <ScrollView keyboardShouldPersistTaps="handled">
                 <GooglePlacesAutocomplete
                     placeholder="Enter Pick-Up Location"
@@ -37,7 +46,7 @@ const AddAddress = () => {
                         setGeometry1(details?.geometry?.location)
                     }
                     query={{
-                        key: 'AIzaSyDWiQo9spq2PLzl5i4OR2oBEXRoaMcgwYQ',
+                        key: '',
                     }}
                     fetchDetails={true}
                     onFail={error => console.log(error)}
@@ -98,6 +107,13 @@ const AddAddress = () => {
 const styles = StyleSheet.create({
     main: {
         flex: 1,
+    },
+    header: {marginTop: 16, fontWeight: 'bold', fontSize: 25},
+    container: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginBottom: 20,
     },
     button: {
         alignItems: 'center',

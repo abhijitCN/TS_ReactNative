@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native'
+import { StyleSheet } from 'react-native'
 
 export default StyleSheet.create({
   sectionContainer: {
@@ -20,7 +20,7 @@ export default StyleSheet.create({
   outerContainer: {
     width: '100%',
     height: '100%',
-    backgroundColor: '#d6dce4',
+    backgroundColor: '#ffffff',
   },
   innerContainer: {
     width: '100%',
@@ -35,7 +35,7 @@ export default StyleSheet.create({
     backgroundColor: 'rgba(51, 104, 123, 1)',
   },
   textTopContainer: {
-    color: 'rgba(255, 255, 255, 1)',
+    color: '#ffffff',
   },
   headingTopContainer: {
     color: 'rgba(255, 255, 255, 1)',
@@ -121,7 +121,7 @@ export default StyleSheet.create({
     marginRight: 16,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(51, 104, 123, 1)',
+    backgroundColor: 'rgba(51, 104, 13,4)',
   },
   avatarMe: {
     width: 38,
@@ -131,18 +131,19 @@ export default StyleSheet.create({
     marginLeft: 16,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(151, 204, 223, 1)',
+    backgroundColor: '#0a3749',
   },
   avatarNone: {
     display: 'none',
   },
   bottomContainer: {
-    width: '100%',
+    width: '95%',
     flexDirection: 'row',
     alignItems: 'center',
     padding: 8,
     height: 80,
-    backgroundColor: '#d6dce4',
+    backgroundColor: '#ffffff',
+    marginBottom: 15, alignSelf: 'center'
   },
   textInput: {
     flex: 1,
@@ -173,4 +174,6 @@ export default StyleSheet.create({
     height: undefined,
     aspectRatio: 0.9,
   },
+  header: { marginTop: 10, fontWeight: 'bold', fontSize: 25, alignSelf: 'center', marginBottom: 10 },
+
 })

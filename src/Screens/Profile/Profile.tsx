@@ -6,17 +6,19 @@ import {
     StyleSheet,
     Image,
     TouchableOpacity,
+    ActivityIndicator,
 } from 'react-native';
 const {height, width} = Dimensions.get('screen');
-import Toast from 'react-native-toast-message';
 import firestore from '@react-native-firebase/firestore';
 import {useDispatch, useSelector} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
 import {signOut} from '../../Reducers/authSlice';
 import {rootState} from '../../Reducers/store';
+import {toggleSpinner} from '../../Reducers/toggleSpinnerSlice';
+import ArrowBack from 'react-native-vector-icons/Ionicons';
 
 const Profile = () => {
-    const navigation = useNavigation();
+    const navigation: any = useNavigation();
     const dispatch = useDispatch();
     const [userData, setUserData] = useState<any>({});
     const user: any = useSelector<any>(state => state.user);
@@ -29,12 +31,11 @@ const Profile = () => {
     }, []);
 
     const logOut = () => {
+        dispatch(toggleSpinner(true));
+        console.log('SPINNER?.show == true ** ', SPINNER?.show);
         dispatch(signOut());
-        Toast.show({
-            type: 'success',
-            text1: 'Logout Successfully',
-            position: 'top',
-        });
+        dispatch(toggleSpinner(false));
+        console.log('SPINNER?.show == false ** ', SPINNER?.show);
     };
 
     const getUserAvatar = async () => {
@@ -82,83 +83,131 @@ const Profile = () => {
             });
     };
 
+    const SPINNER: any = useSelector<any>(
+        (state: rootState) => state.toggleSpinner,
+    );
+    console.log('toggleSpinner in change password **', SPINNER);
+
+    useEffect(() => {
+        console.log(' <useEffect SPINNER > ', SPINNER.show);
+    }, [SPINNER.show]);
     return (
         <View style={style.main}>
-            <View style={{alignItems: 'center'}}>
-                <View>
-                    <Text
+            {SPINNER?.show === true ? (
+                <>
+                    <View
                         style={{
-                            fontWeight: 'bold',
-                            fontSize: 25,
-                            paddingVertical: 20,
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            flex: 1,
                         }}>
-                        Profile
-                    </Text>
-                </View>
-                <View>
-                    {avatar ? (
-                        //profile?.Image ?
-                        <>
-                            <Image
-                                style={{
-                                    width: 150,
-                                    height: 150,
-                                    backgroundColor: '#eafafc',
-                                    alignSelf: 'center',
-                                    borderRadius: 90,
-                                }}
-                                source={{
-                                    //uri: profile?.Image,
-                                    uri: avatar,
-                                }}
+                        <ActivityIndicator color="#0a3749" size="large" />
+                    </View>
+                </>
+            ) : (
+                <>
+                    <View
+                        style={{
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                        }}>
+                        <TouchableOpacity
+                            onPress={() => navigation.goBack()}
+                            style={{
+                                position: 'absolute',
+                                top: 10,
+                                left: 2,
+                                padding: 5,
+                                paddingRight: 12,
+                            }}>
+                            <ArrowBack
+                                name="arrow-back-circle-outline"
+                                color={'#0a3749'}
+                                size={40}
                             />
-                        </>
-                    ) : (
-                        <>
-                            <Image
+                        </TouchableOpacity>
+                        <View>
+                            <Text
                                 style={{
-                                    width: 150,
-                                    height: 150,
-                                    backgroundColor: '#eafafc',
-                                    alignSelf: 'center',
-                                    borderRadius: 90,
-                                }}
-                                source={require('../../Assets/avatar2.png')}
-                            />
-                        </>
-                    )}
-                </View>
-                <View>
-                    <Toast />
-                </View>
-            </View>
-            <View
-                style={{
-                    alignItems: 'center',
-                }}>
-                <TouchableOpacity
-                    style={style.button}
-                    onPress={() =>
-                        navigation.navigate('EditProfile', {data: userData})
-                    }>
-                    <Text style={style.buttonText}>Edit Details</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    style={style.button}
-                    onPress={() =>
-                        navigation.navigate('AddAddress', {data: userData})
-                    }>
-                    <Text style={style.buttonText}>Add Address</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    style={style.button}
-                    onPress={() => navigation.navigate('ChangePassword')}>
-                    <Text style={style.buttonText}>Change Password</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={style.button} onPress={logOut}>
-                    <Text style={style.buttonText}>Log Out</Text>
-                </TouchableOpacity>
-            </View>
+                                    fontWeight: 'bold',
+                                    fontSize: 25,
+                                    paddingVertical: 20,
+                                }}>
+                                Profile
+                            </Text>
+                        </View>
+                    </View>
+                    <View
+                        style={{
+                            alignItems: 'center',
+                        }}>
+                        <View>
+                            {avatar ? (
+                                //profile?.Image ?
+                                <>
+                                    <Image
+                                        style={{
+                                            width: 150,
+                                            height: 150,
+                                            backgroundColor: '#eafafc',
+                                            alignSelf: 'center',
+                                            borderRadius: 90,
+                                        }}
+                                        source={{
+                                            //uri: profile?.Image,
+                                            uri: avatar,
+                                        }}
+                                    />
+                                </>
+                            ) : (
+                                <>
+                                    <Image
+                                        style={{
+                                            width: 150,
+                                            height: 150,
+                                            backgroundColor: '#eafafc',
+                                            alignSelf: 'center',
+                                            borderRadius: 90,
+                                        }}
+                                        source={require('../../Assets/avatar2.png')}
+                                    />
+                                </>
+                            )}
+                        </View>
+                        <TouchableOpacity
+                            style={style.button}
+                            onPress={() =>
+                                navigation.navigate('EditProfile', {
+                                    data: userData,
+                                })
+                            }>
+                            <Text style={style.buttonText}>Edit Details</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={style.button}
+                            onPress={() =>
+                                navigation.navigate('AddAddress', {
+                                    data: userData,
+                                })
+                            }>
+                            <Text style={style.buttonText}>Add Address</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={style.button}
+                            onPress={() =>
+                                navigation.navigate('ChangePassword')
+                            }>
+                            <Text style={style.buttonText}>
+                                Change Password
+                            </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={style.button} onPress={logOut}>
+                            <Text style={style.buttonText}>Log Out</Text>
+                        </TouchableOpacity>
+                    </View>
+                </>
+            )}
         </View>
     );
 };
