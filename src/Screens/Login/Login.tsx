@@ -27,6 +27,8 @@ import {
     GraphRequestManager,
     GraphRequest,
 } from 'react-native-fbsdk';
+import Button from '../../Components/Button';
+import {TextInputs} from '../../Components';
 
 interface textFields {
     email: string;
@@ -173,6 +175,10 @@ const Login = () => {
         //   }
     };
 
+    const alert = () => {
+        Alert.alert('AAA');
+    };
+
     return (
         <>
             {globalSpinner ? (
@@ -225,7 +231,7 @@ const Login = () => {
                                 </Text>
                             )}
                             <Text style={style.textInputHeading}>Password</Text>
-                            <TextInput
+                            {/* <TextInput
                                 style={[
                                     style.input,
                                     {
@@ -243,18 +249,32 @@ const Login = () => {
                                 placeholderTextColor="#1b94c4"
                                 secureTextEntry={true}
                                 placeholder="Password"
+                            /> */}
+                            <TextInputs
+                                placeholder="enter Password"
+                                secureTextEntry={true}
+                                onChangeText={e =>
+                                    setData({...data, password: e})
+                                }
+                                btnStyle={{
+                                    borderColor:
+                                        validate && data.password === ''
+                                            ? 'red'
+                                            : '#1b94c4',
+                                }}
                             />
                             {validate && data.password === '' && (
                                 <Text style={{marginLeft: 12, color: 'red'}}>
                                     Password required
                                 </Text>
                             )}
-
-                            <TouchableOpacity
+                            <Button press={Authenticate} btnText="Submit" />
+                            {/* <TouchableOpacity
                                 style={style.button}
                                 onPress={Authenticate}>
                                 <Text style={style.buttonText}>Submit</Text>
-                            </TouchableOpacity>
+                            </TouchableOpacity> */}
+                            {/* <Button press={alert} btnText="component BTN" /> */}
                             <View
                                 style={{
                                     //flex: 1,

@@ -1,17 +1,17 @@
 import React, {FC} from 'react';
 import {Dimensions, StyleSheet, View, TextInput} from 'react-native';
-//import {TextInput} from 'react-native-paper';
 const {height, width} = Dimensions.get('screen');
 interface Props {
     placeholder: string;
     onChangeText: (text: string) => void;
     secureTextEntry?: boolean;
+    btnStyle?: {};
 }
 const TextInputs: FC<Props> = props => {
     return (
-        <View style={style.container}>
+        <View style={{}}>
             <TextInput
-                style={style.input}
+                style={{...style.input, ...props.btnStyle}}
                 placeholder={props.placeholder}
                 onChangeText={props.onChangeText}
                 secureTextEntry={props.secureTextEntry || false}
@@ -27,7 +27,13 @@ const style = StyleSheet.create({
         backgroundColor: '#000000',
     },
     input: {
-        padding: 15,
+        height: 60,
+        margin: 12,
+        borderWidth: 1,
+        padding: 10,
+        backgroundColor: '#eafafc',
+        borderColor: '#1b94c4',
+        borderRadius: 10,
     },
 });
 export default TextInputs;
