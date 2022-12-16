@@ -6,6 +6,7 @@ interface Props {
     onChangeText: (text: string) => void;
     secureTextEntry?: boolean;
     btnStyle?: {};
+    placeholderTextColor: string;
 }
 const TextInputs: FC<Props> = props => {
     return (
@@ -15,6 +16,7 @@ const TextInputs: FC<Props> = props => {
                 placeholder={props.placeholder}
                 onChangeText={props.onChangeText}
                 secureTextEntry={props.secureTextEntry || false}
+                placeholderTextColor={props.placeholderTextColor}
             />
         </View>
     );

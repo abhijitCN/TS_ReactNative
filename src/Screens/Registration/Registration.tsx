@@ -30,6 +30,7 @@ import {
 } from '@react-native-google-signin/google-signin';
 import storage from '@react-native-firebase/storage';
 import {toggleSpinner} from '../../Reducers/toggleSpinnerSlice';
+import {TextInputs} from '../../Components';
 
 interface textFields {
     name: string;
@@ -371,7 +372,7 @@ function Registration() {
                                 <Text style={style.textInputHeading}>
                                     Password
                                 </Text>
-                                <TextInput
+                                {/* <TextInput
                                     style={[
                                         style.input,
                                         {
@@ -388,6 +389,20 @@ function Registration() {
                                     onChangeText={e =>
                                         setData({...data, password: e})
                                     }
+                                /> */}
+                                <TextInputs
+                                    placeholder="enter Password"
+                                    placeholderTextColor="#1b94c4"
+                                    secureTextEntry={true}
+                                    onChangeText={e =>
+                                        setData({...data, password: e})
+                                    }
+                                    btnStyle={{
+                                        borderColor:
+                                            validate && data.password === ''
+                                                ? 'red'
+                                                : '#1b94c4',
+                                    }}
                                 />
                                 {validate && data.password === '' && (
                                     <Text

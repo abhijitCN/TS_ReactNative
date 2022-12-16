@@ -252,6 +252,7 @@ const Login = () => {
                             /> */}
                             <TextInputs
                                 placeholder="enter Password"
+                                placeholderTextColor="#1b94c4"
                                 secureTextEntry={true}
                                 onChangeText={e =>
                                     setData({...data, password: e})
