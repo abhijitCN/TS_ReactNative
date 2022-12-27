@@ -30,6 +30,7 @@ const AddAddress = () => {
                         left: 2,
                         padding: 5,
                         paddingRight: 12,
+                        
                     }}>
                     <ArrowBack
                         name="arrow-back-circle-outline"
