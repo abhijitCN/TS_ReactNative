@@ -1,19 +1,14 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import {
     View,
     TouchableOpacity,
     Text,
     StyleSheet,
     Image,
-    ActivityIndicator,
-    Alert,
-    Button,
     TextInput,
     FlatList,
     ScrollView,
     SafeAreaView,
-    StatusBar,
-    RefreshControl,
     Modal,
     Pressable,
 } from 'react-native';
@@ -38,6 +33,7 @@ import {
 import storage from '@react-native-firebase/storage';
 import firestore from '@react-native-firebase/firestore';
 import Bars from 'react-native-vector-icons/FontAwesome5';
+import {TextInputs} from '../../Components';
 
 interface textFields {
     email: string;
@@ -58,14 +54,32 @@ const wait = (timeout: any) => {
 function Home() {
     const navigation: any = useNavigation();
     const dispatch = useDispatch();
+
     const [data, setData] = useState<itemType[]>([]);
+    const [oldData, setOldData] = useState<itemType[]>([]);
+    const [visible, setVisible] = useState<boolean>(false);
+    const [search, setSearch] = useState<string>('');
+    const searchRef = useRef();
+    const scrollIndexRef = useRef();
+
     const [avatar, setAvatar] = useState();
     const [refreshing, setRefreshing] = React.useState(false);
     const user: any = useSelector<any>((state: rootState) => state.user);
     const profile: any = useSelector<any>((state: rootState) => state.profile);
     const [userData, setUserData] = useState<any>({});
     const [modalVisible, setModalVisible] = useState(false);
-
+    const [scrollIndex, setscrollIndex] = useState<number>(0);
+    //search Function
+    const onSearch = text => {
+        if (text == '') {
+            setData(oldData);
+        } else {
+            let tempList = data.filter(item => {
+                return item.name.toLowerCase().indexOf(text.toLowerCase()) > -1;
+            });
+            setData(tempList);
+        }
+    };
     //console.log(' < user > ', profile);
     // const SPINNER: any = useSelector<any>(
     //     (state: rootState) => state.toggleSpinner,
@@ -216,6 +230,7 @@ function Home() {
                 });
             });
         setData(Product);
+        setOldData(Product);
     };
 
     useEffect(() => {
@@ -308,7 +323,50 @@ function Home() {
                     }}>
                     <Text style={style.helloText}>Hello,{user?.email}</Text>
                 </View>
-                <ScrollView
+                {/* <TextInputs
+                    placeholder="Search"
+                    placeholderTextColor="#1b94c4"
+                    // btnStyle={{
+                    //     width: '90%',
+                    // }}
+                    onChangeText={text => {
+                        onSearch(text);
+                        setSearch(text);
+                    }}
+                /> */}
+                <View style={style.searchSection}>
+                    <Filter
+                        style={style.searchIcon}
+                        name="search1"
+                        size={20}
+                        color="#000"
+                    />
+                    <TextInput
+                        style={style.input}
+                        placeholder="Search"
+                        onChangeText={text => {
+                            onSearch(text);
+                            setSearch(text);
+                        }}
+                        underlineColorAndroid="transparent"
+                    />
+                    {search == '' ? null : (
+                        <TouchableOpacity
+                            onPress={() => {
+                                searchRef.current.clear();
+                                onSearch('');
+                                setSearch('');
+                            }}>
+                            <Icon
+                                style={style.searchIcon}
+                                name="circle-with-cross"
+                                size={30}
+                                color="#000"
+                            />
+                        </TouchableOpacity>
+                    )}
+                </View>
+                {/* <ScrollView
                     contentContainerStyle={style.scrollView}
                     // refreshControl={
                     //     <RefreshControl
@@ -316,118 +374,105 @@ function Home() {
                     //         onRefresh={onRefresh}
                     //     />
                     // }
-                >
-                    <View style={{flex: 1}}>
-                        <FlatList
-                            data={data}
-                            renderItem={({item}) => {
-                                return (
-                                    <>
-                                        <View
-                                            style={{
-                                                flex: 1,
+                > */}
+                <View style={{flex: 1}}>
+                    <FlatList
+                        initialScrollIndex={scrollIndex}
+                        ref={scrollIndexRef}
+                        data={data}
+                        renderItem={({item}) => {
+                            return (
+                                <>
+                                    <View
+                                        style={{
+                                            flex: 1,
 
-                                                //backgroundColor: 'green',
+                                            //backgroundColor: 'green',
+                                        }}>
+                                        <TouchableOpacity
+                                            onPress={() =>
+                                                navigation.navigate(
+                                                    'ProductDetails',
+                                                    {items: item},
+                                                )
+                                            }
+                                            style={{
+                                                //padding: 12,
+                                                margin: 12,
+                                                borderColor: 'gray',
+                                                //borderWidth: 0.7,
+                                                borderRadius: 10,
+                                                marginTop: 10,
+                                                backgroundColor: '#bff0f7',
+                                                shadowColor: '#000',
+                                                shadowOffset: {
+                                                    width: 0,
+                                                    height: 2,
+                                                },
+                                                shadowOpacity: 0.25,
+                                                shadowRadius: 4,
+                                                elevation: 5,
+                                                minHeight: 253,
                                             }}>
-                                            <TouchableOpacity
-                                                onPress={() =>
-                                                    navigation.navigate(
-                                                        'ProductDetails',
-                                                        {items: item},
-                                                    )
-                                                }
+                                            {item.ImageUrl ? (
+                                                <>
+                                                    <Image
+                                                        style={{
+                                                            height: 150,
+                                                            width: '100%',
+                                                            borderTopLeftRadius: 10,
+                                                            borderTopRightRadius: 10,
+                                                            marginVertical: 0,
+                                                        }}
+                                                        source={{
+                                                            uri: item.ImageUrl,
+                                                        }}
+                                                    />
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <Image
+                                                        style={{
+                                                            height: 150,
+                                                            width: '100%',
+                                                            borderRadius: 10,
+                                                        }}
+                                                        source={{
+                                                            uri: 'https://reactnative.dev/img/tiny_logo.png',
+                                                        }}
+                                                    />
+                                                </>
+                                            )}
+                                            <View
                                                 style={{
-                                                    //padding: 12,
-                                                    margin: 12,
-                                                    borderColor: 'gray',
-                                                    //borderWidth: 0.7,
-                                                    borderRadius: 10,
-                                                    marginTop: 10,
-                                                    backgroundColor: '#bff0f7',
-                                                    shadowColor: '#000',
-                                                    shadowOffset: {
-                                                        width: 0,
-                                                        height: 2,
-                                                    },
-                                                    shadowOpacity: 0.25,
-                                                    shadowRadius: 4,
-                                                    elevation: 5,
-                                                    minHeight: 253,
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    marginTop: 5,
                                                 }}>
-                                                {item.ImageUrl ? (
-                                                    <>
-                                                        <Image
-                                                            style={{
-                                                                height: 150,
-                                                                width: '100%',
-                                                                borderTopLeftRadius: 10,
-                                                                borderTopRightRadius: 10,
-                                                                marginVertical: 0,
-                                                            }}
-                                                            source={{
-                                                                uri: item.ImageUrl,
-                                                            }}
-                                                        />
-                                                    </>
-                                                ) : (
-                                                    <>
-                                                        <Image
-                                                            style={{
-                                                                height: 150,
-                                                                width: '100%',
-                                                                borderRadius: 10,
-                                                            }}
-                                                            source={{
-                                                                uri: 'https://reactnative.dev/img/tiny_logo.png',
-                                                            }}
-                                                        />
-                                                    </>
-                                                )}
-                                                <View
-                                                    style={{
-                                                        alignItems: 'center',
-                                                        justifyContent:
-                                                            'center',
-                                                        marginTop: 5,
-                                                    }}>
-                                                    <Text
-                                                        style={
-                                                            style.productText
-                                                        }>
-                                                        Name - {item.name}
-                                                    </Text>
-                                                    <Text
-                                                        style={
-                                                            style.productText
-                                                        }>
-                                                        Price - {item.price}
-                                                    </Text>
-                                                    <Text
-                                                        style={
-                                                            style.productText
-                                                        }>
-                                                        Quantity -{' '}
-                                                        {item.quantity}
-                                                    </Text>
-                                                    <Text
-                                                        style={
-                                                            style.productText
-                                                        }>
-                                                        Category -{' '}
-                                                        {item.category}
-                                                    </Text>
-                                                </View>
-                                            </TouchableOpacity>
-                                        </View>
-                                    </>
-                                );
-                            }}
-                            showsVerticalScrollIndicator={false}
-                            horizontal={false}
-                            numColumns={2}
-                        />
-                    </View>
-                </ScrollView>
+                                                <Text style={style.productText}>
+                                                    Name - {item.name}
+                                                </Text>
+                                                <Text style={style.productText}>
+                                                    Price - {item.price}
+                                                </Text>
+                                                <Text style={style.productText}>
+                                                    Quantity - {item.quantity}
+                                                </Text>
+                                                <Text style={style.productText}>
+                                                    Category - {item.category}
+                                                </Text>
+                                            </View>
+                                        </TouchableOpacity>
+                                    </View>
+                                </>
+                            );
+                        }}
+                        showsVerticalScrollIndicator={false}
+                        horizontal={false}
+                        numColumns={2}
+                    />
+                </View>
+                {/* </ScrollView> */}
                 <Modal
                     animationType="slide"
                     transparent={true}
@@ -448,30 +493,43 @@ function Home() {
                                 }}>
                                 <Pressable
                                     style={[style.button2, style.buttonClose]}
-                                    // onPress={() =>
-                                    //     pickImageAndUploadFromCamera()
-                                    // }
-                                >
+                                    onPress={() => {
+                                        const tempList = data.sort((a, b) =>
+                                            a.name > b.name ? 1 : -1,
+                                        );
+                                        setData(tempList);
+                                        scrollIndexRef.current.scrollToIndex({
+                                            animated: true,
+                                            index: 0,
+                                        });
+                                        setModalVisible(!modalVisible);
+                                    }}>
                                     <Text style={style.textStyle}>
                                         Sort By Category
                                     </Text>
                                 </Pressable>
                                 <Pressable
                                     style={[style.button2, style.buttonClose]}
-                                    // onPress={() =>
-                                    //     pickImageAndUploadFromGallery()
-                                    // }
-                                >
+                                    onPress={() => {
+                                        const tempList = data.sort((a, b) =>
+                                            a.price - b.price ? 1 : -1,
+                                        );
+                                        setData(tempList);
+                                        setModalVisible(!modalVisible);
+                                    }}>
                                     <Text style={style.textStyle}>
-                                        Sort By Price
+                                        Price Low To High
                                     </Text>
                                 </Pressable>
                                 <Pressable
                                     style={[style.button2, style.buttonClose]}
-                                    // onPress={() =>
-                                    //     pickImageAndUploadFromGallery()
-                                    // }
-                                >
+                                    onPress={() => {
+                                        const tempList = data.sort((a, b) =>
+                                            a.quantity - b.quantity ? 1 : -1,
+                                        );
+                                        setData(tempList);
+                                        setModalVisible(!modalVisible);
+                                    }}>
                                     <Text style={style.textStyle}>
                                         Sort By Quantity
                                     </Text>
@@ -635,6 +693,31 @@ const style = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 25,
         color: '#0a3749',
+    },
+    searchSection: {
+        //flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#fff',
+        height: 60,
+        margin: 12,
+        borderWidth: 1,
+        padding: 5,
+        borderColor: '#1b94c4',
+        borderRadius: 10,
+    },
+    searchIcon: {
+        padding: 10,
+    },
+    input: {
+        flex: 1,
+        paddingTop: 10,
+        paddingRight: 10,
+        paddingBottom: 10,
+        paddingLeft: 0,
+        backgroundColor: '#fff',
+        color: '#424242',
     },
 });
 export default Home;

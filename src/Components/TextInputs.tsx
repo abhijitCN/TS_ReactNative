@@ -7,6 +7,7 @@ interface Props {
     secureTextEntry?: boolean;
     btnStyle?: {};
     placeholderTextColor: string;
+    icon?: string | undefined;
 }
 const TextInputs: FC<Props> = props => {
     return (
