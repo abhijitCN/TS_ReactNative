@@ -2,6 +2,7 @@ import React from 'react';
 import {Dimensions, StyleSheet, View, TextInput, Image} from 'react-native';
 const {height, width} = Dimensions.get('screen');
 //import {useNavigation} from '@react-navigation/native';
+//import * as asa from './Splash.scss';
 
 const Splash: React.FC = ({navigation}) => {
     //const navigation = useNavigation();
@@ -20,6 +21,7 @@ const Splash: React.FC = ({navigation}) => {
                 justifyContent: 'center',
             }}>
             <Image
+                //style={asa.container}
                 style={{
                     width: 200,
                     height: 200,
