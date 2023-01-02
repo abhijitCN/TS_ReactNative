@@ -5,6 +5,8 @@ import profileSlice from './profileSlice';
 import verificationSlice from './verificationSlice';
 import toggleSpinnerSlice from './toggleSpinnerSlice';
 import ProductSlice from './ProductSlice';
+import CartReducer from './CartSlice';
+
 const createDebugger = require('redux-flipper').default; // <-- ADD THIS
 
 const store = configureStore({
@@ -13,7 +15,8 @@ const store = configureStore({
       verification:verificationSlice,
       profile:profileSlice,
       toggleSpinner : toggleSpinnerSlice,
-      product:ProductSlice
+      product:ProductSlice,
+      cart:CartReducer
     },
     middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()

@@ -21,6 +21,8 @@ import VoiceCall from '../Screens/Support/VoiceCall';
 import MyProduct from '../Screens/Myproduct/MyProduct';
 import Selection from '../Screens/Support/Selection';
 import ProductDetailsScreen from '../Screens/ProductDetails/ProductDetails';
+import Payment from '../Screens/Payment/PaymentScreen';
+import AddToCart from '../Screens/AddToCart/AddToCartScreen';
 
 const MainStack = createNativeStackNavigator<MainRootStackParamList>();
 const Drawer = createDrawerNavigator();
@@ -41,6 +43,16 @@ const HomeDrawerStack = () => {
             <MainStack.Screen
                 name="ProductDetails"
                 component={ProductDetailsScreen}
+                options={{headerShown: false}}
+            />
+            <MainStack.Screen
+                name="AddToCart"
+                component={AddToCart}
+                options={{headerShown: false}}
+            />
+            <MainStack.Screen
+                name="Payment"
+                component={Payment}
                 options={{headerShown: false}}
             />
         </MainStack.Navigator>

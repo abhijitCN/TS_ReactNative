@@ -16,8 +16,9 @@ export type MainRootStackParamList = {
     SupportVideoCall:any;
     SupportVoiceCall:any;
     MyProduct:any;
-    ProductDetails:any
-
+    ProductDetails:any;
+    AddToCart:any;
+    Payment:any
 };
 export type MainDrawerParamList = {
     Home: {showMsg: boolean};

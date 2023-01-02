@@ -455,9 +455,9 @@ function Home() {
                                                 <Text style={style.productText}>
                                                     Price - {item.price}
                                                 </Text>
-                                                <Text style={style.productText}>
+                                                {/* <Text style={style.productText}>
                                                     Quantity - {item.quantity}
-                                                </Text>
+                                                </Text> */}
                                                 <Text style={style.productText}>
                                                     Category - {item.category}
                                                 </Text>

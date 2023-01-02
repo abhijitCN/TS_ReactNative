@@ -3,7 +3,7 @@ import React from 'react';
 
 interface BtnText {
     press?(): void;
-    btnStyle?(): {};
+    btnStyle?: {};
     btnText: string;
 }
 

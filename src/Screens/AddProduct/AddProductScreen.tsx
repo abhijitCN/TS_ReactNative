@@ -48,10 +48,10 @@ const AddProduct: React.FC = () => {
         userMail: user.email,
     });
     const Categorys = [
-        {id: 1, name: 'fruits'},
+        {id: 1, name: 'Mobile'},
         ,
-        {id: 2, name: 'vegetables'},
-        {id: 3, name: 'animal'},
+        {id: 2, name: 'Laptop'},
+        {id: 3, name: 'Tablet'},
     ];
     const [validate, SetValiadate] = useState<boolean>(false);
 
@@ -100,7 +100,7 @@ const AddProduct: React.FC = () => {
         if (
             data.name != '' &&
             data.price != '' &&
-            data.quantity != '' &&
+            //data.quantity != '' &&
             categoryName != '' &&
             data.imageUrl != ''
         ) {
@@ -300,7 +300,7 @@ const AddProduct: React.FC = () => {
                                     </Text>
                                 )}
 
-                                <Text style={style.textInputHeading}>
+                                {/* <Text style={style.textInputHeading}>
                                     Product Quantity
                                 </Text>
 
@@ -326,7 +326,7 @@ const AddProduct: React.FC = () => {
                                         style={{marginLeft: 12, color: 'red'}}>
                                         Product Quantity required
                                     </Text>
-                                )}
+                                )} */}
 
                                 <Text style={style.textInputHeading}>
                                     Product Category

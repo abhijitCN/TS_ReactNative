@@ -7,7 +7,6 @@ import {
     Image,
     ActivityIndicator,
     Alert,
-    Button,
     TextInput,
     FlatList,
     ScrollView,
@@ -20,15 +19,21 @@ import firestore from '@react-native-firebase/firestore';
 import {useDispatch, useSelector} from 'react-redux';
 import {rootState} from '../../Reducers/store';
 import ArrowBack from 'react-native-vector-icons/Ionicons';
+import Button from '../../Components/Button';
+import {addCartProduct} from '../../Reducers/CartSlice';
 
 export default function ProductDetails() {
     const Route = useRoute();
     const navigation: any = useNavigation();
     const [avatar, setAvatar] = useState();
     const user: any = useSelector<any>((state: rootState) => state.user);
+    const cartProductArray: any = useSelector<any>(state => state.cart);
+
     const routData = Route.params;
     const values: any = routData;
-    console.log('values ** ', values);
+    console.log('values ** ', values.items);
+    console.log(' ** cartProductArray ** ', cartProductArray);
+    const dispatch = useDispatch();
 
     useEffect(() => {
         sample();
@@ -61,6 +66,11 @@ export default function ProductDetails() {
                 });
             });
     };
+
+    // const Payment = () => {
+    //     dispatch(addCartProduct(values));
+    //     //navigation.navigate('AddToCart');
+    // };
 
     return (
         <View style={style.main}>
@@ -180,6 +190,28 @@ export default function ProductDetails() {
                             Category - {values.items.category}
                         </Text>
                     </View>
+                </View>
+                {values.items.quantity == 0 ? (
+                    // <Button press={Payment} btnText="Add To Cart" />
+                    <TouchableOpacity
+                        onPress={() => {
+                            dispatch(addCartProduct(values.items));
+                        }}>
+                        <Text>ADD to Cart</Text>
+                    </TouchableOpacity>
+                ) : null}
+                <View style={{flexDirection: 'row'}}>
+                    <Button
+                        //press={Payment}
+                        btnStyle={{width: 70}}
+                        btnText="-"
+                    />
+                    <Text>{'0'}</Text>
+                    <Button
+                        //press={Payment}
+                        btnStyle={{width: 70}}
+                        btnText="+"
+                    />
                 </View>
             </View>
         </View>
