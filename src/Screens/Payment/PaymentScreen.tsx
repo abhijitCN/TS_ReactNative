@@ -1,6 +1,6 @@
 import React from 'react';
 import {Alert, Text, TouchableHighlight, View} from 'react-native';
-import RazorpayCheckout from 'react-native-razorpay';
+//import RazorpayCheckout from 'react-native-razorpay';
 
 // import { Container } from './styles';
 
@@ -8,7 +8,7 @@ const Payment: React.FC = () => {
     return (
         <View>
             <Text>Payment</Text>
-            <TouchableHighlight
+            {/* <TouchableHighlight
                 onPress={() => {
                     var options = {
                         description: 'Credits towards consultation',
@@ -35,7 +35,7 @@ const Payment: React.FC = () => {
                                 `Error: ${error.code} | ${error.description}`,
                             );
                         });
-                }}></TouchableHighlight>
+                }}></TouchableHighlight> */}
         </View>
     );
 };

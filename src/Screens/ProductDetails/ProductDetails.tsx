@@ -21,6 +21,8 @@ import {rootState} from '../../Reducers/store';
 import ArrowBack from 'react-native-vector-icons/Ionicons';
 import Button from '../../Components/Button';
 import {addCartProduct} from '../../Reducers/CartSlice';
+import CartIcon from 'react-native-vector-icons/Feather';
+//import Toast from 'react-native-toast-message';
 
 export default function ProductDetails() {
     const Route = useRoute();
@@ -32,7 +34,7 @@ export default function ProductDetails() {
     const routData = Route.params;
     const values: any = routData;
     console.log('values ** ', values.items);
-    console.log(' ** cartProductArray ** ', cartProductArray);
+    console.log(' ** cartProductArray ** ', cartProductArray.arr);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -67,10 +69,10 @@ export default function ProductDetails() {
             });
     };
 
-    // const Payment = () => {
-    //     dispatch(addCartProduct(values));
-    //     //navigation.navigate('AddToCart');
-    // };
+    const AddProductToCart = () => {
+        dispatch(addCartProduct(values.items));
+        Alert.alert('Product Added Successfully');
+    };
 
     return (
         <View style={style.main}>
@@ -117,6 +119,31 @@ export default function ProductDetails() {
                             />
                         </>
                     )}
+                </TouchableOpacity>
+                <TouchableOpacity
+                    onPress={() => navigation.navigate('AddToCart')}
+                    style={{
+                        position: 'absolute',
+                        top: 23,
+                        right: 0,
+                        left: 280,
+                        padding: 5,
+                        paddingRight: 12,
+                    }}>
+                    <CartIcon
+                        name="shopping-cart"
+                        size={22}
+                        color={'#000000'}
+                    />
+                    {/* <Text
+                        style={{
+                            position: 'absolute',
+                            left: 15,
+                            bottom: 22,
+                            fontWeight: 'bold',
+                        }}>
+                        {cartProductArray.arr.length}
+                    </Text> */}
                 </TouchableOpacity>
             </View>
             <View
@@ -191,27 +218,25 @@ export default function ProductDetails() {
                         </Text>
                     </View>
                 </View>
-                {values.items.quantity == 0 ? (
-                    // <Button press={Payment} btnText="Add To Cart" />
-                    <TouchableOpacity
-                        onPress={() => {
-                            dispatch(addCartProduct(values.items));
-                        }}>
-                        <Text>ADD to Cart</Text>
-                    </TouchableOpacity>
+                {values.items.quantity !== 0 ? (
+                    <Button press={AddProductToCart} btnText="Add To Cart" />
                 ) : null}
                 <View style={{flexDirection: 'row'}}>
-                    <Button
-                        //press={Payment}
-                        btnStyle={{width: 70}}
-                        btnText="-"
-                    />
-                    <Text>{'0'}</Text>
-                    <Button
-                        //press={Payment}
-                        btnStyle={{width: 70}}
-                        btnText="+"
-                    />
+                    {values.items.quantity == 0 ? null : (
+                        <Button
+                            //press={Payment}
+                            btnStyle={{width: 70}}
+                            btnText="-"
+                        />
+                    )}
+                    {values.items.quantity == 0 ? null : <Text>{'0'}</Text>}
+                    {values.items.quantity == 0 ? null : (
+                        <Button
+                            //press={Payment}
+                            btnStyle={{width: 70}}
+                            btnText="+"
+                        />
+                    )}
                 </View>
             </View>
         </View>

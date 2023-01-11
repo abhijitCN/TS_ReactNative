@@ -33,6 +33,8 @@ import {
 import storage from '@react-native-firebase/storage';
 import firestore from '@react-native-firebase/firestore';
 import Bars from 'react-native-vector-icons/FontAwesome5';
+import CartIcon from 'react-native-vector-icons/Feather';
+
 import {TextInputs} from '../../Components';
 
 interface textFields {
@@ -59,8 +61,8 @@ function Home() {
     const [oldData, setOldData] = useState<itemType[]>([]);
     const [visible, setVisible] = useState<boolean>(false);
     const [search, setSearch] = useState<string>('');
-    const searchRef = useRef();
-    const scrollIndexRef = useRef();
+    const searchRef: React.MutableRefObject<undefined> = useRef();
+    const scrollIndexRef: React.MutableRefObject<undefined> = useRef();
 
     const [avatar, setAvatar] = useState();
     const [refreshing, setRefreshing] = React.useState(false);
@@ -70,13 +72,14 @@ function Home() {
     const [modalVisible, setModalVisible] = useState(false);
     const [scrollIndex, setscrollIndex] = useState<number>(0);
     //search Function
-    const onSearch = text => {
+    const onSearch = (text: string) => {
         if (text == '') {
             setData(oldData);
         } else {
-            let tempList = data.filter(item => {
+            const tempList = data.filter(item => {
                 return item.name.toLowerCase().indexOf(text.toLowerCase()) > -1;
             });
+            console.log('Temples', tempList);
             setData(tempList);
         }
     };
@@ -229,14 +232,14 @@ function Home() {
                     });
                 });
             });
-        setData(Product);
         setOldData(Product);
+        setData(Product);
     };
 
     useEffect(() => {
         getAllProducts();
         //console.log('**HOLE DATA**', data);
-    }, [data]);
+    }, []);
 
     return (
         <>
@@ -268,6 +271,22 @@ function Home() {
                         <Bars name="bars" size={22} color={'#000000'} />
                     </TouchableOpacity>
                     <Text style={style.header}>Home</Text>
+                    <TouchableOpacity
+                        onPress={() => navigation.navigate('AddToCart')}
+                        style={{
+                            position: 'absolute',
+                            top: 23,
+                            right: 0,
+                            left: 280,
+                            padding: 5,
+                            paddingRight: 12,
+                        }}>
+                        <CartIcon
+                            name="shopping-cart"
+                            size={22}
+                            color={'#000000'}
+                        />
+                    </TouchableOpacity>
                     <TouchableOpacity
                         onPress={
                             () => navigation.navigate('Profile')
@@ -505,14 +524,15 @@ function Home() {
                                         setModalVisible(!modalVisible);
                                     }}>
                                     <Text style={style.textStyle}>
-                                        Sort By Category
+                                        Sort By Name
                                     </Text>
                                 </Pressable>
                                 <Pressable
                                     style={[style.button2, style.buttonClose]}
                                     onPress={() => {
-                                        const tempList = data.sort((a, b) =>
-                                            a.price - b.price ? 1 : -1,
+                                        const tempList = data.sort(
+                                            (a: any, b: any) =>
+                                                a.price - b.price,
                                         );
                                         setData(tempList);
                                         setModalVisible(!modalVisible);
@@ -524,14 +544,29 @@ function Home() {
                                 <Pressable
                                     style={[style.button2, style.buttonClose]}
                                     onPress={() => {
-                                        const tempList = data.sort((a, b) =>
-                                            a.quantity - b.quantity ? 1 : -1,
+                                        const tempList = data.sort(
+                                            (a: any, b: any) =>
+                                                b.price - a.price,
                                         );
                                         setData(tempList);
                                         setModalVisible(!modalVisible);
                                     }}>
                                     <Text style={style.textStyle}>
-                                        Sort By Quantity
+                                        Price High To Low
+                                    </Text>
+                                </Pressable>
+                                <Pressable
+                                    style={[style.button2, style.buttonClose]}
+                                    onPress={() => {
+                                        const tempList = data.sort(
+                                            (a: any, b: any) =>
+                                                b.price - a.price,
+                                        );
+                                        setData(tempList);
+                                        setModalVisible(!modalVisible);
+                                    }}>
+                                    <Text style={style.textStyle}>
+                                        Sort By Rating
                                     </Text>
                                 </Pressable>
                             </View>
