@@ -6,7 +6,13 @@ import {Alert, Text, TouchableHighlight, View} from 'react-native';
 
 const Payment: React.FC = () => {
     return (
-        <View>
+        <View
+            style={{
+                flex: 1,
+                backgroundColor: 'pink',
+                alignItems: 'center',
+                justifyContent: 'center',
+            }}>
             <Text>Payment</Text>
             {/* <TouchableHighlight
                 onPress={() => {

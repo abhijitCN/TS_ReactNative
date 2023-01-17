@@ -15,6 +15,11 @@ import CartIcon from 'react-native-vector-icons/Feather';
 import firestore from '@react-native-firebase/firestore';
 import {rootState} from '../../Reducers/store';
 import {ScrollView} from 'react-native-gesture-handler';
+import {
+    addCartProduct,
+    decrementQuantity,
+    deleteMyCartItem,
+} from '../../Reducers/CartSlice';
 
 const AddToCart = () => {
     const Route = useRoute();
@@ -22,13 +27,13 @@ const AddToCart = () => {
     const cartProductArray: any = useSelector<any>(state => state.cart);
     const user: any = useSelector<any>((state: rootState) => state.user);
     const [avatar, setAvatar] = useState();
+    const dispatch = useDispatch();
 
-    console.log(' ** cartProductArray ?? ** ', cartProductArray.arr);
+    console.log(' ** cartProductArray ?? ** ', cartProductArray);
 
     useEffect(() => {
         sample();
     }, []);
-
     const sample = async () => {
         const emailArray: any = [];
         await firestore()
@@ -56,13 +61,18 @@ const AddToCart = () => {
                 });
             });
     };
-
     const Payment = () => {
         navigation.navigate('Payment');
     };
+    const Increment = () => {
+        navigation.navigate('Payment');
+    };
+    const Decrement = (item: any): void => {
+        dispatch(addCartProduct(item));
+    };
     const TotalPrice = () => {
         let total = 0;
-        cartProductArray.arr.map((item: any) => {
+        cartProductArray.map((item: any) => {
             total = total + item.quantity * item.price;
         });
         return total;
@@ -122,17 +132,10 @@ const AddToCart = () => {
                         left: 280,
                         padding: 5,
                         paddingRight: 12,
-                    }}>
-                    <CartIcon
-                        name="shopping-cart"
-                        size={22}
-                        color={'#000000'}
-                    />
-                </TouchableOpacity>
+                    }}></TouchableOpacity>
             </View>
-            {/* <ScrollView> */}
             <FlatList
-                data={cartProductArray.arr}
+                data={cartProductArray}
                 renderItem={({item}) => {
                     return (
                         <>
@@ -206,7 +209,19 @@ const AddToCart = () => {
                                 <View style={{flexDirection: 'row'}}>
                                     {item.quantity == 0 ? null : (
                                         <Button
-                                            //press={Payment}
+                                            press={() => {
+                                                if (item.quantity > 1) {
+                                                    dispatch(
+                                                        decrementQuantity(item),
+                                                    );
+                                                } else {
+                                                    dispatch(
+                                                        deleteMyCartItem(
+                                                            item.docId,
+                                                        ),
+                                                    );
+                                                }
+                                            }}
                                             btnStyle={{width: 70}}
                                             btnText="-"
                                         />
@@ -216,7 +231,9 @@ const AddToCart = () => {
                                     )}
                                     {item.quantity == 0 ? null : (
                                         <Button
-                                            //press={Payment}
+                                            press={() =>
+                                                dispatch(addCartProduct(item))
+                                            }
                                             btnStyle={{width: 70}}
                                             btnText="+"
                                         />
@@ -230,14 +247,10 @@ const AddToCart = () => {
                 horizontal={false}
                 numColumns={1}
             />
-            {/* </ScrollView> */}
-            {cartProductArray.arr.length > 0 ? (
-                <View style={{minHeight: 150, backgroundColor: 'red'}}>
+            {cartProductArray.length > 0 ? (
+                <View style={{minHeight: 150}}>
                     <Text>
-                        {'Added items' +
-                            '(' +
-                            cartProductArray.arr.length +
-                            ')'}
+                        {'Added items' + '(' + cartProductArray.length + ')'}
                     </Text>
                     <Text>{'Total Price' + TotalPrice()}</Text>
                     <Button
@@ -245,7 +258,7 @@ const AddToCart = () => {
                         btnText={
                             'Proceed to Buy' +
                             '(' +
-                            cartProductArray.arr.length +
+                            cartProductArray.length +
                             'Items' +
                             ')'
                         }
@@ -256,7 +269,7 @@ const AddToCart = () => {
                     style={{
                         flex: 1,
                         alignItems: 'center',
-                        justifyContent: 'center',
+                        //justifyContent: 'center',
                     }}>
                     <Text style={{fontSize: 50, fontWeight: 'bold'}}>
                         Cart is Empty

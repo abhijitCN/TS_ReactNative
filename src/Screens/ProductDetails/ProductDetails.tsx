@@ -20,7 +20,10 @@ import {useDispatch, useSelector} from 'react-redux';
 import {rootState} from '../../Reducers/store';
 import ArrowBack from 'react-native-vector-icons/Ionicons';
 import Button from '../../Components/Button';
-import {addCartProduct} from '../../Reducers/CartSlice';
+import {
+    addCartProduct,
+    increaseQuantityInProductDetails,
+} from '../../Reducers/CartSlice';
 import CartIcon from 'react-native-vector-icons/Feather';
 //import Toast from 'react-native-toast-message';
 
@@ -34,7 +37,7 @@ export default function ProductDetails() {
     const routData = Route.params;
     const values: any = routData;
     console.log('values ** ', values.items);
-    console.log(' ** cartProductArray ** ', cartProductArray.arr);
+    console.log(' ** cartProductArray ** ', cartProductArray);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -71,6 +74,7 @@ export default function ProductDetails() {
 
     const AddProductToCart = () => {
         dispatch(addCartProduct(values.items));
+        dispatch(increaseQuantityInProductDetails(values.items));
         Alert.alert('Product Added Successfully');
     };
 
@@ -135,15 +139,15 @@ export default function ProductDetails() {
                         size={22}
                         color={'#000000'}
                     />
-                    {/* <Text
+                    <Text
                         style={{
                             position: 'absolute',
                             left: 15,
                             bottom: 22,
                             fontWeight: 'bold',
                         }}>
-                        {cartProductArray.arr.length}
-                    </Text> */}
+                        {cartProductArray.length}
+                    </Text>
                 </TouchableOpacity>
             </View>
             <View
@@ -229,7 +233,9 @@ export default function ProductDetails() {
                             btnText="-"
                         />
                     )}
-                    {values.items.quantity == 0 ? null : <Text>{'0'}</Text>}
+                    {values.items.quantity == 0 ? null : (
+                        <Text>{values.items.quantity}</Text>
+                    )}
                     {values.items.quantity == 0 ? null : (
                         <Button
                             //press={Payment}

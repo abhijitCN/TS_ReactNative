@@ -63,6 +63,7 @@ function Home() {
     const [search, setSearch] = useState<string>('');
     const searchRef: React.MutableRefObject<undefined> = useRef();
     const scrollIndexRef: React.MutableRefObject<undefined> = useRef();
+    const cartProductArray: any = useSelector<any>(state => state.cart);
 
     const [avatar, setAvatar] = useState();
     const [refreshing, setRefreshing] = React.useState(false);
@@ -286,6 +287,15 @@ function Home() {
                             size={22}
                             color={'#000000'}
                         />
+                        <Text
+                            style={{
+                                position: 'absolute',
+                                left: 15,
+                                bottom: 22,
+                                fontWeight: 'bold',
+                            }}>
+                            {cartProductArray.length}
+                        </Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         onPress={
