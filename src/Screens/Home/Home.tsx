@@ -415,8 +415,6 @@ function Home() {
                                     <View
                                         style={{
                                             flex: 1,
-
-                                            //backgroundColor: 'green',
                                         }}>
                                         <TouchableOpacity
                                             onPress={() =>
@@ -426,10 +424,9 @@ function Home() {
                                                 )
                                             }
                                             style={{
-                                                //padding: 12,
+                                                flexDirection: 'row',
                                                 margin: 12,
                                                 borderColor: 'gray',
-                                                //borderWidth: 0.7,
                                                 borderRadius: 10,
                                                 marginTop: 10,
                                                 backgroundColor: '#bff0f7',
@@ -441,55 +438,84 @@ function Home() {
                                                 shadowOpacity: 0.25,
                                                 shadowRadius: 4,
                                                 elevation: 5,
-                                                minHeight: 253,
+                                                minHeight: 150,
                                             }}>
-                                            {item.ImageUrl ? (
-                                                <>
-                                                    <Image
-                                                        style={{
-                                                            height: 150,
-                                                            width: '100%',
-                                                            borderTopLeftRadius: 10,
-                                                            borderTopRightRadius: 10,
-                                                            marginVertical: 0,
-                                                        }}
-                                                        source={{
-                                                            uri: item.ImageUrl,
-                                                        }}
-                                                    />
-                                                </>
-                                            ) : (
-                                                <>
-                                                    <Image
-                                                        style={{
-                                                            height: 150,
-                                                            width: '100%',
-                                                            borderRadius: 10,
-                                                        }}
-                                                        source={{
-                                                            uri: 'https://reactnative.dev/img/tiny_logo.png',
-                                                        }}
-                                                    />
-                                                </>
-                                            )}
+                                            <View>
+                                                {item.ImageUrl ? (
+                                                    <>
+                                                        <Image
+                                                            style={{
+                                                                height: 150,
+                                                                width: '100%',
+                                                                minWidth: 150,
+                                                                borderTopLeftRadius: 10,
+                                                                marginVertical: 0,
+                                                                flexWrap:
+                                                                    'wrap',
+                                                                borderBottomLeftRadius: 10,
+                                                            }}
+                                                            source={{
+                                                                uri: item.ImageUrl,
+                                                            }}
+                                                        />
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <Image
+                                                            style={{
+                                                                height: 170,
+                                                                width: '100%',
+                                                                minWidth: 150,
+                                                                borderRadius: 10,
+                                                            }}
+                                                            source={{
+                                                                uri: 'https://reactnative.dev/img/tiny_logo.png',
+                                                            }}
+                                                        />
+                                                    </>
+                                                )}
+                                            </View>
                                             <View
                                                 style={{
-                                                    alignItems: 'center',
                                                     justifyContent: 'center',
-                                                    marginTop: 5,
+                                                    marginLeft: 10,
                                                 }}>
                                                 <Text style={style.productText}>
                                                     Name - {item.name}
                                                 </Text>
+
                                                 <Text style={style.productText}>
-                                                    Price - {item.price}
+                                                    Description -{' '}
+                                                    {item?.quantity}
                                                 </Text>
-                                                {/* <Text style={style.productText}>
-                                                    Quantity - {item.quantity}
-                                                </Text> */}
                                                 <Text style={style.productText}>
                                                     Category - {item.category}
                                                 </Text>
+                                                <View
+                                                    style={{
+                                                        flexDirection: 'column',
+                                                    }}>
+                                                    <Text
+                                                        style={
+                                                            style.productText
+                                                        }>
+                                                        Price - {item.price}
+                                                    </Text>
+                                                    <Text
+                                                        style={[
+                                                            style.productText,
+                                                            {},
+                                                        ]}>
+                                                        Rating -{' '}
+                                                        {
+                                                            <Filter
+                                                                name="star"
+                                                                color={'green'}
+                                                                size={20}
+                                                            />
+                                                        }
+                                                    </Text>
+                                                </View>
                                             </View>
                                         </TouchableOpacity>
                                     </View>
@@ -498,7 +524,7 @@ function Home() {
                         }}
                         showsVerticalScrollIndicator={false}
                         horizontal={false}
-                        numColumns={2}
+                        numColumns={1}
                     />
                 </View>
                 {/* </ScrollView> */}
