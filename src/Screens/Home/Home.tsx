@@ -20,6 +20,7 @@ import {useDispatch, useSelector} from 'react-redux';
 //import firestore from '@react-native-firebase/firestore';
 //import {db} from '../../Constant/Firebase';
 //import {deleteDoc, doc, getDoc, setDoc} from 'firebase/firestore';
+import * as Animatable from 'react-native-animatable';
 import {useNavigation} from '@react-navigation/native';
 import {rootState} from '../../Reducers/store';
 import {toggleSpinner} from '../../Reducers/toggleSpinnerSlice';
@@ -61,8 +62,8 @@ function Home() {
     const [oldData, setOldData] = useState<itemType[]>([]);
     const [visible, setVisible] = useState<boolean>(false);
     const [search, setSearch] = useState<string>('');
-    const searchRef: React.MutableRefObject<undefined> = useRef();
-    const scrollIndexRef: React.MutableRefObject<undefined> = useRef();
+    const searchRef: any = useRef();
+    const scrollIndexRef: any = useRef();
     const cartProductArray: any = useSelector<any>(state => state.cart);
 
     const [avatar, setAvatar] = useState();
@@ -143,20 +144,6 @@ function Home() {
                 });
             });
     };
-    const DATA = [
-        {
-            id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-            title: 'First Item',
-        },
-        {
-            id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-            title: 'Second Item',
-        },
-        {
-            id: '58694a0f-3da1-471f-bd96-145571e29d72',
-            title: 'Third Item',
-        },
-    ];
 
     const callImageFromStorage = async () => {
         // const pathReference = await storage()
@@ -409,10 +396,13 @@ function Home() {
                         initialScrollIndex={scrollIndex}
                         ref={scrollIndexRef}
                         data={data}
-                        renderItem={({item}) => {
+                        renderItem={({item, index}) => {
                             return (
                                 <>
-                                    <View
+                                    <Animatable.View
+                                        animation={'fadeInUp'}
+                                        duration={1000}
+                                        delay={index * 300}
                                         style={{
                                             flex: 1,
                                         }}>
@@ -518,7 +508,7 @@ function Home() {
                                                 </View>
                                             </View>
                                         </TouchableOpacity>
-                                    </View>
+                                    </Animatable.View>
                                 </>
                             );
                         }}

@@ -10,23 +10,29 @@ import {
 } from 'react-native';
 import {UserContext} from '../../Context/AuthContext';
 import {useDispatch, useSelector} from 'react-redux';
-import {googleSignInUser, signInUser} from '../../Reducers/authSlice';
+import {
+    googleSignInUser,
+    signInUser,
+    FacebookLogin,
+} from '../../Reducers/authSlice';
 import {useNavigation} from '@react-navigation/native';
 import {rootState} from '../../Reducers/store';
 import FbIcon from 'react-native-vector-icons/SimpleLineIcons';
 import AppleIcon from 'react-native-vector-icons/AntDesign';
 import {appleAuth} from '@invertase/react-native-apple-authentication';
 import firestore from '@react-native-firebase/firestore';
+import {
+    LoginButton,
+    AccessToken,
+    Profile,
+    LoginManager,
+} from 'react-native-fbsdk-next';
 
 import {
     GoogleSignin,
     statusCodes,
 } from '@react-native-google-signin/google-signin';
-import {
-    LoginManager,
-    GraphRequestManager,
-    GraphRequest,
-} from 'react-native-fbsdk';
+
 import Button from '../../Components/Button';
 import {TextInputs} from '../../Components';
 
@@ -122,37 +128,64 @@ const Login = () => {
             console.log('error raised', error);
         }
     };
-
-    const fbLogin = (resCallback: any) => {
-        LoginManager.logOut();
-        return LoginManager.logInWithPermissions([
-            'email',
-            'public_profile',
-        ]).then(
-            (result: any) => {
-                console.log('fb result==>>>>>>', result);
-                if (
-                    result.declinedPermissions &&
-                    result.declinedPermissions.includes('email')
-                ) {
-                    resCallback({message: 'Email is required'});
-                }
-                if (result.isCancelled) {
-                    console.log('error');
-                } else {
-                    const infoRequest = new GraphRequest(
-                        '/me?fileds=email,name,picture, friend',
-                        null,
-                        resCallback,
-                    );
-                    new GraphRequestManager().addRequest(infoRequest).start();
-                }
-            },
-            function (error: string) {
-                console.log('Login fail with error:' + error);
-            },
-        );
+    const fbLogin2 = () => {
+        //dispatch(FacebookLogin);
+        AccessToken.getCurrentAccessToken().then(data => {
+            console.log('ne FB data ++  ', data);
+        });
+        Profile.getCurrentProfile().then(function (currentProfile) {
+            if (currentProfile) {
+                console.log(
+                    'The current logged user is: ' +
+                        currentProfile.name +
+                        '. His profile id is: ' +
+                        currentProfile.userID,
+                );
+            }
+        });
     };
+    const FBLogin3 = () => {
+        Profile.getCurrentProfile().then(function (currentProfile) {
+            if (currentProfile) {
+                console.log(
+                    'The current logged user is: ' +
+                        currentProfile.name +
+                        '. His profile id is: ' +
+                        currentProfile.userID,
+                );
+            }
+        });
+    };
+    // const fbLogin = (resCallback: any) => {
+    //     LoginManager.logOut();
+    //     return LoginManager.logInWithPermissions([
+    //         'email',
+    //         'public_profile',
+    //     ]).then(
+    //         (result: any) => {
+    //             console.log('fb result==>>>>>>', result);
+    //             if (
+    //                 result.declinedPermissions &&
+    //                 result.declinedPermissions.includes('email')
+    //             ) {
+    //                 resCallback({message: 'Email is required'});
+    //             }
+    //             if (result.isCancelled) {
+    //                 console.log('error');
+    //             } else {
+    //                 const infoRequest = new GraphRequest(
+    //                     '/me?fileds=email,name,picture, friend',
+    //                     null,
+    //                     resCallback,
+    //                 );
+    //                 new GraphRequestManager().addRequest(infoRequest).start();
+    //             }
+    //         },
+    //         function (error: string) {
+    //             console.log('Login fail with error:' + error);
+    //         },
+    //     );
+    // };
 
     const _responseInfoCallBack = async (error: any, result: any) => {
         if (error) {
@@ -304,7 +337,7 @@ const Login = () => {
                                     }}></View>
                             </View>
                             <TouchableOpacity
-                                onPress={onFbLogin}
+                                onPress={fbLogin2}
                                 style={style.button}>
                                 <FbIcon
                                     name="social-facebook"
@@ -315,6 +348,50 @@ const Login = () => {
                                     Facebook Login
                                 </Text>
                             </TouchableOpacity>
+                            {/* <LoginButton
+                                style={{
+                                    alignItems: 'center',
+                                    backgroundColor: '#95d6f0',
+                                    padding: 10,
+                                    marginHorizontal: 10,
+                                    borderRadius: 25,
+                                    marginVertical: 3,
+
+                                    height: 40,
+                                }}
+                                onLoginFinished={(error, result) => {
+                                    if (error) {
+                                        console.log(
+                                            'login has error: ' + result,
+                                        );
+                                    } else if (result.isCancelled) {
+                                        console.log('login is cancelled.');
+                                    } else {
+                                        AccessToken.getCurrentAccessToken().then(
+                                            data => {
+                                                console.log(
+                                                    'ne FB data ++  ',
+                                                    data,
+                                                );
+                                            },
+                                        );
+                                        const ProfileDetails =
+                                            Profile.getCurrentProfile().then(
+                                                function (currentProfile) {
+                                                    if (currentProfile) {
+                                                        console.log(
+                                                            currentProfile,
+                                                        );
+                                                    }
+                                                },
+                                            );
+                                        console.log(ProfileDetails);
+                                        //fbLogin2();
+                                        //FBLogin3();
+                                    }
+                                }}
+                                onLogoutFinished={() => console.log('logout.')}
+                            /> */}
                             <TouchableOpacity
                                 style={style.button}
                                 onPress={googleSignIn}>

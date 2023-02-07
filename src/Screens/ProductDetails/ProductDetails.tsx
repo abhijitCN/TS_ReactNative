@@ -155,13 +155,15 @@ export default function ProductDetails() {
                     flex: 1,
                     //alignItems: 'center',
                     justifyContent: 'center',
+                    //backgroundColor: 'red',
+                    marginTop: 20,
                 }}>
                 <View
                     style={{
                         margin: 12,
                         borderColor: 'gray',
                         borderRadius: 10,
-                        marginTop: 10,
+                        //marginTop: 10,
                         backgroundColor: '#bff0f7',
                         shadowColor: '#000',
                         shadowOffset: {
@@ -171,14 +173,14 @@ export default function ProductDetails() {
                         shadowOpacity: 0.25,
                         shadowRadius: 4,
                         elevation: 5,
-                        minHeight: 400,
+                        minHeight: 200,
                     }}>
                     {values.items.ImageUrl ? (
                         <>
                             <Image
                                 style={{
-                                    height: 250,
-                                    width: '100%',
+                                    height: 150,
+                                    width: '80%',
                                     borderTopLeftRadius: 10,
                                     borderTopRightRadius: 10,
                                     marginVertical: 0,
@@ -193,7 +195,7 @@ export default function ProductDetails() {
                             <Image
                                 style={{
                                     height: 150,
-                                    width: '100%',
+                                    width: '80%',
                                     borderRadius: 10,
                                 }}
                                 source={{
@@ -202,30 +204,36 @@ export default function ProductDetails() {
                             />
                         </>
                     )}
-                    <View
-                        style={{
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            marginTop: 18,
-                        }}>
-                        <Text style={style.productText}>
-                            Name - {values.items.name}
-                        </Text>
-                        <Text style={style.productText}>
-                            Price - {values.items.price}
-                        </Text>
-                        <Text style={style.productText}>
-                            Quantity - {values.items.quantity}
-                        </Text>
-                        <Text style={style.productText}>
-                            Category - {values.items.category}
-                        </Text>
-                    </View>
                 </View>
-                {values.items.quantity !== 0 ? (
-                    <Button press={AddProductToCart} btnText="Add To Cart" />
-                ) : null}
-                <View style={{flexDirection: 'row'}}>
+                <View
+                    style={{
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        margin: 12,
+                        //backgroundColor: '#2d2d',
+                    }}>
+                    <Text style={style.productText}>
+                        Name - {values.items.name}
+                    </Text>
+                    <Text style={style.productText}>
+                        Price - {values.items.price}
+                    </Text>
+                    <Text style={style.productText}>
+                        Quantity - {values.items.quantity}
+                    </Text>
+                    <Text style={style.productText}>
+                        Category - {values.items.category}
+                    </Text>
+                    <Text style={[style.productText, {textAlign: 'justify'}]}>
+                        Details - Lorem Ipsum is simply dummy text of the
+                        printing and typesetting industry. Lorem Ipsum has been
+                        the industry's standard dummy text ever since the 1500s,
+                        when an unknown printer took a galley of type and
+                        scrambled it to make a type specimen book.
+                    </Text>
+                </View>
+
+                {/* <View style={{flexDirection: 'row'}}>
                     {values.items.quantity == 0 ? null : (
                         <Button
                             //press={Payment}
@@ -243,7 +251,8 @@ export default function ProductDetails() {
                             btnText="+"
                         />
                     )}
-                </View>
+                </View> */}
+                <Button press={AddProductToCart} btnText="Add To Cart" />
             </View>
         </View>
     );

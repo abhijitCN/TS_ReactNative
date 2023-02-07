@@ -11,6 +11,7 @@ import {
     GoogleSignin,
     statusCodes,
 } from '@react-native-google-signin/google-signin';
+import {LoginButton, AccessToken, Profile} from 'react-native-fbsdk-next';
 
 interface Initial {
     email: string;
@@ -45,6 +46,39 @@ export const signInUser: any = createAsyncThunk(
             Alert.alert('Enter Valid Credential');
         }
         //  }
+    },
+);
+
+export const FacebookLogin: any = createAsyncThunk(
+    'FacebookLogin',
+    async () => {
+        try {
+            const asyncToken = await AccessToken.getCurrentAccessToken().then(
+                data => {
+                    console.log('ne FB data ++  ', data);
+                },
+            );
+            // const ProfileDetails = await Profile.getCurrentProfile().then(
+            //     function (currentProfile) {
+            //         if (currentProfile) {
+            //             console.log(
+            //                 'The current logged user is: ' +
+            //                     currentProfile.name +
+            //                     '. His profile id is: ' +
+            //                     currentProfile.userID,
+            //             );
+            //         }
+            //     },
+            // );
+            console.log('asyncToken', asyncToken);
+
+            // if (asyncToken) {
+            //     return asyncToken;
+            // }
+        } catch (error) {
+            console.log('error', error);
+            Alert.alert('Enter Valid Credential');
+        }
     },
 );
 
@@ -263,6 +297,25 @@ const authSlice = createSlice({
             );
         },
         [signInUser.rejected]: (state, action) => {
+            //state.isLoading = false;
+            state.globalLoading = false;
+        },
+        //FacebookLogin
+        [FacebookLogin.pending]: (state, action) => {
+            ///state.isLoading = false;
+            state.globalLoading = true;
+        },
+        [FacebookLogin.fulfilled]: (state, action) => {
+            state.globalLoading = false;
+            //state.email = action.payload;
+            //state.isLoading = true;
+            //return state;
+            AsyncStorage.setItem(
+                'Token',
+                JSON.stringify((state.isLoading = true)),
+            );
+        },
+        [FacebookLogin.rejected]: (state, action) => {
             //state.isLoading = false;
             state.globalLoading = false;
         },
