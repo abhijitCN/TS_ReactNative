@@ -23,8 +23,8 @@ import {FlatList} from 'react-native-gesture-handler';
 interface textFields {
     name: string;
     price: string;
-    quantity: string;
-    //category: string;
+    //quantity?: string;
+    category: string;
     imageUrl: any;
     userMail: string;
     //chipText: string;
@@ -48,8 +48,8 @@ const AddProduct: React.FC = () => {
     const [data, setData] = useState<textFields>({
         name: '',
         price: '',
-        quantity: '',
-        //category: '',
+        //quantity: '',
+        category: '',
         imageUrl: '',
         userMail: user.email,
         //chipText: '',
@@ -57,9 +57,8 @@ const AddProduct: React.FC = () => {
     });
     const Categorys = [
         {id: 1, name: 'Mobile'},
-        ,
         {id: 2, name: 'Laptop'},
-        {id: 3, name: 'Tablet'},
+        {id: 3, name: 'Headphone'},
     ];
     const [validate, SetValiadate] = useState<boolean>(false);
 

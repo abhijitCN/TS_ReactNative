@@ -473,11 +473,10 @@ function Home() {
                                                 <Text style={style.productText}>
                                                     Name - {item.name}
                                                 </Text>
-
-                                                <Text style={style.productText}>
+                                                {/* <Text style={style.productText}>
                                                     Description -{' '}
                                                     {item?.quantity}
-                                                </Text>
+                                                </Text> */}
                                                 <Text style={style.productText}>
                                                     Category - {item.category}
                                                 </Text>

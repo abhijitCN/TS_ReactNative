@@ -6,12 +6,18 @@ import firestore from '@react-native-firebase/firestore';
 import {deleteDoc, doc, getDoc, setDoc} from 'firebase/firestore';
 import {db} from '../Constant/Firebase';
 import storage from '@react-native-firebase/storage';
+import auth from '@react-native-firebase/auth';
 import {useState} from 'react';
 import {
     GoogleSignin,
     statusCodes,
 } from '@react-native-google-signin/google-signin';
-import {LoginButton, AccessToken, Profile} from 'react-native-fbsdk-next';
+import {
+    LoginButton,
+    LoginManager,
+    AccessToken,
+    Profile,
+} from 'react-native-fbsdk-next';
 
 interface Initial {
     email: string;
@@ -53,28 +59,21 @@ export const FacebookLogin: any = createAsyncThunk(
     'FacebookLogin',
     async () => {
         try {
-            const asyncToken = await AccessToken.getCurrentAccessToken().then(
-                data => {
-                    console.log('ne FB data ++  ', data);
-                },
+            const result = await LoginManager.logInWithPermissions([
+                'public_profile',
+                'email',
+            ]);
+            if (result.isCancelled) {
+                throw 'User cancelled the login process';
+            }
+            const data = await AccessToken.getCurrentAccessToken();
+            if (!data) {
+                throw 'Something went wrong obtaining access token';
+            }
+            const facebookCredential = auth.FacebookAuthProvider.credential(
+                data.accessToken,
             );
-            // const ProfileDetails = await Profile.getCurrentProfile().then(
-            //     function (currentProfile) {
-            //         if (currentProfile) {
-            //             console.log(
-            //                 'The current logged user is: ' +
-            //                     currentProfile.name +
-            //                     '. His profile id is: ' +
-            //                     currentProfile.userID,
-            //             );
-            //         }
-            //     },
-            // );
-            console.log('asyncToken', asyncToken);
-
-            // if (asyncToken) {
-            //     return asyncToken;
-            // }
+            return auth().signInWithCredential(facebookCredential);
         } catch (error) {
             console.log('error', error);
             Alert.alert('Enter Valid Credential');

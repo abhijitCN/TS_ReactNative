@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState, useRef} from 'react';
 import {
     View,
     TouchableOpacity,
@@ -26,6 +26,7 @@ import {
 } from '../../Reducers/CartSlice';
 import CartIcon from 'react-native-vector-icons/Feather';
 //import Toast from 'react-native-toast-message';
+import Toast from 'react-native-toast-message';
 
 export default function ProductDetails() {
     const Route = useRoute();
@@ -74,12 +75,23 @@ export default function ProductDetails() {
 
     const AddProductToCart = () => {
         dispatch(addCartProduct(values.items));
-        dispatch(increaseQuantityInProductDetails(values.items));
-        Alert.alert('Product Added Successfully');
+        //dispatch(increaseQuantityInProductDetails(values.items));
+        Toast.show({
+            position: 'bottom',
+            type: 'success',
+            text1: 'Successfully Added',
+            text2: 'Product Added Successfully',
+        });
     };
 
     return (
         <View style={style.main}>
+            <Toast
+                ref={ref => {
+                    Toast.setRef(ref);
+                }}
+            />
+
             <View style={style.container}>
                 <TouchableOpacity
                     onPress={() => navigation.goBack()}
@@ -153,17 +165,13 @@ export default function ProductDetails() {
             <View
                 style={{
                     flex: 1,
-                    //alignItems: 'center',
-                    justifyContent: 'center',
-                    //backgroundColor: 'red',
-                    marginTop: 20,
+                    marginTop: 30,
                 }}>
                 <View
                     style={{
                         margin: 12,
                         borderColor: 'gray',
                         borderRadius: 10,
-                        //marginTop: 10,
                         backgroundColor: '#bff0f7',
                         shadowColor: '#000',
                         shadowOffset: {
@@ -179,10 +187,8 @@ export default function ProductDetails() {
                         <>
                             <Image
                                 style={{
-                                    height: 150,
-                                    width: '80%',
-                                    borderTopLeftRadius: 10,
-                                    borderTopRightRadius: 10,
+                                    height: 200,
+                                    borderRadius: 10,
                                     marginVertical: 0,
                                 }}
                                 source={{
@@ -207,9 +213,9 @@ export default function ProductDetails() {
                 </View>
                 <View
                     style={{
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        margin: 12,
+                        //alignItems: 'center',
+                        //justifyContent: 'center',
+                        margin: 10,
                         //backgroundColor: '#2d2d',
                     }}>
                     <Text style={style.productText}>
@@ -285,8 +291,8 @@ const style = StyleSheet.create({
         marginHorizontal: 10,
     },
     productText: {
-        fontSize: 20,
-        fontWeight: '600',
+        fontSize: 17,
+        fontWeight: '500',
     },
     header: {marginTop: 20, fontWeight: 'bold', fontSize: 25},
     helloText: {fontSize: 20, fontWeight: 'bold', marginTop: 6},

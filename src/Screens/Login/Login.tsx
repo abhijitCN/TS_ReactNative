@@ -129,20 +129,20 @@ const Login = () => {
         }
     };
     const fbLogin2 = () => {
-        //dispatch(FacebookLogin);
-        AccessToken.getCurrentAccessToken().then(data => {
-            console.log('ne FB data ++  ', data);
-        });
-        Profile.getCurrentProfile().then(function (currentProfile) {
-            if (currentProfile) {
-                console.log(
-                    'The current logged user is: ' +
-                        currentProfile.name +
-                        '. His profile id is: ' +
-                        currentProfile.userID,
-                );
-            }
-        });
+        dispatch(FacebookLogin());
+        // AccessToken.getCurrentAccessToken().then(data => {
+        //     console.log('ne FB data ++  ', data);
+        // });
+        // Profile.getCurrentProfile().then(function (currentProfile) {
+        //     if (currentProfile) {
+        //         console.log(
+        //             'The current logged user is: ' +
+        //                 currentProfile.name +
+        //                 '. His profile id is: ' +
+        //                 currentProfile.userID,
+        //         );
+        //     }
+        // });
     };
     const FBLogin3 = () => {
         Profile.getCurrentProfile().then(function (currentProfile) {
@@ -367,27 +367,27 @@ const Login = () => {
                                     } else if (result.isCancelled) {
                                         console.log('login is cancelled.');
                                     } else {
-                                        AccessToken.getCurrentAccessToken().then(
-                                            data => {
-                                                console.log(
-                                                    'ne FB data ++  ',
-                                                    data,
-                                                );
-                                            },
-                                        );
-                                        const ProfileDetails =
-                                            Profile.getCurrentProfile().then(
-                                                function (currentProfile) {
-                                                    if (currentProfile) {
-                                                        console.log(
-                                                            currentProfile,
-                                                        );
-                                                    }
-                                                },
-                                            );
-                                        console.log(ProfileDetails);
-                                        //fbLogin2();
-                                        //FBLogin3();
+                                        // AccessToken.getCurrentAccessToken().then(
+                                        //     data => {
+                                        //         console.log(
+                                        //             'ne FB data ++  ',
+                                        //             data,
+                                        //         );
+                                        //     },
+                                        // );
+                                        // const ProfileDetails =
+                                        //     Profile.getCurrentProfile().then(
+                                        //         function (currentProfile) {
+                                        //             if (currentProfile) {
+                                        //                 console.log(
+                                        //                     currentProfile,
+                                        //                 );
+                                        //             }
+                                        //         },
+                                        //     );
+                                        // console.log(ProfileDetails);
+                                        fbLogin2();
+                                        FBLogin3();
                                     }
                                 }}
                                 onLogoutFinished={() => console.log('logout.')}

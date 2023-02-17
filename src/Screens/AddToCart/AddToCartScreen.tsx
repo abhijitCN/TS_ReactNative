@@ -20,6 +20,7 @@ import {
     decrementQuantity,
     deleteMyCartItem,
 } from '../../Reducers/CartSlice';
+import Filter from 'react-native-vector-icons/AntDesign';
 
 const AddToCart = () => {
     const Route = useRoute();
@@ -61,9 +62,7 @@ const AddToCart = () => {
                 });
             });
     };
-    const Payment = () => {
-        navigation.navigate('Payment');
-    };
+
     const Increment = () => {
         navigation.navigate('Payment');
     };
@@ -76,6 +75,10 @@ const AddToCart = () => {
             total = total + item.quantity * item.price;
         });
         return total;
+    };
+    const totalPriceForPayment = TotalPrice();
+    const Payment = (data: any) => {
+        navigation.navigate('Payment', {items: totalPriceForPayment});
     };
     return (
         <View style={{flex: 1}}>
@@ -142,13 +145,16 @@ const AddToCart = () => {
                             <View
                                 style={{
                                     flex: 1,
+                                    flexDirection: 'row',
+                                    marginTop: 15,
                                 }}>
-                                <TouchableOpacity
+                                <View
                                     style={{
+                                        flexDirection: 'row',
                                         margin: 12,
                                         borderColor: 'gray',
                                         borderRadius: 10,
-                                        marginTop: 10,
+                                        //marginTop: 10,
                                         backgroundColor: '#bff0f7',
                                         shadowColor: '#000',
                                         shadowOffset: {
@@ -158,17 +164,20 @@ const AddToCart = () => {
                                         shadowOpacity: 0.25,
                                         shadowRadius: 4,
                                         elevation: 5,
-                                        minHeight: 253,
+                                        minHeight: 150,
+                                        width: '70%',
                                     }}>
                                     {item.ImageUrl ? (
                                         <>
                                             <Image
                                                 style={{
                                                     height: 150,
-                                                    width: '100%',
+                                                    width: '50%',
+                                                    minWidth: 150,
                                                     borderTopLeftRadius: 10,
-                                                    borderTopRightRadius: 10,
                                                     marginVertical: 0,
+                                                    flexWrap: 'wrap',
+                                                    borderBottomLeftRadius: 10,
                                                 }}
                                                 source={{
                                                     uri: item.ImageUrl,
@@ -179,8 +188,9 @@ const AddToCart = () => {
                                         <>
                                             <Image
                                                 style={{
-                                                    height: 150,
+                                                    height: 170,
                                                     width: '100%',
+                                                    minWidth: 150,
                                                     borderRadius: 10,
                                                 }}
                                                 source={{
@@ -191,22 +201,40 @@ const AddToCart = () => {
                                     )}
                                     <View
                                         style={{
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            marginTop: 5,
+                                            marginTop: 15,
+                                            marginLeft: 15,
                                         }}>
-                                        <Text style={style.productText}>
-                                            Name - {item.name}
+                                        <Text
+                                            style={[
+                                                style.productText,
+                                                {flexWrap: 'wrap'},
+                                            ]}>
+                                            {item.name}
                                         </Text>
                                         <Text style={style.productText}>
-                                            Price - {item.price}
+                                            {item.price}
                                         </Text>
                                         <Text style={style.productText}>
-                                            Category - {item.category}
+                                            {item.category}
+                                        </Text>
+                                        <Text style={[style.productText, {}]}>
+                                            Rating -{' '}
+                                            {
+                                                <Filter
+                                                    name="star"
+                                                    color={'green'}
+                                                    size={20}
+                                                />
+                                            }
                                         </Text>
                                     </View>
-                                </TouchableOpacity>
-                                <View style={{flexDirection: 'row'}}>
+                                </View>
+                                <View
+                                    style={{
+                                        //alignSelf: 'center',
+                                        alignItems: 'center',
+                                        justifyContent: 'space-evenly',
+                                    }}>
                                     {item.quantity == 0 ? null : (
                                         <Button
                                             press={() => {
@@ -227,7 +255,14 @@ const AddToCart = () => {
                                         />
                                     )}
                                     {item.quantity == 0 ? null : (
-                                        <Text>{item.quantity}</Text>
+                                        <Text
+                                            style={{
+                                                fontSize: 25,
+                                                fontWeight: 'bold',
+                                                color: '#0a3749',
+                                            }}>
+                                            {item.quantity}
+                                        </Text>
                                     )}
                                     {item.quantity == 0 ? null : (
                                         <Button
@@ -248,28 +283,54 @@ const AddToCart = () => {
                 numColumns={1}
             />
             {cartProductArray.length > 0 ? (
-                <View style={{minHeight: 150}}>
-                    <Text>
-                        {'Added items' + '(' + cartProductArray.length + ')'}
-                    </Text>
-                    <Text>{'Total Price' + TotalPrice()}</Text>
-                    <Button
-                        press={Payment}
-                        btnText={
-                            'Proceed to Buy' +
-                            '(' +
-                            cartProductArray.length +
-                            'Items' +
-                            ')'
-                        }
-                    />
+                <View style={{minHeight: 200}}>
+                    <View
+                        style={{
+                            backgroundColor: '#2d2d',
+                            height: 140,
+                            margin: 12,
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            borderRadius: 10,
+                        }}>
+                        <Text
+                            style={{
+                                fontSize: 25,
+                                fontWeight: 'bold',
+                                color: '#0a3749',
+                            }}>
+                            {'Added items' +
+                                '(' +
+                                cartProductArray.length +
+                                ')'}
+                        </Text>
+                        <Text
+                            style={{
+                                fontSize: 25,
+                                fontWeight: 'bold',
+                                color: '#0a3749',
+                            }}>
+                            {'Total Price' + TotalPrice()}
+                        </Text>
+                    </View>
+                    <View>
+                        <Button
+                            press={Payment}
+                            btnText={
+                                'Proceed to Buy' +
+                                '(' +
+                                cartProductArray.length +
+                                'Items' +
+                                ')'
+                            }
+                        />
+                    </View>
                 </View>
             ) : (
                 <View
                     style={{
                         flex: 1,
                         alignItems: 'center',
-                        //justifyContent: 'center',
                     }}>
                     <Text style={{fontSize: 50, fontWeight: 'bold'}}>
                         Cart is Empty
