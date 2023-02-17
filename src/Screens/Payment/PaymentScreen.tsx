@@ -1,47 +1,56 @@
 import React from 'react';
 import {Alert, Text, TouchableHighlight, View} from 'react-native';
-//import RazorpayCheckout from 'react-native-razorpay';
-
-// import { Container } from './styles';
+import {useNavigation, useRoute} from '@react-navigation/native';
+import {STRIP_PUBLISHKEY} from '@env';
+import {StripeProvider} from '@stripe/stripe-react-native';
+import {CardField, useStripe} from '@stripe/stripe-react-native';
+import Button from '../../Components/Button';
 
 const Payment: React.FC = () => {
+    const Route = useRoute();
+    const routData = Route.params;
+    const values: any = routData;
+    console.log('payment details ** ', values);
+    const {confirmPayment} = useStripe();
+    const Payment = (data: any) => {
+        Alert.alert(STRIP_PUBLISHKEY);
+    };
     return (
         <View
             style={{
                 flex: 1,
-                backgroundColor: 'pink',
-                alignItems: 'center',
-                justifyContent: 'center',
             }}>
-            <Text>Payment</Text>
-            {/* <TouchableHighlight
-                onPress={() => {
-                    var options = {
-                        description: 'Credits towards consultation',
-                        image: 'https://i.imgur.com/3g7nmJC.png',
-                        currency: 'INR',
-                        key: '', // Your api key
-                        amount: '5000',
-                        name: 'foo',
-                        prefill: {
-                            email: 'void@razorpay.com',
-                            contact: '9191919191',
-                            name: 'Razorpay Software',
-                        },
-                        theme: {color: '#F37254'},
-                    };
-                    RazorpayCheckout.open(options)
-                        .then(data => {
-                            // handle success
-                            Alert.alert(`Success: ${data.razorpay_payment_id}`);
-                        })
-                        .catch(error => {
-                            // handle failure
-                            Alert.alert(
-                                `Error: ${error.code} | ${error.description}`,
-                            );
-                        });
-                }}></TouchableHighlight> */}
+            <StripeProvider
+                publishableKey={STRIP_PUBLISHKEY}
+                merchantIdentifier="merchant.identifier" // required for Apple Pay
+                urlScheme="your-url-scheme" // required for 3D Secure and bank redirects
+            >
+                <View>
+                    <CardField
+                        postalCodeEnabled={false}
+                        placeholders={{
+                            number: '4242 4242 4242 4242',
+                        }}
+                        cardStyle={{
+                            backgroundColor: '#FFFFFF',
+                            textColor: '#000000',
+                        }}
+                        style={{
+                            marginRight: 10,
+                            width: '100%',
+                            height: 50,
+                            marginVertical: 30,
+                        }}
+                        onCardChange={cardDetails => {
+                            console.log('cardDetails', cardDetails);
+                        }}
+                        onFocus={focusedField => {
+                            console.log('focusField', focusedField);
+                        }}
+                    />
+                </View>
+                <Button press={Payment} btnText={'Proceed to Payment'} />
+            </StripeProvider>
         </View>
     );
 };
