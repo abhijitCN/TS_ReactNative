@@ -8,7 +8,9 @@ import { name as appName } from './app.json';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import store from "./src/Reducers/store";
-
+//import persistStore from 'redux-persist/es/persistStore';
+//import { PersistGate } from 'redux-persist/integration/react'
+//let persistor = persistStore()
 // const initialState = {
 //     name: 'Abhijit',
 // };
@@ -22,7 +24,9 @@ import store from "./src/Reducers/store";
 const ReduxAppWrapper = () => {
     return (
         <Provider store={store}>
+            {/* <PersistGate persistor={persistor}> */}
             <App />
+            {/* </PersistGate> */}
         </Provider>
     );
 };

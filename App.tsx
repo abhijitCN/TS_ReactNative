@@ -7,7 +7,7 @@ import {rootState} from './src/Reducers/store';
 
 const App = () => {
     const verify: any = useSelector((state: rootState) => state.user);
-    console.log('inside verify', verify);
+    //console.log('inside verify', verify);
     const [isUser, setIsUser] = useState(null);
     useEffect(() => {
         displayData();
@@ -17,17 +17,17 @@ const App = () => {
         try {
             let user: any = await AsyncStorage.getItem('Token');
             let parsed = JSON.parse(user);
-            console.log('parsed token ******** ', parsed);
+            //console.log('parsed token ******** ', parsed);
             setIsUser(parsed);
-            console.log('**** set Parsed value in setState ****', isUser);
+            //console.log('**** set Parsed value in setState ****', isUser);
         } catch (error) {
             Alert.alert('Enter Valid Credential');
         }
     };
 
     const isAuthenticate = verify.isLoading && verify.email;
-    console.log('verify.isLoading ?*?', verify.isLoading);
-    console.log('isAuthenticate ?*?', isAuthenticate);
+    //console.log('verify.isLoading ?*?', verify.isLoading);
+    //console.log('isAuthenticate ?*?', isAuthenticate);
     return <>{isAuthenticate ? <MainStackNavigation /> : <AuthNavigator />}</>;
 };
 
