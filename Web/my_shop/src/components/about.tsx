@@ -6,7 +6,7 @@ function about() {
             <p className="text-2xl md:text-4xl font-bold text-center ">
                 My Background
             </p>
-            <p className="text-base text-left md:text-center text-gray-600 leading-relaxed mt-4">
+            <p className="text-base text-left md:text-center text-gray-600 leading-relaxed mt-4 mx-2 text-justify tracking-tight">
                 {' '}
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
                 eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut

@@ -5,17 +5,17 @@ import {FaCode} from 'react-icons/fa';
 
 function skills() {
     return (
-        <div className="flex flex-col sm:flex-row align-center  justify-center max-w-2xl mx-auto mt-8">
-            <div className='className="p-4 w-40 mx-auto text-center rounded-xl border-2 border-gray-600 bg-white'>
-                <FaPalette className="text-4xl mx-auto inline-block" />
+        <div className="flex flex-col justify-center max-w-2xl py-4 mx-auto mt-8 sm:flex-row bg-slate-800">
+            <div className="w-40 p-4 mx-auto mb-2 text-center bg-white border-2 border-gray-600 rounded-xl">
+                <FaPalette className="inline-block mx-auto text-4xl" />
                 <p>FrontEnd</p>
             </div>
-            <div className="p-4 w-40 mx-auto text-center rounded-xl border-2 border-gray-600 bg-white">
-                <FaReact className="text-4xl mx-auto inline-block" />
+            <div className="w-40 p-4 mx-auto text-center bg-white border-2 border-gray-600 rounded-xl sm:mb-2">
+                <FaReact className="inline-block mx-auto text-4xl" />
                 <p>Backend</p>
             </div>
-            <div className="p-4 w-40 mx-auto text-center rounded-xl border-2 border-gray-600 bg-white">
-                <FaCode className="text-4xl mx-auto inline-block" />
+            <div className="w-40 p-4 mx-auto text-center bg-white border-2 border-gray-600 rounded-xl">
+                <FaCode className="inline-block mx-auto text-4xl" />
                 <p>Server</p>
             </div>
         </div>
