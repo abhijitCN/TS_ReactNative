@@ -1,19 +1,4 @@
-// module.exports = {
-//   content: ["./src/**/*.{html,js,tsx,ts}"],
-//   purge: ['./src/**/*.{js,jsx,ts,tsx}', './public/index.html'],
-//   darkMode: false, // or 'media' or 'class'
-//   theme: {
-//     extend: {
-//       colors: {
-//         "orange": "#DF5F3D"
-//       }
-//     },
-//   },
-//   variants: {
-//     extend: {},
-//   },
-//   plugins: [],
-// }
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [

@@ -1,15 +1,16 @@
 import About from './components/about';
-import Card from './components/card';
-import Footer from './components/footer';
+import ImageSlider from './components/imageSlider';
+import Fetures from './components/fetures';
 import Skills from './components/skills';
-
+import Navbar from './components/navbar';
 function App() {
     return (
-        <div className="py-10 bg-blue dm:px-5 min-h-screen">
-            <Card />
-            <About />
-            <Skills />
-            <Footer />
+        <div className="">
+            <div className="mx-auto">
+                <Navbar />
+                <ImageSlider />
+                <Fetures />
+            </div>
         </div>
     );
 }
