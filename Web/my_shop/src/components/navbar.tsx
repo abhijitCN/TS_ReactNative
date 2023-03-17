@@ -1,7 +1,15 @@
-import React from 'react';
 import {FaBars, FaSearch, FaShoppingCart, FaUserCircle} from 'react-icons/fa';
 import logo from '../Assets/icon.png';
-export default function navbar() {
+import {useNavigate} from 'react-router-dom';
+
+export default function Navbar() {
+    const navigate = useNavigate();
+    const login = () => {
+        navigate('/');
+    };
+    const signUp = () => {
+        navigate('/SignUp');
+    };
     return (
         <div className="flex justify-between mx-3 mt-3">
             <div className="flex items-center justify-center md:order-2 md:hidden">
@@ -35,7 +43,7 @@ export default function navbar() {
                     <FaShoppingCart size={25} />
                 </div>
                 <div className="pl-3">
-                    <FaUserCircle size={25} />
+                    <FaUserCircle size={25} color={'blue'} />
                 </div>
             </div>
         </div>

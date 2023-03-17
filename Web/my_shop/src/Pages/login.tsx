@@ -1,38 +1,58 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
-import signinBackground from '../Assets/signinBackground.jpeg';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import {Button} from '@mui/material';
+import {Button, TextField} from '@mui/material';
 import {useNavigate} from 'react-router-dom';
+import {BsYoutube, BsGoogle, BsFacebook} from 'react-icons/bs';
+import {orange} from '@mui/material/colors';
+
 export default function Login() {
     const navigate = useNavigate();
-    const submit = () => {
+    const login = () => {
         navigate('/');
     };
+    const signUp = () => {
+        navigate('/register');
+    };
+
     return (
-        <div className="flex flex-row items-center justify-center h-screen space-x-5 bg-gradient-to-r from-violet-500 to-fuchsia-500">
-            <div className="flex flex-col bg-slate-50 ">
-                <h1>Welcome back !</h1>
-                <OutlinedInput
-                    id="time"
-                    type="MuiOutlinedInput" //inputProps={inputProps}
-                    className="w-6/12 h-10"
-                    fullWidth={false}
+        <div className="flex flex-col items-center justify-center h-screen p-2 space-x-5 bg-red-200 sm:flex-row">
+            <div className="flex flex-col w-11/12 p-5 m-5 space-y-3 font-serif bg-white md:w-5/10 h-7/12 md:h-6/12">
+                <h1 className="flex justify-center text-lg font-bold">
+                    Welcome back !
+                </h1>
+                <TextField
+                    id="outlined-basic"
+                    label="Email"
+                    variant="outlined"
                 />
-                <OutlinedInput
-                    id="time"
-                    type="MuiOutlinedInput" //inputProps={inputProps}
+                <TextField
+                    id="outlined-basic"
+                    label="Password"
+                    variant="outlined"
                 />
-                <Button variant="outlined" onClick={submit}>
-                    Outlined
+
+                <p className="flex justify-center">--- or ---</p>
+                <div className="flex justify-center m-5 space-x-5">
+                    <div>
+                        <BsFacebook size={25} color={'blue'} />
+                    </div>
+                    <div>
+                        <BsGoogle size={25} color={'orange'} />
+                    </div>
+                    <div>
+                        <BsYoutube size={25} color={'red'} />
+                    </div>
+                </div>
+                <Button variant="outlined" color="secondary" onClick={login}>
+                    Login
                 </Button>
-                <p>Forgate password ?</p>
+                <p className="flex justify-center">Forgoat password ?</p>
             </div>
-            <div className="flex flex-col bg-gray-900 ">
-                <h1>Don't have an account ?</h1>
+            <div className="flex flex-col items-center justify-center w-11/12 ml-0 space-y-5 font-serif text-white bg-gradient-to-r from-violet-500 to-fuchsia-500 md:w-5/10 h-7/12 md:h-3/6">
+                <h1 className="text-2xl font-bold">Don't have an account ?</h1>
                 <p>Start your journey in one click</p>
-                <Button variant="outlined" onClick={submit}>
-                    Outlined
+                <Button variant="contained" color="primary" onClick={signUp}>
+                    register
                 </Button>
             </div>
         </div>
