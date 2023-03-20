@@ -19,7 +19,7 @@ export default function ProductDetails() {
             </div>
             <div className="flex">
                 <div>image scroll</div>
-                <div>select specefication</div>
+                <div>select specification</div>
             </div>
             <div className="flex">
                 <div>
@@ -27,7 +27,7 @@ export default function ProductDetails() {
                     <div>bass 2</div>
                 </div>
                 <div>add to cart</div>
-                <div>add to fevorit</div>
+                <div>add to favorite</div>
             </div>
         </div>
     );
