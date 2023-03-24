@@ -1,5 +1,6 @@
 import React from 'react';
 import laptop from '../Assets/laptop1.png';
+import HorizontalScrollDiv from '../components/HorizontalScrollDiv';
 import {Button, TextField, IconButton} from '@mui/material';
 import {
     BsYoutube,
@@ -64,6 +65,7 @@ export default function ProductDetails() {
                     </div>
                 </div>
             </div>
+            <HorizontalScrollDiv />
         </div>
     );
 }
