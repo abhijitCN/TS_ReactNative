@@ -13,8 +13,8 @@ import {useNavigate} from 'react-router-dom';
 export default function ProductDetails() {
     const navigate = useNavigate();
 
-    const signUp = () => {
-        navigate('/register');
+    const addToCart = () => {
+        navigate('/cart');
     };
     return (
         <div className="">
@@ -57,7 +57,9 @@ export default function ProductDetails() {
                     <h1 className="font-serif text-3xl">short dec</h1>
                 </div>
                 <div className="flex flex-row items-center">
-                    <div className="w-4/5 font-serif text-3xl bg-slate-500 text-cyan-50">
+                    <div
+                        className="w-4/5 font-serif text-3xl bg-slate-500 text-cyan-50"
+                        onClick={addToCart}>
                         Add to Cart
                     </div>
                     <div className="flex items-center justify-center w-20 h-12 bg-orange-500">

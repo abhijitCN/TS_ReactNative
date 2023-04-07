@@ -7,7 +7,7 @@ import {BiRightArrow} from 'react-icons/bi';
 export default function ItemList1() {
     const navigate = useNavigate();
 
-    const signUp = () => {
+    const productDetails = () => {
         navigate('/productDetails');
     };
     return (
@@ -15,7 +15,9 @@ export default function ItemList1() {
             <div className="m-5 font-serif text-xl font-bold text-black">
                 For Business
             </div>{' '}
-            <div className="pb-2 pr-1 m-5 bg-cyan-100 " onClick={signUp}>
+            <div
+                className="pb-2 pr-1 m-5 bg-cyan-100 "
+                onClick={productDetails}>
                 <div className="absolute flex items-center justify-center w-16 h-8 bg-yellow-500">
                     <h1 className="flex items-center justify-center font-serif">
                         NEW

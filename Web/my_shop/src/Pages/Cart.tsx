@@ -2,16 +2,23 @@ import React from 'react';
 import laptop from '../Assets/laptop1.png';
 import {AiOutlinePlus, AiOutlineMinus} from 'react-icons/ai';
 import {BsFillSuitHeartFill} from 'react-icons/bs';
+import {useNavigate} from 'react-router-dom';
+
 export default function Cart() {
+    const navigate = useNavigate();
+
+    const makePayment = () => {
+        navigate('/payment');
+    };
     return (
         <div>
-            <div className="flex justify-center mb-5">
+            <div className="flex justify-center my-5">
                 <h1>Your Cart (4 items)</h1>
             </div>
-            <div className="flex flex-row">
-                <div className="flex flex-col bg-slate-500">
+            <div className="flex flex-row space-x-5 justify-evenly">
+                <div className="flex flex-col">
                     <h2>Item</h2>
-                    <img className="h-2/4 w-2/4" src={laptop} alt="" />
+                    <img className="h-3/4 w-2/4" src={laptop} alt="" />
                 </div>
                 <div className="flex flex-col">
                     <h2>Description</h2>
@@ -56,7 +63,9 @@ export default function Cart() {
                     </div>
                     <h2>Shipping</h2>
                 </div>
-                <div className="w-1/6 font-serif text-3xl bg-slate-500 text-cyan-50 flex items-center">
+                <div
+                    className="w-1/6 font-serif text-3xl bg-slate-500 text-cyan-50 flex items-center"
+                    onClick={makePayment}>
                     Check Out
                 </div>
             </div>
