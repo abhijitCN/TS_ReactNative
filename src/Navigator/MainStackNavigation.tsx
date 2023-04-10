@@ -10,7 +10,7 @@ import AddAddressScreen from '../Screens/AddAddress/AddAddress';
 import MapScreen from '../Screens/Map/Map';
 import AddProductScreen from '../Screens/AddProduct/AddProductScreen';
 import {createDrawerNavigator} from '@react-navigation/drawer';
-import {useNavigation} from '@react-navigation/native';
+import FeatherIonicons from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Product from 'react-native-vector-icons/FontAwesome5';
 import CustomerService from 'react-native-vector-icons/AntDesign';
@@ -23,6 +23,7 @@ import Selection from '../Screens/Support/Selection';
 import ProductDetailsScreen from '../Screens/ProductDetails/ProductDetails';
 import Payment from '../Screens/Payment/PaymentScreen';
 import AddToCart from '../Screens/AddToCart/AddToCartScreen';
+import MyOrders from '../Screens/MyOrders/Orders';
 
 const MainStack = createNativeStackNavigator<MainRootStackParamList>();
 const Drawer = createDrawerNavigator();
@@ -70,6 +71,18 @@ const AddProductDrawerStack = () => {
             <MainStack.Screen
                 name="Home"
                 component={HomeScreen}
+                options={{headerShown: false}}
+            />
+        </MainStack.Navigator>
+    );
+};
+
+const OrdersDrawerStack = () => {
+    return (
+        <MainStack.Navigator>
+            <MainStack.Screen
+                name="Orders"
+                component={MyOrders}
                 options={{headerShown: false}}
             />
         </MainStack.Navigator>
@@ -230,6 +243,19 @@ const MainStackScreens = () => (
             options={{
                 drawerIcon: ({color}) => (
                     <Ionicons name="person-outline" size={22} color={color} />
+                ),
+            }}
+        />
+        <Drawer.Screen
+            name="Orders"
+            component={OrdersDrawerStack}
+            options={{
+                drawerIcon: ({color}) => (
+                    <FeatherIonicons
+                        name="shopping-bag"
+                        size={22}
+                        color={color}
+                    />
                 ),
             }}
         />

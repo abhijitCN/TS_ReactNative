@@ -302,303 +302,303 @@ const Login = () => {
         }
     };
     return (
-        // <>
-        //     {globalSpinner ? (
-        //         <>
-        //             <View
-        //                 style={{
-        //                     alignItems: 'center',
-        //                     justifyContent: 'center',
-        //                     flex: 1,
-        //                 }}>
-        //                 <ActivityIndicator color="#0a3749" size="large" />
-        //             </View>
-        //         </>
-        //     ) : (
-        //         <>
-        //             <View style={style.main}>
-        //                 <View
-        //                     style={{
-        //                         alignItems: 'center',
-        //                         justifyContent: 'center',
-        //                     }}>
-        //                     <Text style={style.loginText}>Please Log-In</Text>
-        //                     <Text style={style.sentence}>
-        //                         Enter your email and password
-        //                     </Text>
-        //                 </View>
-
-        //                 <View style={{}}>
-        //                     <Text style={style.textInputHeading}>Email</Text>
-        //                     <TextInput
-        //                         style={[
-        //                             style.input,
-        //                             {
-        //                                 borderColor:
-        //                                     validate && data.email === ''
-        //                                         ? 'red'
-        //                                         : '#1b94c4',
-        //                             },
-        //                         ]}
-        //                         onChangeText={e => setData({...data, email: e})}
-        //                         value={data.email}
-        //                         placeholderTextColor="#1b94c4"
-        //                         keyboardType="email-address"
-        //                         //keyboardAppearance="light"
-        //                         placeholder="Email"
-        //                     />
-        //                     {validate && data.email === '' && (
-        //                         <Text style={{marginLeft: 12, color: 'red'}}>
-        //                             Email required
-        //                         </Text>
-        //                     )}
-        //                     <Text style={style.textInputHeading}>Password</Text>
-        //                     {/* <TextInput
-        //                         style={[
-        //                             style.input,
-        //                             {
-        //                                 borderColor:
-        //                                     validate && data.password === ''
-        //                                         ? 'red'
-        //                                         : '#1b94c4',
-        //                             },
-        //                         ]}
-        //                         onChangeText={e =>
-        //                             setData({...data, password: e})
-        //                         }
-        //                         value={data.password}
-        //                         //value={'123'}
-        //                         placeholderTextColor="#1b94c4"
-        //                         secureTextEntry={true}
-        //                         placeholder="Password"
-        //                     /> */}
-        //                     <TextInputs
-        //                         placeholder="enter Password"
-        //                         placeholderTextColor="#1b94c4"
-        //                         secureTextEntry={true}
-        //                         onChangeText={e =>
-        //                             setData({...data, password: e})
-        //                         }
-        //                         btnStyle={{
-        //                             borderColor:
-        //                                 validate && data.password === ''
-        //                                     ? 'red'
-        //                                     : '#1b94c4',
-        //                         }}
-        //                     />
-        //                     {validate && data.password === '' && (
-        //                         <Text style={{marginLeft: 12, color: 'red'}}>
-        //                             Password required
-        //                         </Text>
-        //                     )}
-        //                     <Button press={Authenticate} btnText="Submit" />
-        //                     {/* <TouchableOpacity
-        //                         style={style.button}
-        //                         onPress={Authenticate}>
-        //                         <Text style={style.buttonText}>Submit</Text>
-        //                     </TouchableOpacity> */}
-        //                     {/* <Button press={alert} btnText="component BTN" /> */}
-        //                     <View
-        //                         style={{
-        //                             //flex: 1,
-        //                             alignItems: 'center',
-        //                             justifyContent: 'center',
-        //                             flexDirection: 'row',
-        //                         }}>
-        //                         <View
-        //                             style={{
-        //                                 height: 1,
-        //                                 backgroundColor: '#000000',
-        //                                 width: '30%',
-        //                                 marginRight: 10,
-        //                                 marginVertical: 20,
-        //                             }}></View>
-        //                         <Text
-        //                             style={{fontSize: 20, fontWeight: 'bold'}}>
-        //                             Or
-        //                         </Text>
-        //                         <View
-        //                             style={{
-        //                                 height: 1,
-        //                                 backgroundColor: '#000000',
-        //                                 width: '30%',
-        //                                 marginLeft: 10,
-        //                             }}></View>
-        //                     </View>
-        //                     <TouchableOpacity
-        //                         onPress={fbLogin2}
-        //                         style={style.button}>
-        //                         <FbIcon
-        //                             name="social-facebook"
-        //                             size={22}
-        //                             color={'#0a3749'}
-        //                         />
-        //                         <Text style={style.buttonText}>
-        //                             Facebook Login
-        //                         </Text>
-        //                     </TouchableOpacity>
-        //                     {/* <LoginButton
-        //                         style={{
-        //                             alignItems: 'center',
-        //                             backgroundColor: '#95d6f0',
-        //                             padding: 10,
-        //                             marginHorizontal: 10,
-        //                             borderRadius: 25,
-        //                             marginVertical: 3,
-
-        //                             height: 40,
-        //                         }}
-        //                         onLoginFinished={(error, result) => {
-        //                             if (error) {
-        //                                 console.log(
-        //                                     'login has error: ' + result,
-        //                                 );
-        //                             } else if (result.isCancelled) {
-        //                                 console.log('login is cancelled.');
-        //                             } else {
-        //                                 // AccessToken.getCurrentAccessToken().then(
-        //                                 //     data => {
-        //                                 //         console.log(
-        //                                 //             'ne FB data ++  ',
-        //                                 //             data,
-        //                                 //         );
-        //                                 //     },
-        //                                 // );
-        //                                 // const ProfileDetails =
-        //                                 //     Profile.getCurrentProfile().then(
-        //                                 //         function (currentProfile) {
-        //                                 //             if (currentProfile) {
-        //                                 //                 console.log(
-        //                                 //                     currentProfile,
-        //                                 //                 );
-        //                                 //             }
-        //                                 //         },
-        //                                 //     );
-        //                                 // console.log(ProfileDetails);
-        //                                 fbLogin2();
-        //                                 FBLogin3();
-        //                             }
-        //                         }}
-        //                         onLogoutFinished={() => console.log('logout.')}
-        //                     /> */}
-        //                     <TouchableOpacity
-        //                         style={style.button}
-        //                         onPress={googleSignIn}>
-        //                         <FbIcon
-        //                             name="social-google"
-        //                             size={20}
-        //                             color={'#0a3749'}
-        //                         />
-        //                         <Text
-        //                             style={[
-        //                                 style.buttonText,
-        //                                 {paddingLeft: 5},
-        //                             ]}>
-        //                             Google Login
-        //                         </Text>
-        //                     </TouchableOpacity>
-        //                     <TouchableOpacity
-        //                         style={style.button}
-        //                         onPress={appleLogin}>
-        //                         <AppleIcon
-        //                             name="apple-o"
-        //                             size={22}
-        //                             color={'#0a3749'}
-        //                         />
-        //                         <Text
-        //                             style={[
-        //                                 style.buttonText,
-        //                                 {paddingLeft: 5},
-        //                             ]}>
-        //                             Apple Login
-        //                         </Text>
-        //                     </TouchableOpacity>
-        //                     <TouchableOpacity
-        //                         onPress={() => navigation.navigate('SignUp')}>
-        //                         <Text
-        //                             style={[
-        //                                 style.buttonText,
-        //                                 {alignSelf: 'center', marginTop: 12},
-        //                             ]}>
-        //                             Don't Have Account ? Sign Up
-        //                         </Text>
-        //                     </TouchableOpacity>
-        //                 </View>
-        //                 <View></View>
-        //             </View>
-        //         </>
-        //     )}
-        // </>
-        <Animated.View style={styles.container}>
-            <Animated.View
-                style={[StyleSheet.absoluteFill, imageAnimatedStyle]}>
-                <Svg height={height + 100} width={width}>
-                    <ClipPath id="clipPathId">
-                        <Ellipse cx={width / 2} rx={height} ry={height + 100} />
-                    </ClipPath>
-                    <Image
-                        href={require('../../Assets/login-background.jpg')}
-                        width={width + 100}
-                        height={height + 100}
-                        preserveAspectRatio="xMidYMid slice"
-                        clipPath="url(#clipPathId)"
-                    />
-                </Svg>
-                <Animated.View
-                    style={[
-                        styles.closeButtonContainer,
-                        closeButtonContainerStyle,
-                    ]}>
-                    <Text onPress={() => (imagePosition.value = 1)}>X</Text>
-                </Animated.View>
-            </Animated.View>
-            <View style={styles.bottomContainer}>
-                <Animated.View style={buttonsAnimatedStyle}>
-                    <Pressable style={styles.button} onPress={loginHandler}>
-                        <Text style={styles.buttonText}>LOG IN</Text>
-                    </Pressable>
-                </Animated.View>
-                <Animated.View style={buttonsAnimatedStyle}>
-                    <Pressable style={styles.button} onPress={registerHandler}>
-                        <Text style={styles.buttonText}>REGISTER</Text>
-                    </Pressable>
-                </Animated.View>
-                <Animated.View
-                    style={[styles.formInputContainer, formAnimatedStyle]}>
-                    <TextInput
-                        placeholder="Email"
-                        placeholderTextColor="black"
-                        style={styles.textInput}
-                    />
-                    {isRegistering && (
-                        <TextInput
-                            placeholder="Full Name"
-                            placeholderTextColor="black"
-                            style={styles.textInput}
-                        />
-                    )}
-                    <TextInput
-                        placeholder="Password"
-                        placeholderTextColor="black"
-                        style={styles.textInput}
-                    />
-                    <Animated.View
-                        style={[styles.formButton, formButtonAnimatedStyle]}>
-                        <Pressable
-                            onPress={() =>
-                                (formButtonScale.value = withSequence(
-                                    withSpring(1.5),
-                                    withSpring(1),
-                                ))
-                            }>
-                            <Text style={styles.buttonText}>
-                                {isRegistering ? 'REGISTER' : 'LOG IN'}
+        <>
+            {globalSpinner ? (
+                <>
+                    <View
+                        style={{
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            flex: 1,
+                        }}>
+                        <ActivityIndicator color="#0a3749" size="large" />
+                    </View>
+                </>
+            ) : (
+                <>
+                    <View style={style.main}>
+                        <View
+                            style={{
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                            }}>
+                            <Text style={style.loginText}>Please Log-In</Text>
+                            <Text style={style.sentence}>
+                                Enter your email and password
                             </Text>
-                        </Pressable>
-                    </Animated.View>
-                </Animated.View>
-            </View>
-        </Animated.View>
+                        </View>
+
+                        <View style={{}}>
+                            <Text style={style.textInputHeading}>Email</Text>
+                            <TextInput
+                                style={[
+                                    style.input,
+                                    {
+                                        borderColor:
+                                            validate && data.email === ''
+                                                ? 'red'
+                                                : '#1b94c4',
+                                    },
+                                ]}
+                                onChangeText={e => setData({...data, email: e})}
+                                value={data.email}
+                                placeholderTextColor="#1b94c4"
+                                keyboardType="email-address"
+                                //keyboardAppearance="light"
+                                placeholder="Email"
+                            />
+                            {validate && data.email === '' && (
+                                <Text style={{marginLeft: 12, color: 'red'}}>
+                                    Email required
+                                </Text>
+                            )}
+                            <Text style={style.textInputHeading}>Password</Text>
+                            {/* <TextInput
+                                style={[
+                                    style.input,
+                                    {
+                                        borderColor:
+                                            validate && data.password === ''
+                                                ? 'red'
+                                                : '#1b94c4',
+                                    },
+                                ]}
+                                onChangeText={e =>
+                                    setData({...data, password: e})
+                                }
+                                value={data.password}
+                                //value={'123'}
+                                placeholderTextColor="#1b94c4"
+                                secureTextEntry={true}
+                                placeholder="Password"
+                            /> */}
+                            <TextInputs
+                                placeholder="enter Password"
+                                placeholderTextColor="#1b94c4"
+                                secureTextEntry={true}
+                                onChangeText={e =>
+                                    setData({...data, password: e})
+                                }
+                                btnStyle={{
+                                    borderColor:
+                                        validate && data.password === ''
+                                            ? 'red'
+                                            : '#1b94c4',
+                                }}
+                            />
+                            {validate && data.password === '' && (
+                                <Text style={{marginLeft: 12, color: 'red'}}>
+                                    Password required
+                                </Text>
+                            )}
+                            <Button press={Authenticate} btnText="Submit" />
+                            {/* <TouchableOpacity
+                                style={style.button}
+                                onPress={Authenticate}>
+                                <Text style={style.buttonText}>Submit</Text>
+                            </TouchableOpacity> */}
+                            {/* <Button press={alert} btnText="component BTN" /> */}
+                            <View
+                                style={{
+                                    //flex: 1,
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    flexDirection: 'row',
+                                }}>
+                                <View
+                                    style={{
+                                        height: 1,
+                                        backgroundColor: '#000000',
+                                        width: '30%',
+                                        marginRight: 10,
+                                        marginVertical: 20,
+                                    }}></View>
+                                <Text
+                                    style={{fontSize: 20, fontWeight: 'bold'}}>
+                                    Or
+                                </Text>
+                                <View
+                                    style={{
+                                        height: 1,
+                                        backgroundColor: '#000000',
+                                        width: '30%',
+                                        marginLeft: 10,
+                                    }}></View>
+                            </View>
+                            <TouchableOpacity
+                                onPress={fbLogin2}
+                                style={style.button}>
+                                <FbIcon
+                                    name="social-facebook"
+                                    size={22}
+                                    color={'#0a3749'}
+                                />
+                                <Text style={style.buttonText}>
+                                    Facebook Login
+                                </Text>
+                            </TouchableOpacity>
+                            {/* <LoginButton
+                                style={{
+                                    alignItems: 'center',
+                                    backgroundColor: '#95d6f0',
+                                    padding: 10,
+                                    marginHorizontal: 10,
+                                    borderRadius: 25,
+                                    marginVertical: 3,
+
+                                    height: 40,
+                                }}
+                                onLoginFinished={(error, result) => {
+                                    if (error) {
+                                        console.log(
+                                            'login has error: ' + result,
+                                        );
+                                    } else if (result.isCancelled) {
+                                        console.log('login is cancelled.');
+                                    } else {
+                                        // AccessToken.getCurrentAccessToken().then(
+                                        //     data => {
+                                        //         console.log(
+                                        //             'ne FB data ++  ',
+                                        //             data,
+                                        //         );
+                                        //     },
+                                        // );
+                                        // const ProfileDetails =
+                                        //     Profile.getCurrentProfile().then(
+                                        //         function (currentProfile) {
+                                        //             if (currentProfile) {
+                                        //                 console.log(
+                                        //                     currentProfile,
+                                        //                 );
+                                        //             }
+                                        //         },
+                                        //     );
+                                        // console.log(ProfileDetails);
+                                        fbLogin2();
+                                        FBLogin3();
+                                    }
+                                }}
+                                onLogoutFinished={() => console.log('logout.')}
+                            /> */}
+                            <TouchableOpacity
+                                style={style.button}
+                                onPress={googleSignIn}>
+                                <FbIcon
+                                    name="social-google"
+                                    size={20}
+                                    color={'#0a3749'}
+                                />
+                                <Text
+                                    style={[
+                                        style.buttonText,
+                                        {paddingLeft: 5},
+                                    ]}>
+                                    Google Login
+                                </Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={style.button}
+                                onPress={appleLogin}>
+                                <AppleIcon
+                                    name="apple-o"
+                                    size={22}
+                                    color={'#0a3749'}
+                                />
+                                <Text
+                                    style={[
+                                        style.buttonText,
+                                        {paddingLeft: 5},
+                                    ]}>
+                                    Apple Login
+                                </Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                onPress={() => navigation.navigate('SignUp')}>
+                                <Text
+                                    style={[
+                                        style.buttonText,
+                                        {alignSelf: 'center', marginTop: 12},
+                                    ]}>
+                                    Don't Have Account ? Sign Up
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
+                        <View></View>
+                    </View>
+                </>
+            )}
+        </>
+        // <Animated.View style={styles.container}>
+        //     <Animated.View
+        //         style={[StyleSheet.absoluteFill, imageAnimatedStyle]}>
+        //         <Svg height={height + 100} width={width}>
+        //             <ClipPath id="clipPathId">
+        //                 <Ellipse cx={width / 2} rx={height} ry={height + 100} />
+        //             </ClipPath>
+        //             <Image
+        //                 href={require('../../Assets/login-background.jpg')}
+        //                 width={width + 100}
+        //                 height={height + 100}
+        //                 preserveAspectRatio="xMidYMid slice"
+        //                 clipPath="url(#clipPathId)"
+        //             />
+        //         </Svg>
+        //         <Animated.View
+        //             style={[
+        //                 styles.closeButtonContainer,
+        //                 closeButtonContainerStyle,
+        //             ]}>
+        //             <Text onPress={() => (imagePosition.value = 1)}>X</Text>
+        //         </Animated.View>
+        //     </Animated.View>
+        //     <View style={styles.bottomContainer}>
+        //         <Animated.View style={buttonsAnimatedStyle}>
+        //             <Pressable style={styles.button} onPress={loginHandler}>
+        //                 <Text style={styles.buttonText}>LOG IN</Text>
+        //             </Pressable>
+        //         </Animated.View>
+        //         <Animated.View style={buttonsAnimatedStyle}>
+        //             <Pressable style={styles.button} onPress={registerHandler}>
+        //                 <Text style={styles.buttonText}>REGISTER</Text>
+        //             </Pressable>
+        //         </Animated.View>
+        //         <Animated.View
+        //             style={[styles.formInputContainer, formAnimatedStyle]}>
+        //             <TextInput
+        //                 placeholder="Email"
+        //                 placeholderTextColor="black"
+        //                 style={styles.textInput}
+        //             />
+        //             {isRegistering && (
+        //                 <TextInput
+        //                     placeholder="Full Name"
+        //                     placeholderTextColor="black"
+        //                     style={styles.textInput}
+        //                 />
+        //             )}
+        //             <TextInput
+        //                 placeholder="Password"
+        //                 placeholderTextColor="black"
+        //                 style={styles.textInput}
+        //             />
+        //             <Animated.View
+        //                 style={[styles.formButton, formButtonAnimatedStyle]}>
+        //                 <Pressable
+        //                     onPress={() =>
+        //                         (formButtonScale.value = withSequence(
+        //                             withSpring(1.5),
+        //                             withSpring(1),
+        //                         ))
+        //                     }>
+        //                     <Text style={styles.buttonText}>
+        //                         {isRegistering ? 'REGISTER' : 'LOG IN'}
+        //                     </Text>
+        //                 </Pressable>
+        //             </Animated.View>
+        //         </Animated.View>
+        //     </View>
+        // </Animated.View>
     );
 };
 

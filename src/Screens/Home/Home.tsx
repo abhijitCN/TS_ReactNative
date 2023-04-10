@@ -14,8 +14,10 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Entypo';
 import Filter from 'react-native-vector-icons/AntDesign';
+import RupeeSign from 'react-native-vector-icons/FontAwesome5';
+
 //import AsyncStorage from '@react-native-async-storage/async-storage';
-//import Toast from 'react-native-toast-message';
+import {responsiveHeight, responsiveWidth} from '../../Utils/ScreenDimention';
 import {useDispatch, useSelector} from 'react-redux';
 //import firestore from '@react-native-firebase/firestore';
 //import {db} from '../../Constant/Firebase';
@@ -250,11 +252,11 @@ function Home() {
                         onPress={() => navigation.openDrawer()}
                         style={{
                             position: 'absolute',
-                            top: 23,
-                            right: 0,
-                            left: 15,
-                            padding: 5,
-                            paddingRight: 12,
+                            //top: 23,
+                            //right: 0,
+                            left: responsiveWidth(25),
+                            //padding: 5,
+                            //paddingRight: 12,
                         }}>
                         <Bars name="bars" size={22} color={'#000000'} />
                     </TouchableOpacity>
@@ -263,22 +265,20 @@ function Home() {
                         onPress={() => navigation.navigate('AddToCart')}
                         style={{
                             position: 'absolute',
-                            top: 23,
+                            top: responsiveWidth(20),
                             right: 0,
-                            left: 280,
-                            padding: 5,
-                            paddingRight: 12,
+                            left: responsiveWidth(1.35),
                         }}>
                         <CartIcon
                             name="shopping-cart"
-                            size={22}
+                            size={responsiveHeight(28)}
                             color={'#000000'}
                         />
                         <Text
                             style={{
                                 position: 'absolute',
-                                left: 15,
-                                bottom: 22,
+                                left: 10,
+                                bottom: 18,
                                 fontWeight: 'bold',
                             }}>
                             {cartProductArray.length}
@@ -291,10 +291,10 @@ function Home() {
                         }
                         style={{
                             position: 'absolute',
-                            top: 10,
+                            //top: 1,
                             right: 0,
-                            padding: 5,
-                            paddingRight: 12,
+                            //padding: 5,
+                            paddingRight: responsiveWidth(50),
                         }}>
                         {
                             //profile?.Image ?
@@ -485,12 +485,6 @@ function Home() {
                                                         flexDirection: 'column',
                                                     }}>
                                                     <Text
-                                                        style={
-                                                            style.productText
-                                                        }>
-                                                        Price - {item.price}
-                                                    </Text>
-                                                    <Text
                                                         style={[
                                                             style.productText,
                                                             {},
@@ -504,6 +498,28 @@ function Home() {
                                                             />
                                                         }
                                                     </Text>
+                                                    <View
+                                                        style={{
+                                                            flexDirection:
+                                                                'row',
+                                                            alignItems:
+                                                                'center',
+                                                        }}>
+                                                        <RupeeSign
+                                                            name="rupee-sign"
+                                                            color={'#0a3749'}
+                                                            size={20}
+                                                        />
+                                                        <Text
+                                                            style={[
+                                                                style.productText,
+                                                                {
+                                                                    marginLeft: 3,
+                                                                },
+                                                            ]}>
+                                                            {item.price}
+                                                        </Text>
+                                                    </View>
                                                 </View>
                                             </View>
                                         </TouchableOpacity>
@@ -646,13 +662,18 @@ const style = StyleSheet.create({
         fontSize: 16,
         fontWeight: '600',
     },
-    header: {marginTop: 20, fontWeight: 'bold', fontSize: 25, marginBottom: 5},
-    helloText: {fontSize: 20, fontWeight: 'bold', marginTop: 6},
+    header: {
+        fontWeight: 'bold',
+        fontSize: responsiveHeight(25),
+        marginBottom: 5,
+    },
+    helloText: {fontSize: 20, fontWeight: 'bold'},
     image: {width: 50, height: 50, borderRadius: 25},
     container: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
+        height: responsiveHeight(12),
     },
     touchableOpacityStyle: {
         position: 'absolute',
@@ -761,7 +782,8 @@ const style = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#fff',
         height: 60,
-        margin: 12,
+        marginHorizontal: 12,
+        marginTop: 5,
         borderWidth: 1,
         padding: 5,
         borderColor: '#1b94c4',

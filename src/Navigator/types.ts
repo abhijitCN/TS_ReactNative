@@ -18,7 +18,9 @@ export type MainRootStackParamList = {
     MyProduct:any;
     ProductDetails:any;
     AddToCart:any;
-    Payment:any
+    Payment:any;
+    Orders:any
+
 };
 export type MainDrawerParamList = {
     Home: {showMsg: boolean};

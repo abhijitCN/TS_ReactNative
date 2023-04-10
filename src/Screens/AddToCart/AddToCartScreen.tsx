@@ -78,7 +78,10 @@ const AddToCart = () => {
     };
     const totalPriceForPayment = TotalPrice();
     const Payment = (data: any) => {
-        navigation.navigate('Payment', {items: totalPriceForPayment});
+        navigation.navigate('Payment', {
+            items: totalPriceForPayment,
+            cartArray: cartProductArray,
+        });
     };
     return (
         <View style={{flex: 1}}>
@@ -284,7 +287,7 @@ const AddToCart = () => {
             />
             {cartProductArray.length > 0 ? (
                 <View style={{minHeight: 200}}>
-                    <View
+                    {/* <View
                         style={{
                             backgroundColor: '#2d2d',
                             height: 140,
@@ -312,7 +315,7 @@ const AddToCart = () => {
                             }}>
                             {'Total Price' + TotalPrice()}
                         </Text>
-                    </View>
+                    </View> */}
                     <View>
                         <Button
                             press={Payment}
