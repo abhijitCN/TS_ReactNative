@@ -21,6 +21,8 @@ import {
     deleteMyCartItem,
 } from '../../Reducers/CartSlice';
 import Filter from 'react-native-vector-icons/AntDesign';
+import {responsiveHeight, responsiveWidth} from '../../Utils/ScreenDimention';
+import RupeeSign from 'react-native-vector-icons/FontAwesome5';
 
 const AddToCart = () => {
     const Route = useRoute();
@@ -84,7 +86,7 @@ const AddToCart = () => {
         });
     };
     return (
-        <View style={{flex: 1}}>
+        <View style={{}}>
             <View style={style.container}>
                 <TouchableOpacity
                     onPress={() => navigation.goBack()}
@@ -102,7 +104,7 @@ const AddToCart = () => {
                     />
                 </TouchableOpacity>
                 <Text style={style.header}>Your Cart</Text>
-                <TouchableOpacity
+                {/* <TouchableOpacity
                     onPress={() => navigation.navigate('Profile')}
                     style={{
                         position: 'absolute',
@@ -128,17 +130,36 @@ const AddToCart = () => {
                             />
                         </>
                     )}
-                </TouchableOpacity>
+                </TouchableOpacity> */}
                 <TouchableOpacity
                     onPress={() => navigation.navigate('AddToCart')}
                     style={{
                         position: 'absolute',
-                        top: 23,
-                        right: 0,
-                        left: 280,
-                        padding: 5,
-                        paddingRight: 12,
-                    }}></TouchableOpacity>
+                        top: responsiveWidth(20),
+                        right: responsiveWidth(25),
+                    }}>
+                    <CartIcon
+                        name="shopping-cart"
+                        size={responsiveHeight(28)}
+                        color={'#000000'}
+                    />
+                    <View style={{marginTop: responsiveHeight(99)}}>
+                        <Text
+                            style={{
+                                position: 'absolute',
+                                left: responsiveWidth(30),
+                                bottom: 18,
+                                fontWeight: 'bold',
+                                fontSize: 15,
+                                backgroundColor: '#95d6f0',
+                                borderRadius: 100,
+
+                                padding: responsiveWidth(95),
+                            }}>
+                            {cartProductArray.length}
+                        </Text>
+                    </View>
+                </TouchableOpacity>
             </View>
             <FlatList
                 data={cartProductArray}
@@ -147,7 +168,6 @@ const AddToCart = () => {
                         <>
                             <View
                                 style={{
-                                    flex: 1,
                                     flexDirection: 'row',
                                     marginTop: 15,
                                 }}>
@@ -157,7 +177,6 @@ const AddToCart = () => {
                                         margin: 12,
                                         borderColor: 'gray',
                                         borderRadius: 10,
-                                        //marginTop: 10,
                                         backgroundColor: '#bff0f7',
                                         shadowColor: '#000',
                                         shadowOffset: {
@@ -167,7 +186,6 @@ const AddToCart = () => {
                                         shadowOpacity: 0.25,
                                         shadowRadius: 4,
                                         elevation: 5,
-                                        minHeight: 150,
                                         width: '70%',
                                     }}>
                                     {item.ImageUrl ? (
@@ -179,8 +197,8 @@ const AddToCart = () => {
                                                     minWidth: 150,
                                                     borderTopLeftRadius: 10,
                                                     marginVertical: 0,
-                                                    flexWrap: 'wrap',
                                                     borderBottomLeftRadius: 10,
+                                                    resizeMode: 'center',
                                                 }}
                                                 source={{
                                                     uri: item.ImageUrl,
@@ -207,20 +225,14 @@ const AddToCart = () => {
                                             marginTop: 15,
                                             marginLeft: 15,
                                         }}>
-                                        <Text
-                                            style={[
-                                                style.productText,
-                                                {flexWrap: 'wrap'},
-                                            ]}>
+                                        <Text style={[style.productText, {}]}>
                                             {item.name}
                                         </Text>
-                                        <Text style={style.productText}>
-                                            {item.price}
-                                        </Text>
+
                                         <Text style={style.productText}>
                                             {item.category}
                                         </Text>
-                                        <Text style={[style.productText, {}]}>
+                                        {/* <Text style={[style.productText, {}]}>
                                             Rating -{' '}
                                             {
                                                 <Filter
@@ -229,7 +241,29 @@ const AddToCart = () => {
                                                     size={20}
                                                 />
                                             }
-                                        </Text>
+                                        </Text> */}
+
+                                        <View
+                                            style={{
+                                                flexDirection: 'row',
+                                                alignItems: 'center',
+                                            }}>
+                                            <RupeeSign
+                                                name="rupee-sign"
+                                                color={'#0a3749'}
+                                                size={20}
+                                            />
+                                            <Text
+                                                style={[
+                                                    {
+                                                        marginLeft: 3,
+                                                        fontSize: 20,
+                                                        fontWeight: '600',
+                                                    },
+                                                ]}>
+                                                {item.price}
+                                            </Text>
+                                        </View>
                                     </View>
                                 </View>
                                 <View
@@ -286,7 +320,7 @@ const AddToCart = () => {
                 numColumns={1}
             />
             {cartProductArray.length > 0 ? (
-                <View style={{minHeight: 200}}>
+                <View style={{}}>
                     {/* <View
                         style={{
                             backgroundColor: '#2d2d',
@@ -333,6 +367,7 @@ const AddToCart = () => {
                 <View
                     style={{
                         flex: 1,
+                        justifyContent: 'center',
                         alignItems: 'center',
                     }}>
                     <Text style={{fontSize: 50, fontWeight: 'bold'}}>
@@ -345,7 +380,7 @@ const AddToCart = () => {
 };
 const style = StyleSheet.create({
     main: {
-        flex: 1,
+        //flex: 1,
     },
     button: {
         alignItems: 'center',
@@ -432,10 +467,10 @@ const style = StyleSheet.create({
         shadowOpacity: 1,
     },
     scrollView: {
-        flex: 1,
+        //  flex: 1,
     },
     centeredView: {
-        flex: 1,
+        //flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
         marginTop: 22,
@@ -498,7 +533,7 @@ const style = StyleSheet.create({
         padding: 10,
     },
     input: {
-        flex: 1,
+        //flex: 1,
         paddingTop: 10,
         paddingRight: 10,
         paddingBottom: 10,

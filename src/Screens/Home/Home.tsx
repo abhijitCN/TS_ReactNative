@@ -266,25 +266,31 @@ function Home() {
                         style={{
                             position: 'absolute',
                             top: responsiveWidth(20),
-                            right: 0,
-                            left: responsiveWidth(1.35),
+                            right: responsiveWidth(25),
                         }}>
                         <CartIcon
                             name="shopping-cart"
                             size={responsiveHeight(28)}
                             color={'#000000'}
                         />
-                        <Text
-                            style={{
-                                position: 'absolute',
-                                left: 10,
-                                bottom: 18,
-                                fontWeight: 'bold',
-                            }}>
-                            {cartProductArray.length}
-                        </Text>
+                        <View style={{marginTop: responsiveHeight(99)}}>
+                            <Text
+                                style={{
+                                    position: 'absolute',
+                                    left: responsiveWidth(30),
+                                    bottom: 18,
+                                    fontWeight: 'bold',
+                                    fontSize: 15,
+                                    backgroundColor: '#95d6f0',
+                                    borderRadius: 100,
+
+                                    padding: responsiveWidth(95),
+                                }}>
+                                {cartProductArray.length}
+                            </Text>
+                        </View>
                     </TouchableOpacity>
-                    <TouchableOpacity
+                    {/* <TouchableOpacity
                         onPress={
                             () => navigation.navigate('Profile')
                             //() => navigation.openDrawer()
@@ -329,7 +335,7 @@ function Home() {
                                 </>
                             )
                         }
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                 </View>
                 <View
                     style={{
@@ -337,7 +343,7 @@ function Home() {
                         //flex: 1,
                         //justifyContent: 'center',
                     }}>
-                    <Text style={style.helloText}>Hello,{user?.email}</Text>
+                    {/* <Text style={style.helloText}>Hello,{user?.email}</Text> */}
                 </View>
                 {/* <TextInputs
                     placeholder="Search"
@@ -376,7 +382,7 @@ function Home() {
                             <Icon
                                 style={style.searchIcon}
                                 name="circle-with-cross"
-                                size={30}
+                                size={responsiveWidth(20)}
                                 color="#000"
                             />
                         </TouchableOpacity>
@@ -401,7 +407,7 @@ function Home() {
                                 <>
                                     <Animatable.View
                                         animation={'fadeInUp'}
-                                        duration={1000}
+                                        duration={500}
                                         delay={index * 300}
                                         style={{
                                             flex: 1,
@@ -415,7 +421,7 @@ function Home() {
                                             }
                                             style={{
                                                 flexDirection: 'row',
-                                                margin: 12,
+                                                marginHorizontal: 12,
                                                 borderColor: 'gray',
                                                 borderRadius: 10,
                                                 marginTop: 10,
@@ -428,20 +434,20 @@ function Home() {
                                                 shadowOpacity: 0.25,
                                                 shadowRadius: 4,
                                                 elevation: 5,
-                                                minHeight: 150,
+                                                //minHeight: 150,
                                             }}>
                                             <View>
                                                 {item.ImageUrl ? (
                                                     <>
                                                         <Image
                                                             style={{
-                                                                height: 150,
+                                                                height: 100,
                                                                 width: '100%',
                                                                 minWidth: 150,
                                                                 borderTopLeftRadius: 10,
                                                                 marginVertical: 0,
-                                                                flexWrap:
-                                                                    'wrap',
+                                                                resizeMode:
+                                                                    'center',
                                                                 borderBottomLeftRadius: 10,
                                                             }}
                                                             source={{
@@ -471,20 +477,20 @@ function Home() {
                                                     marginLeft: 10,
                                                 }}>
                                                 <Text style={style.productText}>
-                                                    Name - {item.name}
+                                                    {item.name}
                                                 </Text>
                                                 {/* <Text style={style.productText}>
                                                     Description -{' '}
                                                     {item?.quantity}
                                                 </Text> */}
                                                 <Text style={style.productText}>
-                                                    Category - {item.category}
+                                                    {item.category}
                                                 </Text>
                                                 <View
                                                     style={{
                                                         flexDirection: 'column',
                                                     }}>
-                                                    <Text
+                                                    {/* <Text
                                                         style={[
                                                             style.productText,
                                                             {},
@@ -497,7 +503,7 @@ function Home() {
                                                                 size={20}
                                                             />
                                                         }
-                                                    </Text>
+                                                    </Text> */}
                                                     <View
                                                         style={{
                                                             flexDirection:
@@ -512,9 +518,11 @@ function Home() {
                                                         />
                                                         <Text
                                                             style={[
-                                                                style.productText,
                                                                 {
                                                                     marginLeft: 3,
+                                                                    fontSize: 20,
+                                                                    fontWeight:
+                                                                        '600',
                                                                 },
                                                             ]}>
                                                             {item.price}
@@ -781,11 +789,11 @@ const style = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#fff',
-        height: 60,
+        height: 45,
         marginHorizontal: 12,
         marginTop: 5,
         borderWidth: 1,
-        padding: 5,
+        padding: 2,
         borderColor: '#1b94c4',
         borderRadius: 10,
     },

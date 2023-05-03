@@ -1,24 +1,11 @@
-import React, {useContext, useEffect, useState, useRef} from 'react';
-import {
-    View,
-    TouchableOpacity,
-    Text,
-    StyleSheet,
-    Image,
-    ActivityIndicator,
-    Alert,
-    TextInput,
-    FlatList,
-    ScrollView,
-    SafeAreaView,
-    StatusBar,
-    RefreshControl,
-} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {View, TouchableOpacity, Text, StyleSheet, Image} from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import firestore from '@react-native-firebase/firestore';
 import {useDispatch, useSelector} from 'react-redux';
 import {rootState} from '../../Reducers/store';
 import ArrowBack from 'react-native-vector-icons/Ionicons';
+import Hearto from 'react-native-vector-icons/AntDesign';
 import Button from '../../Components/Button';
 import {
     addCartProduct,
@@ -27,6 +14,8 @@ import {
 import CartIcon from 'react-native-vector-icons/Feather';
 //import Toast from 'react-native-toast-message';
 import Toast from 'react-native-toast-message';
+import RupeeSign from 'react-native-vector-icons/FontAwesome5';
+import {responsiveHeight, responsiveWidth} from '../../Utils/ScreenDimention';
 
 export default function ProductDetails() {
     const Route = useRoute();
@@ -109,7 +98,7 @@ export default function ProductDetails() {
                     />
                 </TouchableOpacity>
                 <Text style={style.header}>{values.items.name}</Text>
-                <TouchableOpacity
+                {/* <TouchableOpacity
                     onPress={() => navigation.navigate('Profile')}
                     style={{
                         position: 'absolute',
@@ -135,31 +124,35 @@ export default function ProductDetails() {
                             />
                         </>
                     )}
-                </TouchableOpacity>
+                </TouchableOpacity> */}
                 <TouchableOpacity
                     onPress={() => navigation.navigate('AddToCart')}
                     style={{
                         position: 'absolute',
-                        top: 23,
-                        right: 0,
-                        left: 280,
-                        padding: 5,
-                        paddingRight: 12,
+                        top: responsiveWidth(20),
+                        right: responsiveWidth(25),
                     }}>
                     <CartIcon
                         name="shopping-cart"
-                        size={22}
+                        size={responsiveHeight(28)}
                         color={'#000000'}
                     />
-                    <Text
-                        style={{
-                            position: 'absolute',
-                            left: 15,
-                            bottom: 22,
-                            fontWeight: 'bold',
-                        }}>
-                        {cartProductArray.length}
-                    </Text>
+                    <View style={{marginTop: responsiveHeight(99)}}>
+                        <Text
+                            style={{
+                                position: 'absolute',
+                                left: responsiveWidth(30),
+                                bottom: 18,
+                                fontWeight: 'bold',
+                                fontSize: 15,
+                                backgroundColor: '#95d6f0',
+                                borderRadius: 100,
+
+                                padding: responsiveWidth(95),
+                            }}>
+                            {cartProductArray.length}
+                        </Text>
+                    </View>
                 </TouchableOpacity>
             </View>
             <View
@@ -181,15 +174,14 @@ export default function ProductDetails() {
                         shadowOpacity: 0.25,
                         shadowRadius: 4,
                         elevation: 5,
-                        minHeight: 200,
                     }}>
                     {values.items.ImageUrl ? (
                         <>
                             <Image
                                 style={{
-                                    height: 200,
+                                    height: 250,
                                     borderRadius: 10,
-                                    marginVertical: 0,
+                                    resizeMode: 'center',
                                 }}
                                 source={{
                                     uri: values.items.ImageUrl,
@@ -201,8 +193,10 @@ export default function ProductDetails() {
                             <Image
                                 style={{
                                     height: 150,
-                                    width: '80%',
+                                    //width: '80%',
                                     borderRadius: 10,
+                                    //overflow: 'hidden',
+                                    resizeMode: 'center',
                                 }}
                                 source={{
                                     uri: 'https://reactnative.dev/img/tiny_logo.png',
@@ -210,6 +204,20 @@ export default function ProductDetails() {
                             />
                         </>
                     )}
+                    <View style={{position: 'absolute', right: 10, bottom: 10}}>
+                        <TouchableOpacity
+                            style={{
+                                height: 50,
+                                width: 50,
+                                backgroundColor: '#95d6f0',
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                borderRadius: 100,
+                            }}>
+                            <Hearto name="hearto" color={'#0a3749'} size={30} />
+                        </TouchableOpacity>
+                    </View>
                 </View>
                 <View
                     style={{
@@ -218,17 +226,8 @@ export default function ProductDetails() {
                         margin: 10,
                         //backgroundColor: '#2d2d',
                     }}>
-                    <Text style={style.productText}>
-                        Name - {values.items.name}
-                    </Text>
-                    <Text style={style.productText}>
-                        Price - {values.items.price}
-                    </Text>
-                    <Text style={style.productText}>
-                        Quantity - {values.items.quantity}
-                    </Text>
-                    <Text style={style.productText}>
-                        Category - {values.items.category}
+                    <Text style={[style.productText, {fontSize: 27}]}>
+                        {values.items.name}
                     </Text>
                     <Text style={[style.productText, {textAlign: 'justify'}]}>
                         Details - Lorem Ipsum is simply dummy text of the
@@ -238,26 +237,59 @@ export default function ProductDetails() {
                         scrambled it to make a type specimen book.
                     </Text>
                 </View>
-
-                {/* <View style={{flexDirection: 'row'}}>
-                    {values.items.quantity == 0 ? null : (
-                        <Button
-                            //press={Payment}
-                            btnStyle={{width: 70}}
-                            btnText="-"
+                <View
+                    style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        justifyContent: 'space-evenly',
+                        marginBottom: 50,
+                    }}>
+                    <Text style={style.productText}>Price :</Text>
+                    <View
+                        style={{
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                        }}>
+                        <RupeeSign
+                            name="rupee-sign"
+                            color={'#0a3749'}
+                            size={20}
                         />
-                    )}
-                    {values.items.quantity == 0 ? null : (
-                        <Text>{values.items.quantity}</Text>
-                    )}
-                    {values.items.quantity == 0 ? null : (
-                        <Button
-                            //press={Payment}
-                            btnStyle={{width: 70}}
-                            btnText="+"
-                        />
-                    )}
-                </View> */}
+                        <Text
+                            style={[
+                                {
+                                    marginLeft: 3,
+                                    fontSize: 20,
+                                    fontWeight: '600',
+                                },
+                            ]}>
+                            {values.items.price}
+                        </Text>
+                    </View>
+                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                        {values.items.quantity == 0 ? null : (
+                            <Button
+                                //press={Payment}
+                                btnStyle={{width: 70}}
+                                btnText="-"
+                            />
+                        )}
+                        {values.items.quantity == 0 ? null : (
+                            <Text style={{fontSize: 20, fontWeight: '500'}}>
+                                {values.items.quantity
+                                    ? values.items.quantity
+                                    : 1}
+                            </Text>
+                        )}
+                        {values.items.quantity == 0 ? null : (
+                            <Button
+                                //press={Payment}
+                                btnStyle={{width: 70}}
+                                btnText="+"
+                            />
+                        )}
+                    </View>
+                </View>
                 <Button press={AddProductToCart} btnText="Add To Cart" />
             </View>
         </View>
