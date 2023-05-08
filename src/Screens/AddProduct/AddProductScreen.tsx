@@ -19,6 +19,7 @@ import {rootState} from '../../Reducers/store';
 import {useFocusEffect} from '@react-navigation/native';
 import ArrowBack from 'react-native-vector-icons/Ionicons';
 import {FlatList} from 'react-native-gesture-handler';
+import notifee, {AndroidStyle} from '@notifee/react-native';
 
 interface textFields {
     name: string;
@@ -113,7 +114,7 @@ const AddProduct: React.FC = () => {
         ) {
             dispatch(addProduct(reqData));
             Alert.alert('Product Added Successfully');
-            navigation.navigate('Home');
+            localDisplayNotification(), navigation.navigate('Home');
         } else {
             Alert.alert('Please Fill All Fields');
         }
@@ -135,6 +136,38 @@ const AddProduct: React.FC = () => {
         });
         SetData2(temp);
     };
+
+    // Local notification
+
+    async function localDisplayNotification() {
+        // Request permissions (required for iOS)
+        await notifee.requestPermission();
+
+        // Create a channel (required for Android)
+        const channelId = await notifee.createChannel({
+            id: 'default',
+            name: 'Default Channel',
+        });
+
+        // Display a notification
+        await notifee.displayNotification({
+            title: 'Local Notification Title',
+            body: 'Local Notification Body',
+            android: {
+                channelId,
+                //smallIcon: 'name-of-a-small-icon', // optional, defaults to 'ic_launcher'.
+                // pressAction is needed if you want the notification to open the app when pressed
+                pressAction: {
+                    id: 'default',
+                },
+                style: {
+                    type: AndroidStyle.BIGPICTURE,
+                    picture:
+                        'https://techrushi.com/wp-content/uploads/2022/12/iPhone-14-Pro-Max-wallpaper-4K.webp',
+                },
+            },
+        });
+    }
     return (
         <>
             {globalSpinner ? (

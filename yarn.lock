@@ -1570,6 +1570,11 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
+"@notifee/react-native@^7.7.1":
+  version "7.7.1"
+  resolved "https://registry.yarnpkg.com/@notifee/react-native/-/react-native-7.7.1.tgz#ce3f982fb7354519406cb7716f8e861bab0056ce"
+  integrity sha512-E+W91ulI4dxdIrhK6YCyjWqXgrUsVNZYYCSn3gDADmveuR2Yd2uGvbbSW2vUIFU4N4gQQT/5HJdk9Jk83KHbVA==
+
 "@npmcli/fs@^1.0.0":
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/@npmcli/fs/-/fs-1.1.1.tgz#72f719fe935e687c56a4faecf3c03d06ba593257"
@@ -1869,6 +1874,11 @@
   version "10.3.1"
   resolved "https://registry.yarnpkg.com/@react-native-firebase/firestore/-/firestore-10.3.1.tgz#fbfd0a0bc9a724e3ff297c83c06c49637bb6409d"
   integrity sha512-K2/c6qVoIVwhsc5r754n4nPmxtk95AuBFMpbZuma/et8mGuq+ZKBVPNH41pOBY9V7Nu+aTqoVdN9vs8yZ/b/og==
+
+"@react-native-firebase/messaging@^17.4.3":
+  version "17.4.3"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/messaging/-/messaging-17.4.3.tgz#61db528867ab4742ec772a6dde1e0cb0be85b3dd"
+  integrity sha512-geZsrfU4nlWYWNz7ES0IbUNvK3j0/1wGbWj6V1ae7LJMXfuD21+dynb+VxwWhQTwlsr8IkpsIZDg1VIsL1rs6g==
 
 "@react-native-firebase/storage@10.3.1":
   version "10.3.1"

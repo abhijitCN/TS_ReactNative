@@ -7,7 +7,6 @@ import {
     Image,
     TextInput,
     FlatList,
-    ScrollView,
     SafeAreaView,
     Modal,
     Pressable,
@@ -15,6 +14,7 @@ import {
 import Icon from 'react-native-vector-icons/Entypo';
 import Filter from 'react-native-vector-icons/AntDesign';
 import RupeeSign from 'react-native-vector-icons/FontAwesome5';
+import notifee, {AndroidStyle} from '@notifee/react-native';
 
 //import AsyncStorage from '@react-native-async-storage/async-storage';
 import {responsiveHeight, responsiveWidth} from '../../Utils/ScreenDimention';
@@ -292,7 +292,9 @@ function Home() {
                     </TouchableOpacity>
                     {/* <TouchableOpacity
                         onPress={
-                            () => navigation.navigate('Profile')
+                            () => 
+                            //localDisplayNotification()
+                            //navigation.navigate('Profile')
                             //() => navigation.openDrawer()
                         }
                         style={{

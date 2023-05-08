@@ -66,7 +66,7 @@ export default function ProductDetails() {
         dispatch(addCartProduct(values.items));
         //dispatch(increaseQuantityInProductDetails(values.items));
         Toast.show({
-            position: 'bottom',
+            position: 'top',
             type: 'success',
             text1: 'Successfully Added',
             text2: 'Product Added Successfully',
